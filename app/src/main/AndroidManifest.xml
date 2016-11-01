@@ -17,7 +17,13 @@
             </intent-filter>
         </activity>
 
+        <!--Dagger-->
         <activity android:name=".dagger.example.DaggerSampleAct"/>
+
+        <!--RxJava-->
+        <activity android:name=".rxjava2.RxJavaSampleAct"/>
+        <activity android:name=".rxjava2.ObservableFlowableAct"/>
+        <activity android:name=".rxjava2.RxJavaInteropAct"/>
 
     </application>
 
