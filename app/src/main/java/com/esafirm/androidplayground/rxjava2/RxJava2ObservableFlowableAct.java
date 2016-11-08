@@ -1,7 +1,8 @@
 package com.esafirm.androidplayground.rxjava2;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import com.esafirm.androidplayground.common.BaseAct;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,7 +16,7 @@ import static com.esafirm.androidplayground.utils.Logger.clear;
 import static com.esafirm.androidplayground.utils.Logger.getLogView;
 import static com.esafirm.androidplayground.utils.Logger.log;
 
-public class ObservableFlowableAct extends AppCompatActivity {
+public class RxJava2ObservableFlowableAct extends BaseAct {
 
     private Disposable disposable;
     private Disposable secondDisposable;

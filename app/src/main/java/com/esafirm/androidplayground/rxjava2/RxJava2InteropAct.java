@@ -2,8 +2,8 @@ package com.esafirm.androidplayground.rxjava2;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
+import com.esafirm.androidplayground.common.BaseAct;
 import com.esafirm.androidplayground.utils.Logger;
 
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import io.reactivex.functions.Consumer;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 
-public class RxJavaInteropAct extends AppCompatActivity {
+public class RxJava2InteropAct extends BaseAct {
 
     private CompositeDisposable compositeDisposable;
 

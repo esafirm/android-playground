@@ -18,7 +18,6 @@ public class Logger {
     private static SerializedSubject subject = new SerializedSubject<>(PublishSubject.create());
     private static final StringBuilder loggerBuilder = new StringBuilder();
 
-
     public static void clear() {
         loggerBuilder.setLength(0);
     }

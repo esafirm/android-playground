@@ -21,9 +21,11 @@
         <activity android:name=".dagger.example.DaggerSampleAct"/>
 
         <!--RxJava-->
-        <activity android:name=".rxjava2.RxJavaSampleAct"/>
-        <activity android:name=".rxjava2.ObservableFlowableAct"/>
-        <activity android:name=".rxjava2.RxJavaInteropAct"/>
+        <activity android:name=".rxjava2.RxJava2SampleAct"/>
+        <activity android:name=".rxjava2.RxJava2ObservableFlowableAct"/>
+        <activity android:name=".rxjava2.RxJava2InteropAct"/>
+        <activity android:name=".rxjava2.RxJava2NullItemAct"/>
+        <activity android:name=".rxjava2.RxJava2SchedulerSampleAct"/>
 
     </application>
 
