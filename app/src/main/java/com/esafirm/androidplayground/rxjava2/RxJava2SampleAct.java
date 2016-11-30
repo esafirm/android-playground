@@ -20,7 +20,8 @@ public class RxJava2SampleAct extends BaseAct {
                         "Observable vs Flowable",
                         "Interop with v1",
                         "Null item on Stream",
-                        "Schedulers"
+                        "Schedulers",
+                        "RetryWhen"
                 ), new OnNavigatePage() {
                     @Override
                     public void navigate(int index) {
@@ -43,6 +44,9 @@ public class RxJava2SampleAct extends BaseAct {
                 break;
             case 3:
                 ActivityStater.start(this, RxJava2SchedulerSampleAct.class);
+                break;
+            case 4:
+                ActivityStater.start(this, RxJava2RetryWhen.class);
                 break;
         }
     }
