@@ -2,7 +2,7 @@
 
 _Here come dat boi ~ o shit waddup!_
 
-A collection of samples about Libraries that's trending in Android developer community
+A collection of samples about trending and interesting libraries in Android developer community
 
 ## What's inside?
 
