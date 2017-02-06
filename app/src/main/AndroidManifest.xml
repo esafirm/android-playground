@@ -28,6 +28,10 @@
         <activity android:name=".rxjava2.RxJava2SchedulerSampleAct"/>
         <activity android:name=".rxjava2.RxJava2RetryWhen"/>
 
+        <!--Reductor-->
+        <activity android:name=".reductor.ReductorSampelAct"/>
+        <activity android:name=".reductor.ReductorCounterAct"/>
+
         <!--UI-->
         <activity android:name=".ui.UISampleAct"/>
         <activity android:name=".ui.ConstraintLayoutAct"/>
