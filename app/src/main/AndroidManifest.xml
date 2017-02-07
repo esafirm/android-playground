@@ -35,6 +35,7 @@
         <!--UI-->
         <activity android:name=".ui.UISampleAct"/>
         <activity android:name=".ui.ConstraintLayoutAct"/>
+        <activity android:name=".ui.SpinnerPositionAct"/>
 
     </application>
 

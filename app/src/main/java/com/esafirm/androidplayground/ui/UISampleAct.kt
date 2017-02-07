@@ -11,7 +11,8 @@ class UISampleAct : BaseAct() {
         super.onCreate(savedInstanceState)
         setContentView(
                 MenuFactory.create(this, Arrays.asList(
-                        "Constraint Layout"
+                        "Constraint Layout",
+                        "Spinner Dropdown Position"
                 )) { index -> navigateToIndex(index) }
         )
     }
@@ -19,6 +20,7 @@ class UISampleAct : BaseAct() {
     fun navigateToIndex(index: Int) {
         when (index) {
             0 -> ActivityStater.start(this, ConstraintLayoutAct::class.java)
+            1 -> ActivityStater.start(this, SpinnerPositionAct::class.java)
         }
     }
 }
