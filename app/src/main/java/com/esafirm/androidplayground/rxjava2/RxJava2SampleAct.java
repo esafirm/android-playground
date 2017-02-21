@@ -21,7 +21,8 @@ public class RxJava2SampleAct extends BaseAct {
                         "Interop with v1",
                         "Null item on Stream",
                         "Schedulers",
-                        "RetryWhen"
+                        "RetryWhen",
+                        "Single | Kotlin Infix Operator"
                 ), new OnNavigatePage() {
                     @Override
                     public void navigate(int index) {

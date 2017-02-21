@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.esafirm.androidplayground">
+    package="com.esafirm.androidplayground">
 
     <application
         android:name=".App"
@@ -27,6 +27,7 @@
         <activity android:name=".rxjava2.RxJava2NullItemAct"/>
         <activity android:name=".rxjava2.RxJava2SchedulerSampleAct"/>
         <activity android:name=".rxjava2.RxJava2RetryWhen"/>
+        <activity android:name=".rxjava2.RxJava2Single"/>
 
         <!--Reductor-->
         <activity android:name=".reductor.ReductorSampelAct"/>
