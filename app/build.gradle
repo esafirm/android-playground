@@ -54,4 +54,7 @@ dependencies {
     final reductorVersion = '0.13.1'
     compile "com.yheriatovych:reductor:$reductorVersion"
     kapt "com.yheriatovych:reductor-processor:$reductorVersion"
+
+    /* Bcrypt */
+    compile 'org.mindrot:jbcrypt:0.4'
 }

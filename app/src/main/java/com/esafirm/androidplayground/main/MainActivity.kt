@@ -8,6 +8,7 @@ import com.esafirm.androidplayground.conductor.ConductorSample
 import com.esafirm.androidplayground.dagger.example.DaggerSampleAct
 import com.esafirm.androidplayground.reductor.ReductorSampelAct
 import com.esafirm.androidplayground.rxjava2.RxJava2SampleAct
+import com.esafirm.androidplayground.securities.SecurityMenuController
 import com.esafirm.androidplayground.ui.UISampleAct
 import com.esafirm.androidplayground.utils.ActivityStater
 import java.util.*
@@ -23,7 +24,8 @@ class MainActivity : AppCompatActivity() {
                                 "RxJava2 Example",
                                 "UI Example",
                                 "Reductor Sample",
-                                "Conductor Sample"
+                                "Conductor Sample",
+                                "Security Sample"
                         )
                 ) { index -> navigateToPage(index) }
         )
@@ -35,7 +37,8 @@ class MainActivity : AppCompatActivity() {
             1 -> RxJava2SampleAct.start(this)
             2 -> ActivityStater.start(this, UISampleAct::class.java)
             3 -> ActivityStater.start(this, ReductorSampelAct::class.java)
-            else -> RouterAct.start(this, ControllerMaker({ ConductorSample() }))
+            4 -> RouterAct.start(this, ControllerMaker({ ConductorSample() }))
+            else -> RouterAct.start(this, ControllerMaker({ SecurityMenuController() }))
         }
     }
 }
