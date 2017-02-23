@@ -1,5 +1,7 @@
 package com.esafirm.androidplayground.dagger;
 
+import android.content.Context;
+
 import com.esafirm.androidplayground.App;
 import com.esafirm.androidplayground.dagger.example.NonScopedClass;
 import com.esafirm.androidplayground.dagger.example.ScopedClass;
@@ -13,6 +15,7 @@ import dagger.Component;
 @Component(modules = AppModule.class)
 public interface AppComponent {
 
+    Context appContext();
     NonScopedClass classInAppComponent();
     ScopedClass singletonClass();
 

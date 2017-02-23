@@ -44,6 +44,12 @@ dependencies {
     compile "com.github.akarnokd:rxjava2-interop:0.6.0"
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
 
+    /* Conductor */
+    final conductorVersion = '2.1.0'
+    compile "com.bluelinelabs:conductor:$conductorVersion"
+    compile "com.bluelinelabs:conductor-rxlifecycle:$conductorVersion"
+    compile "com.bluelinelabs:conductor-support:$conductorVersion"
+
     /* Redux for Android */
     final reductorVersion = '0.13.1'
     compile "com.yheriatovych:reductor:$reductorVersion"

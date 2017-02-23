@@ -2,7 +2,9 @@ package com.esafirm.androidplayground.main
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.esafirm.androidplayground.common.ControllerMaker
 import com.esafirm.androidplayground.common.MenuFactory
+import com.esafirm.androidplayground.conductor.ConductorSample
 import com.esafirm.androidplayground.dagger.example.DaggerSampleAct
 import com.esafirm.androidplayground.reductor.ReductorSampelAct
 import com.esafirm.androidplayground.rxjava2.RxJava2SampleAct
@@ -20,7 +22,8 @@ class MainActivity : AppCompatActivity() {
                                 "Dagger Example",
                                 "RxJava2 Example",
                                 "UI Example",
-                                "Reductor Sample"
+                                "Reductor Sample",
+                                "Conductor Sample"
                         )
                 ) { index -> navigateToPage(index) }
         )
@@ -31,7 +34,8 @@ class MainActivity : AppCompatActivity() {
             0 -> DaggerSampleAct.start(this)
             1 -> RxJava2SampleAct.start(this)
             2 -> ActivityStater.start(this, UISampleAct::class.java)
-            else -> ActivityStater.start(this, ReductorSampelAct::class.java)
+            3 -> ActivityStater.start(this, ReductorSampelAct::class.java)
+            else -> RouterAct.start(this, ControllerMaker({ ConductorSample() }))
         }
     }
 }
