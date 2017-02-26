@@ -14,7 +14,10 @@ public class BcryptController extends Controller {
     @NonNull
     @Override
     protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
-        Logger.log(BCrypt.hashpw("test", BCrypt.gensalt(5)));
+        Logger.clear();
+        String hashed = BCrypt.hashpw("test", BCrypt.gensalt());
+        Logger.log(hashed);
+        Logger.log(BCrypt.checkpw("test", hashed));
         return Logger.getLogView(container.getContext());
     }
 }
