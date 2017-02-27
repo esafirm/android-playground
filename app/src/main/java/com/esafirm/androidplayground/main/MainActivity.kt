@@ -2,6 +2,8 @@ package com.esafirm.androidplayground.main
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.esafirm.androidplayground.anvil.AnvilController
+import com.esafirm.androidplayground.anvil.AnvilSampleAct
 import com.esafirm.androidplayground.common.ControllerMaker
 import com.esafirm.androidplayground.common.MenuFactory
 import com.esafirm.androidplayground.conductor.ConductorSample
@@ -25,7 +27,8 @@ class MainActivity : AppCompatActivity() {
                                 "UI Example",
                                 "Reductor Sample",
                                 "Conductor Sample",
-                                "Security Sample"
+                                "Security Sample",
+                                "Anvil Sample (React Render Like)"
                         )
                 ) { index -> navigateToPage(index) }
         )
@@ -38,7 +41,8 @@ class MainActivity : AppCompatActivity() {
             2 -> ActivityStater.start(this, UISampleAct::class.java)
             3 -> ActivityStater.start(this, ReductorSampelAct::class.java)
             4 -> RouterAct.start(this, ControllerMaker({ ConductorSample() }))
-            else -> RouterAct.start(this, ControllerMaker({ SecurityMenuController() }))
+            5 -> RouterAct.start(this, ControllerMaker({ SecurityMenuController() }))
+            else -> RouterAct.start(this, ControllerMaker { AnvilSampleAct() })
         }
     }
 }

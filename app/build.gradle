@@ -55,6 +55,9 @@ dependencies {
     compile "com.yheriatovych:reductor:$reductorVersion"
     kapt "com.yheriatovych:reductor-processor:$reductorVersion"
 
+    /* AnvilController | React Render Like */
+    compile 'co.trikita:anvil-sdk15:0.4.0'
+
     /* Bcrypt */
     compile 'org.mindrot:jbcrypt:0.4'
 }

@@ -5,14 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bluelinelabs.conductor.Controller;
 import com.bluelinelabs.conductor.RouterTransaction;
+import com.esafirm.androidplayground.common.BaseController;
 import com.esafirm.androidplayground.common.MenuFactory;
 import com.esafirm.androidplayground.common.OnNavigatePage;
 
 import java.util.Arrays;
 
-public class SecurityMenuController extends Controller {
+public class SecurityMenuController extends BaseController {
 
     @NonNull
     @Override
