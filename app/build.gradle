@@ -58,6 +58,9 @@ dependencies {
     /* AnvilController | React Render Like */
     compile 'co.trikita:anvil-sdk15:0.4.0'
 
+    /* Conceal */
+    compile 'com.facebook.conceal:conceal:1.1.3@aar'
+
     /* Bcrypt */
     compile 'org.mindrot:jbcrypt:0.4'
 }
