@@ -2,7 +2,6 @@ package com.esafirm.androidplayground.main
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.esafirm.androidplayground.anvil.AnvilController
 import com.esafirm.androidplayground.anvil.AnvilSampleAct
 import com.esafirm.androidplayground.common.ControllerMaker
 import com.esafirm.androidplayground.common.MenuFactory
