@@ -3,8 +3,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
+
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.3"
+
     defaultConfig {
         applicationId "com.esafirm.androidplayground"
         minSdkVersion 16
@@ -13,6 +15,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -49,6 +52,7 @@ dependencies {
     compile "com.bluelinelabs:conductor:$conductorVersion"
     compile "com.bluelinelabs:conductor-rxlifecycle:$conductorVersion"
     compile "com.bluelinelabs:conductor-support:$conductorVersion"
+    compile "com.github.esafirm:conductor-extra:1.0.0"
 
     /* Redux for Android */
     final reductorVersion = '0.13.1'
