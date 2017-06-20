@@ -23,8 +23,13 @@ class XfermodeController : AbsController() {
                 view.viewTreeObserver.removeOnPreDrawListener(this)
 
                 val bg = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-                val bgImage = BitmapFactory.decodeResource(applicationContext?.resources, R.drawable.bg_laptop)
-                val icon = BitmapFactory.decodeResource(applicationContext?.resources, R.drawable.ic_copyright)
+                val icon = BitmapFactory.decodeResource(applicationContext?.resources, R.drawable.ic_copyright).let {
+                    Bitmap.createScaledBitmap(it, 400, 400, true)
+                }
+
+                val rectPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    color = Color.parseColor("#88000000")
+                }
 
                 val iconPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                     color = Color.BLACK
@@ -32,8 +37,8 @@ class XfermodeController : AbsController() {
                 }
 
                 Canvas(bg).apply {
-                    drawBitmap(bgImage, 0f, 0f, null)
-                    drawBitmap(icon, 0f, 0f, iconPaint)
+                    drawRect(0f, 0f, view.width.toFloat(), view.height.toFloat(), rectPaint)
+                    drawBitmap(icon, view.width.toFloat() / 2, view.height.toFloat() / 2, iconPaint)
                 }
 
                 with(view.findViewById(R.id.imageview)) {
