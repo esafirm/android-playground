@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 android {
 
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.esafirm.androidplayground"
@@ -41,18 +41,18 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     /* RxJava */
-    compile 'io.reactivex:rxjava:1.2.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.0'
-    compile "com.github.akarnokd:rxjava2-interop:0.6.0"
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
+    compile 'io.reactivex:rxjava:1.3.0'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.5'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile "com.github.akarnokd:rxjava2-interop:0.10.0"
+    compile 'com.android.support.constraint:constraint-layout:1.1.0-beta2'
 
     /* Conductor */
-    final conductorVersion = '2.1.0'
-    compile "com.bluelinelabs:conductor:$conductorVersion"
-    compile "com.bluelinelabs:conductor-rxlifecycle:$conductorVersion"
-    compile "com.bluelinelabs:conductor-support:$conductorVersion"
-    compile "com.github.esafirm:conductor-extra:1.0.0"
+    final conductorVersion = '2.1.4'
+    implementation "com.bluelinelabs:conductor:$conductorVersion"
+    implementation "com.bluelinelabs:conductor-rxlifecycle:$conductorVersion"
+    implementation "com.bluelinelabs:conductor-support:$conductorVersion"
+    implementation "com.github.esafirm:conductor-extra:1.3.2"
 
     /* Redux for Android */
     final reductorVersion = '0.13.1'
