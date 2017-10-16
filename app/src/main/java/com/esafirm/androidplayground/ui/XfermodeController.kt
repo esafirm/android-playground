@@ -2,13 +2,14 @@ package com.esafirm.androidplayground.ui
 
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
+import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
 import com.esafirm.androidplayground.R
 import com.esafirm.androidplayground.utils.Logger
-import extra.conductor.esafirm.com.conductorextra.components.AbsController
+import com.esafirm.conductorextra.butterknife.BinderController
 
-class XfermodeController : AbsController() {
+class XfermodeController : BinderController() {
 
     init {
         Logger.clear()
@@ -16,13 +17,12 @@ class XfermodeController : AbsController() {
 
     override fun getLayoutResId(): Int = R.layout.controller_xfermode
 
-    override fun onViewBound(view: View) {
-
-        view.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+    override fun onViewBound(bindingResult: View, savedState: Bundle?) {
+        bindingResult.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
-                view.viewTreeObserver.removeOnPreDrawListener(this)
+                bindingResult.viewTreeObserver.removeOnPreDrawListener(this)
 
-                val bg = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+                val bg = Bitmap.createBitmap(bindingResult.width, bindingResult.height, Bitmap.Config.ARGB_8888)
                 val icon = BitmapFactory.decodeResource(applicationContext?.resources, R.drawable.ic_copyright).let {
                     Bitmap.createScaledBitmap(it, 400, 400, true)
                 }
@@ -37,18 +37,16 @@ class XfermodeController : AbsController() {
                 }
 
                 Canvas(bg).apply {
-                    drawRect(0f, 0f, view.width.toFloat(), view.height.toFloat(), rectPaint)
-                    drawBitmap(icon, view.width.toFloat() / 2, view.height.toFloat() / 2, iconPaint)
+                    drawRect(0f, 0f, bindingResult.width.toFloat(), bindingResult.height.toFloat(), rectPaint)
+                    drawBitmap(icon, bindingResult.width.toFloat() / 2, bindingResult.height.toFloat() / 2, iconPaint)
                 }
 
-                with(view.findViewById(R.id.imageview)) {
+                with(bindingResult.findViewById(R.id.imageview)) {
                     background = BitmapDrawable(bg)
                 }
 
                 return false
             }
         })
-
-
     }
 }

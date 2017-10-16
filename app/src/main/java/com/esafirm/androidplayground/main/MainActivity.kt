@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity() {
             1 -> RxJava2SampleAct.start(this)
             2 -> ActivityStater.start(this, UISampleAct::class.java)
             3 -> ActivityStater.start(this, ReductorSampelAct::class.java)
-            4 -> RouterAct.start(this, ControllerMaker({ ConductorSample() }))
-            5 -> RouterAct.start(this, ControllerMaker({ SecurityMenuController() }))
+            4 -> RouterAct.start(this, ControllerMaker { ConductorSample() })
+            5 -> RouterAct.start(this, ControllerMaker { SecurityMenuController() })
             else -> RouterAct.start(this, ControllerMaker { AnvilSampleAct() })
         }
     }
