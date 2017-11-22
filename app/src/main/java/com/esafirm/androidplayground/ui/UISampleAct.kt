@@ -15,16 +15,22 @@ class UISampleAct : BaseAct() {
                 MenuFactory.create(this, Arrays.asList(
                         "Constraint Layout",
                         "Spinner Dropdown Position",
-                        "Xfermode"
+                        "Xfermode",
+                        "View Drag Helper"
                 )) { index -> navigateToIndex(index) }
         )
     }
 
-    fun navigateToIndex(index: Int) {
+    private fun navigateToIndex(index: Int) {
         when (index) {
             0 -> ActivityStater.start(this, ConstraintLayoutAct::class.java)
             1 -> ActivityStater.start(this, SpinnerPositionAct::class.java)
-            2 -> RouterAct.start(this, ControllerMaker { XfermodeController() })
+            2 -> goToController(ControllerMaker { XfermodeController() })
+            3 -> goToController(ControllerMaker { ViewDragHelperController() })
         }
+    }
+
+    private fun goToController(controllerMaker: ControllerMaker) {
+        RouterAct.start(this, controllerMaker)
     }
 }
