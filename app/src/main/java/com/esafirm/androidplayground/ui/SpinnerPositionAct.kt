@@ -13,8 +13,7 @@ class SpinnerPositionAct : BaseAct() {
         setContentView(R.layout.activity_ui_spinner)
 
         val context = this
-        findViewById(R.id.spinner_data)
-                .let { it as Spinner }
+        findViewById<Spinner>(R.id.spinner_data)
                 .apply {
                     dropDownVerticalOffset = 500
                     adapter = ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, arrayListOf("Satu", "Dua", "Tiga"))

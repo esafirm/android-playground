@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
+import android.widget.ImageView
 import com.esafirm.androidplayground.R
 import com.esafirm.androidplayground.utils.Logger
 import com.esafirm.conductorextra.butterknife.BinderController
@@ -41,7 +42,7 @@ class XfermodeController : BinderController() {
                     drawBitmap(icon, bindingResult.width.toFloat() / 2, bindingResult.height.toFloat() / 2, iconPaint)
                 }
 
-                with(bindingResult.findViewById(R.id.imageview)) {
+                with(bindingResult.findViewById<ImageView>(R.id.imageview)) {
                     background = BitmapDrawable(bg)
                 }
 

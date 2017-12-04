@@ -24,7 +24,7 @@ class RouterAct : BaseAct() {
                 .extras
                 .getSerializable(EXTRA_CONTROLLER) as ControllerMaker
 
-        router = Conductor.attachRouter(this, findViewById(R.id.container) as ViewGroup, savedInstanceState)
+        router = Conductor.attachRouter(this, findViewById<ViewGroup>(R.id.container), savedInstanceState)
         if (!router!!.hasRootController()) {
             router!!.setRoot(RouterTransaction.with(maker.makeController()))
         }

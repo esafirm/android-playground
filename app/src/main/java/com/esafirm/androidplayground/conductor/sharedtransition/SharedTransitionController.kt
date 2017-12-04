@@ -30,12 +30,12 @@ class SharedTransitionController : BinderController() {
         val inflater = LayoutInflater.from(bindingResult.context)
         MODELS.forEach { item ->
             inflater.inflate(R.layout.item_shared_transition, container, false).let {
-                (it.findViewById(R.id.img) as ImageView).apply {
+                (it.findViewById<ImageView>(R.id.img)).apply {
                     setImageResource(item.imageRes)
                     ViewCompat.setTransitionName(this, "IMAGE${item.imageRes}")
                 }
 
-                (it.findViewById(R.id.txt) as TextView).apply {
+                (it.findViewById<TextView>(R.id.txt)).apply {
                     text = item.text
                     ViewCompat.setTransitionName(this, "TEXT${item.imageRes}")
                 }

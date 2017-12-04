@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageView
 import com.esafirm.androidplayground.R
 import com.esafirm.androidplayground.utils.Logger
 import com.esafirm.androidplayground.utils.clamp
@@ -23,8 +24,8 @@ class DargCardView @JvmOverloads constructor(
                 it.setEdgeTrackingEnabled(ViewDragHelper.EDGE_BOTTOM)
             }
 
-    private val childImg by lazy { findViewById(R.id.img_child) }
-    private val card by lazy { findViewById(R.id.card) }
+    private val childImg by lazy { findViewById<ImageView>(R.id.img_child) }
+    private val card by lazy { findViewById<View>(R.id.card) }
 
     private val dragRange = 92.dp
 
