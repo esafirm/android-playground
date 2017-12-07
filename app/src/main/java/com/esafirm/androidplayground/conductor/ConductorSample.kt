@@ -7,6 +7,7 @@ import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.esafirm.androidplayground.common.MenuFactory
 import com.esafirm.androidplayground.conductor.sharedtransition.SharedTransitionController
+import com.esafirm.androidplayground.conductor.viewstate.ViewStateSampleController
 import com.esafirm.conductorextra.transaction.Routes
 import java.io.Serializable
 import java.util.*
@@ -16,11 +17,13 @@ class ConductorSample : Controller(), Serializable {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         return MenuFactory.create(container.context, Arrays.asList(
                 "Configuration Change",
-                "Shared Transition"
+                "Shared Transition",
+                "View State"
         )) { index ->
             when (index) {
                 0 -> goToController(ConfigurationChangeController())
                 1 -> goToController(SharedTransitionController())
+                2 -> goToController(ViewStateSampleController())
             }
         }
     }
