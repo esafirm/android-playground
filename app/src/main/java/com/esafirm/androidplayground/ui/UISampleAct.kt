@@ -5,6 +5,7 @@ import com.esafirm.androidplayground.common.BaseAct
 import com.esafirm.androidplayground.common.ControllerMaker
 import com.esafirm.androidplayground.common.MenuFactory
 import com.esafirm.androidplayground.main.RouterAct
+import com.esafirm.androidplayground.ui.cliptopadding.ClipToPaddingController
 import com.esafirm.androidplayground.utils.ActivityStater
 import java.util.*
 
@@ -16,7 +17,8 @@ class UISampleAct : BaseAct() {
                         "Constraint Layout",
                         "Spinner Dropdown Position",
                         "Xfermode",
-                        "View Drag Helper"
+                        "View Drag Helper",
+                        "Clip to Padding"
                 )) { index -> navigateToIndex(index) }
         )
     }
@@ -27,6 +29,7 @@ class UISampleAct : BaseAct() {
             1 -> ActivityStater.start(this, SpinnerPositionAct::class.java)
             2 -> goToController(ControllerMaker { XfermodeController() })
             3 -> goToController(ControllerMaker { ViewDragHelperController() })
+            4 -> goToController(ControllerMaker { ClipToPaddingController() })
         }
     }
 
