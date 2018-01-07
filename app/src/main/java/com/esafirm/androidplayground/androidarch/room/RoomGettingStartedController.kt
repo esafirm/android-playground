@@ -29,15 +29,24 @@ class RoomGettingStartedController : BinderController() {
             inserUsers().subscribeOn(Schedulers.io()).subscribe()
         }
 
+        buttonOf(bindingResult, R.id.room_btn_read).setOnClickListener {
+            getUsersWithAge().subscribeOn(Schedulers.io()).subscribe()
+        }
+
+        buttonOf(bindingResult, R.id.room_btn_delete).setOnClickListener {
+            deleteOldestUser().subscribeOn(Schedulers.io()).subscribe()
+        }
+
+        buttonOf(bindingResult, R.id.room_btn_update).setOnClickListener {
+            update().subscribeOn(Schedulers.io()).subscribe()
+        }
+
         init()
     }
 
     private fun init() {
         inserUsers()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnComplete { Logger.log("Adding users to database") }
-                .observeOn(Schedulers.io())
                 .andThen(getUsers())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { users, error ->
@@ -51,11 +60,32 @@ class RoomGettingStartedController : BinderController() {
         database.userDao().getUsers()
     }
 
+    private fun update(): Completable = Completable.fromAction {
+        val userDao = database.userDao()
+        val nika = userDao.getUserWithAge(18).firstOrNull()
+        if (nika != null) {
+            userDao.insertUser(nika.copy(age = 22))
+        }
+        Logger.log("Changing nika age to 22")
+    }
+
+    private fun getUsersWithAge(): Completable = Completable.fromAction {
+        val users = database.userDao().getUserWithAge(18)
+        Logger.log("There are ${users.size} users with age 18")
+    }
+
+    private fun deleteOldestUser(): Completable = Completable.fromAction {
+        val userDao = database.userDao()
+        val nara = userDao.getUserWithAge(17).firstOrNull()
+        nara?.let { userDao.deleteUsers(it) }
+    }
+
     private fun inserUsers(): Completable = Completable.fromAction {
+        Logger.log("Adding users to database")
         listOf(
-                User(123123, "Nara", 17),
-                User(111111, "Nika", 18),
-                User(991199, "Nana", 19)
+                User(name = "Nara", age = 17),
+                User(name = "Nika", age = 18),
+                User(name = "Nana", age = 19)
         ).forEach {
             database.userDao().insertUser(it)
         }

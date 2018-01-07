@@ -22,6 +22,13 @@
             android:text="Insert"/>
 
         <Button
+            android:id="@+id/room_btn_update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Update"/>
+
+        <Button
             android:id="@+id/room_btn_delete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

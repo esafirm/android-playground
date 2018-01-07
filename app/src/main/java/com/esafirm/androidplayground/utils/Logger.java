@@ -47,13 +47,14 @@ public class Logger {
         ScrollView scrollView = new ScrollView(context);
         scrollView.addView(textView);
 
-        getObs().subscribe(new Action1<String>() {
-            @Override
-            public void call(String s) {
-                textView.setText(null);
-                textView.setText(s);
-            }
-        });
+        getObs().observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        textView.setText(null);
+                        textView.setText(s);
+                    }
+                });
 
         return scrollView;
     }

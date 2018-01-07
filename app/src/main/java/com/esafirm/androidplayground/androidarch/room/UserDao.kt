@@ -7,6 +7,9 @@ interface UserDao {
     @Query("SELECT * FROM user")
     fun getUsers(): List<User>
 
+    @Query("SELECT * FROM user WHERE age = :age")
+    fun getUserWithAge(age: Int): List<User>
+
     @Delete
     fun deleteUsers(vararg users: User)
 
