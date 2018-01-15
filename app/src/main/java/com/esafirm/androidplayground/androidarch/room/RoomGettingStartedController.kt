@@ -1,11 +1,12 @@
 package com.esafirm.androidplayground.androidarch.room
 
-import android.arch.persistence.room.Room
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.esafirm.androidplayground.R
+import com.esafirm.androidplayground.androidarch.room.database.AppDatabase
+import com.esafirm.androidplayground.androidarch.room.database.User
 import com.esafirm.androidplayground.utils.Logger
 import com.esafirm.conductorextra.butterknife.BinderController
 import io.reactivex.Completable
@@ -15,9 +16,7 @@ import io.reactivex.schedulers.Schedulers
 
 class RoomGettingStartedController : BinderController() {
 
-    private val database: AppDatabase by lazy {
-        Room.databaseBuilder(applicationContext!!, AppDatabase::class.java, "test.db").build()
-    }
+    private val database: AppDatabase by lazy { AppDatabase.get(applicationContext!!) }
 
     override fun getLayoutResId(): Int = R.layout.controller_room
 

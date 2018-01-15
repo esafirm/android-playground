@@ -1,4 +1,4 @@
-package com.esafirm.androidplayground.androidarch.room
+package com.esafirm.androidplayground.androidarch.room.database
 
 import android.arch.persistence.room.*
 
