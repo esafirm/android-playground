@@ -20,6 +20,7 @@ class RelationController : BaseController() {
     override fun onAttach(view: View) {
         super.onAttach(view)
         insertData().subscribeOn(Schedulers.io()).subscribe()
+        getUserWithCars().subscribeOn(Schedulers.io()).subscribe()
     }
 
     private fun insertData() = Completable.fromAction {
@@ -42,5 +43,16 @@ class RelationController : BaseController() {
                 Logger.log("Inserting car $it")
             }
         }
+    }
+
+    private fun getUserWithCars() = Completable.fromAction {
+        Logger.log("=========")
+
+        val userDao = database.userDao()
+        userDao.getUserWithCars()
+                .filter { it.cars?.isEmpty()?.not() ?: false }
+                .forEach {
+                    Logger.log("User $it")
+                }
     }
 }

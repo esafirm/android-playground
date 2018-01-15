@@ -15,4 +15,7 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertUser(user: User)
+
+    @Query("SELECT * FROM user")
+    fun getUserWithCars(): List<UserWitCars>
 }
