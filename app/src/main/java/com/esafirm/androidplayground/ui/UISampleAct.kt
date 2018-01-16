@@ -6,6 +6,7 @@ import com.esafirm.androidplayground.common.ControllerMaker
 import com.esafirm.androidplayground.common.MenuFactory
 import com.esafirm.androidplayground.main.RouterAct
 import com.esafirm.androidplayground.ui.cliptopadding.ClipToPaddingController
+import com.esafirm.androidplayground.ui.nestedscroll.NestedScrollingController
 import com.esafirm.androidplayground.utils.ActivityStater
 import java.util.*
 
@@ -18,7 +19,8 @@ class UISampleAct : BaseAct() {
                         "Spinner Dropdown Position",
                         "Xfermode",
                         "View Drag Helper",
-                        "Clip to Padding"
+                        "Clip to Padding",
+                        "Nested Scroll Test - RecyclerView inside Coordinator"
                 )) { index -> navigateToIndex(index) }
         )
     }
@@ -30,6 +32,7 @@ class UISampleAct : BaseAct() {
             2 -> goToController(ControllerMaker { XfermodeController() })
             3 -> goToController(ControllerMaker { ViewDragHelperController() })
             4 -> goToController(ControllerMaker { ClipToPaddingController() })
+            5 -> goToController(ControllerMaker { NestedScrollingController() })
         }
     }
 
