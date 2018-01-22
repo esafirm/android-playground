@@ -96,4 +96,10 @@ dependencies {
 
     /* Bcrypt */
     compile 'org.mindrot:jbcrypt:0.4'
+
+    /* Network */
+    final okHttpVersion = '3.9.1'
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
 }
