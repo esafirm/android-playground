@@ -8,11 +8,10 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.Buffer;
 import okio.BufferedSink;
-import okio.ForwardingSink;
-import okio.Okio;
-import okio.Sink;
 
 public class CountingRequestBody extends RequestBody {
+
+    private static final int SEGMENT_SIZE = 12 * 1024;
 
     private RequestBody delegate;
     private Listener listener;
@@ -34,27 +33,17 @@ public class CountingRequestBody extends RequestBody {
 
     @Override
     public void writeTo(@NonNull BufferedSink sink) throws IOException {
-        CountingSink countingSink = new CountingSink(sink);
-        BufferedSink bufferedSink = Okio.buffer(countingSink);
-        delegate.writeTo(bufferedSink);
-    }
+        Buffer buffer = new Buffer();
+        delegate.writeTo(buffer);
 
-    protected final class CountingSink extends ForwardingSink {
+        long read;
+        long total = 0;
 
-        private long bytesWritten = 0;
-
-        public CountingSink(Sink delegate) {
-            super(delegate);
+        Buffer bufferSink = sink.buffer();
+        while ((read = buffer.read(bufferSink, SEGMENT_SIZE)) != -1) {
+            total += read;
+            listener.onRequestProgress(total, contentLength());
         }
-
-        @Override
-        public void write(@NonNull Buffer source, long byteCount) throws IOException {
-            super.write(source, byteCount);
-
-            bytesWritten += byteCount;
-            listener.onRequestProgress(bytesWritten, contentLength());
-        }
-
     }
 
     public interface Listener {

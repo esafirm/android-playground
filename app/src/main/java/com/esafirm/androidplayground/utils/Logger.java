@@ -34,7 +34,7 @@ public class Logger {
     }
 
     private static Observable<String> getObs() {
-        return subject.startWith(getLogText());
+        return subject.startWith(getLogText()).onBackpressureLatest();
     }
 
     public static ViewGroup getLogView(Context context) {

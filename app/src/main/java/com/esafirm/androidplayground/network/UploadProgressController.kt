@@ -7,9 +7,10 @@ import com.esafirm.androidplayground.common.BaseController
 import com.esafirm.androidplayground.utils.Logger
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import okhttp3.FormProgressBody
+import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 
 class UploadProgressController : BaseController() {
 
@@ -18,7 +19,7 @@ class UploadProgressController : BaseController() {
 
     override fun onAttach(view: View) {
 
-        val body = FormProgressBody.Builder()
+        val body = FormBody.Builder()
                 .add("a", "test")
                 .add("b", 50_000.generateString())
                 .build()
@@ -29,6 +30,9 @@ class UploadProgressController : BaseController() {
         })
 
         val client = OkHttpClient.Builder()
+                .addInterceptor(HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                })
                 .build()
 
         val call = client.newCall(Request.Builder()
