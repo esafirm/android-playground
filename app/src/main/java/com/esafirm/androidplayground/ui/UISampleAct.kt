@@ -6,6 +6,7 @@ import com.esafirm.androidplayground.common.ControllerMaker
 import com.esafirm.androidplayground.common.MenuFactory
 import com.esafirm.androidplayground.main.RouterAct
 import com.esafirm.androidplayground.ui.cliptopadding.ClipToPaddingController
+import com.esafirm.androidplayground.ui.nestedrecyclerview.NestedRecyclerViewController
 import com.esafirm.androidplayground.ui.nestedscroll.NestedScrollingController
 import com.esafirm.androidplayground.ui.zipperview.ZipperViewController
 import com.esafirm.androidplayground.utils.ActivityStater
@@ -22,7 +23,8 @@ class UISampleAct : BaseAct() {
                         "View Drag Helper",
                         "Clip to Padding",
                         "Nested Scroll Test - RecyclerView inside Coordinator",
-                        "Zipper View"
+                        "Zipper View",
+                        "Nested RecyclerView Adapter"
                 )) { index -> navigateToIndex(index) }
         )
     }
@@ -36,6 +38,7 @@ class UISampleAct : BaseAct() {
             4 -> goToController(ControllerMaker { ClipToPaddingController() })
             5 -> goToController(ControllerMaker { NestedScrollingController() })
             6 -> goToController(ControllerMaker { ZipperViewController() })
+            7 -> goToController(ControllerMaker { NestedRecyclerViewController() })
         }
     }
 
