@@ -18,4 +18,7 @@ interface UserDao {
 
     @Query("SELECT * FROM user")
     fun getUserWithCars(): List<UserWitCars>
+
+    @Query("SELECT u.* FROM user u JOIN car c WHERE c.name = :name")
+    fun getUsersWithCar(name: String): List<User>
 }

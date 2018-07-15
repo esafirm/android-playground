@@ -14,4 +14,7 @@ interface CarDao {
 
     @Query("DELETE FROM car")
     fun deleteAll()
+
+    @Query("SELECT COUNT(carId) FROM car")
+    fun getCarCount(): Int
 }
