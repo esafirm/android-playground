@@ -3,22 +3,37 @@ package com.esafirm.androidplayground.androidarch.room.database
 import android.arch.persistence.room.*
 
 @Dao
-interface UserDao {
+abstract class UserDao {
     @Query("SELECT * FROM user")
-    fun getUsers(): List<User>
+    abstract fun getUsers(): List<User>
 
     @Query("SELECT * FROM user WHERE age = :age")
-    fun getUserWithAge(age: Int): List<User>
+    abstract fun getUserWithAge(age: Int): List<User>
 
     @Delete
-    fun deleteUsers(vararg users: User)
+    abstract fun deleteUsers(vararg users: User)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(user: User)
+    abstract fun insertUser(user: User): Long
 
     @Query("SELECT * FROM user")
-    fun getUserWithCars(): List<UserWitCars>
+    abstract fun getUserWithCars(): List<UserWitCars>
 
     @Query("SELECT u.* FROM user u JOIN car c WHERE c.name = :name")
-    fun getUsersWithCar(name: String): List<User>
+    abstract fun getUsersWithCar(name: String): List<User>
+
+    @Transaction
+    open fun replaceUser(old: User, new: User) {
+        insertUser(new)
+        deleteUsers(old)
+    }
+
+    @Transaction
+    open fun replaceUserWithError(old: User, new: User) {
+        insertUser(new)
+        if (true) {
+            throw IllegalStateException()
+        }
+        deleteUsers(old)
+    }
 }

@@ -16,7 +16,7 @@ public class RxJava2SampleAct extends BaseAct {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(
-                MenuFactory.create(this, Arrays.asList(
+                MenuFactory.INSTANCE.create(this, Arrays.asList(
                         "Observable vs Flowable",
                         "Interop with v1",
                         "Null item on Stream",
