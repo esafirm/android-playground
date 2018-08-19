@@ -2,6 +2,7 @@ package com.esafirm.androidplayground;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.v7.app.AppCompatDelegate;
 
 import com.esafirm.androidplayground.dagger.AppComponent;
 import com.facebook.stetho.Stetho;
@@ -26,5 +27,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         Stetho.initializeWithDefaults(this);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 }

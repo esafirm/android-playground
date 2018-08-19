@@ -9,6 +9,7 @@ import com.esafirm.androidplayground.ui.cliptopadding.ClipToPaddingController
 import com.esafirm.androidplayground.ui.grayscalefilter.GrayscaleTestController
 import com.esafirm.androidplayground.ui.nestedrecyclerview.NestedRecyclerViewController
 import com.esafirm.androidplayground.ui.nestedscroll.NestedScrollingController
+import com.esafirm.androidplayground.ui.vectortest.VectorTestController
 import com.esafirm.androidplayground.ui.zipperview.ZipperViewController
 import com.esafirm.androidplayground.utils.ActivityStater
 import java.util.*
@@ -26,7 +27,8 @@ class UISampleAct : BaseAct() {
                         "Nested Scroll Test - RecyclerView inside Coordinator",
                         "Zipper View",
                         "Nested RecyclerView Adapter",
-                        "Grayscale Screen Test"
+                        "Grayscale Screen Test",
+                        "VectorDrawable Test"
                 )) { index -> navigateToIndex(index) }
         )
     }
@@ -42,6 +44,7 @@ class UISampleAct : BaseAct() {
             6 -> goToController(ControllerMaker { ZipperViewController() })
             7 -> goToController(ControllerMaker { NestedRecyclerViewController() })
             8 -> goToController(ControllerMaker { GrayscaleTestController() })
+            9 -> goToController(ControllerMaker { VectorTestController() })
         }
     }
 
