@@ -7,7 +7,7 @@ class NestedRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var newsItems = mutableListOf<AdapterItem>()
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return newsItems.firstOrNull { it.javaClass.hashCode() == viewType }.let {
             it!!.create(parent)
         }

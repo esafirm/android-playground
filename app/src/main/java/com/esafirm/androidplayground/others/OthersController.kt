@@ -1,25 +1,24 @@
-package com.esafirm.androidplayground.network
+package com.esafirm.androidplayground.others
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.esafirm.androidplayground.common.BaseController
-import com.esafirm.androidplayground.common.ControllerMaker
 import com.esafirm.androidplayground.common.MenuFactory
-import com.esafirm.androidplayground.main.RouterAct
+import com.esafirm.androidplayground.utils.start
 import java.util.*
 
-class NetworkSampleController : BaseController() {
+class OthersSampleController : BaseController() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         return MenuFactory.create(container.context, Arrays.asList(
-                "OkHttp - Upload Progress"
+                "Leak Test "
         )) { goToIndex(it) }
     }
 
     private fun goToIndex(index: Int) {
         when (index) {
-            0 -> RouterAct.start(activity!!, ControllerMaker { UploadProgressController() })
+            0 -> activity?.start<LeakTestActivity>()
         }
     }
 }

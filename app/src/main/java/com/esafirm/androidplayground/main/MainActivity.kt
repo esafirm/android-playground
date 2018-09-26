@@ -10,6 +10,7 @@ import com.esafirm.androidplayground.conductor.ConductorSample
 import com.esafirm.androidplayground.dagger.example.DaggerSampleAct
 import com.esafirm.androidplayground.kotlin.KotlinSampleController
 import com.esafirm.androidplayground.network.NetworkSampleController
+import com.esafirm.androidplayground.others.OthersSampleController
 import com.esafirm.androidplayground.reductor.ReductorSampelAct
 import com.esafirm.androidplayground.rxjava2.RxJava2SampleAct
 import com.esafirm.androidplayground.securities.SecurityMenuController
@@ -33,7 +34,8 @@ class MainActivity : AppCompatActivity() {
                                 "Anvil Sample (React Render Like)",
                                 "Android Arch Sample",
                                 "Kotlin Sample",
-                                "Network Sample"
+                                "Network Sample",
+                                "Others"
                         )
                 ) { index -> navigateToPage(index) }
         )
@@ -51,6 +53,7 @@ class MainActivity : AppCompatActivity() {
             7 -> RouterAct.start(this, ControllerMaker { AndroidArchSampleController() })
             8 -> RouterAct.start(this, ControllerMaker { KotlinSampleController() })
             9 -> RouterAct.start(this, ControllerMaker { NetworkSampleController() })
+            10 -> RouterAct.start(this, ControllerMaker { OthersSampleController() })
         }
     }
 }

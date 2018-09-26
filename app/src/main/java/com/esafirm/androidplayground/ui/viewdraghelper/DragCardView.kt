@@ -15,7 +15,7 @@ import com.esafirm.androidplayground.utils.clamp
 import com.esafirm.androidplayground.utils.dp
 
 
-class DargCardView @JvmOverloads constructor(
+class DragCardView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
@@ -39,9 +39,9 @@ class DargCardView @JvmOverloads constructor(
     }
 
     inner class Callback : ViewDragHelper.Callback() {
-        override fun tryCaptureView(child: View?, pointerId: Int): Boolean {
+        override fun tryCaptureView(child: View, pointerId: Int): Boolean {
             Logger.log("Try to capture view: $child - $pointerId")
-            return child != null && child == card
+            return child == card
         }
 
         override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int {
@@ -58,12 +58,11 @@ class DargCardView @JvmOverloads constructor(
                 false -> dragRange.toInt()
             }
             if (dragHelper.settleCapturedViewAt(card.left, top)) {
-                ViewCompat.postInvalidateOnAnimation(this@DargCardView)
+                ViewCompat.postInvalidateOnAnimation(this@DragCardView)
             }
         }
 
-
-        override fun onViewPositionChanged(changedView: View?, left: Int, top: Int, dx: Int, dy: Int) {
+        override fun onViewPositionChanged(changedView: View, left: Int, top: Int, dx: Int, dy: Int) {
             val scale: Float = (dragRange - card.top) / dragRange
             childImg.apply {
                 scaleX = scale
@@ -71,7 +70,7 @@ class DargCardView @JvmOverloads constructor(
             }
         }
 
-        override fun getViewVerticalDragRange(child: View?): Int = dragRange.toInt()
+        override fun getViewVerticalDragRange(child: View): Int = dragRange.toInt()
 
         override fun onEdgeDragStarted(edgeFlags: Int, pointerId: Int) {
             Logger.log("on edge drag - flag: $edgeFlags pointerId: $pointerId")
@@ -85,7 +84,7 @@ class DargCardView @JvmOverloads constructor(
         }
     }
 
-    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         val action = MotionEventCompat.getActionMasked(ev)
         if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
             dragHelper.cancel()
@@ -94,7 +93,7 @@ class DargCardView @JvmOverloads constructor(
         return dragHelper.shouldInterceptTouchEvent(ev)
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         dragHelper.processTouchEvent(event)
         return true
     }

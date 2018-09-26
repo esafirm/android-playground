@@ -10,8 +10,8 @@ import com.esafirm.androidplayground.utils.dp
 
 class HorizontalRecyclerAdapter(private val items: List<String>) : RecyclerView.Adapter<HorizontalRecyclerAdapter.SimpleHorizontalVH>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): SimpleHorizontalVH {
-        return SimpleHorizontalVH(TextView(parent?.context).apply {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleHorizontalVH {
+        return SimpleHorizontalVH(TextView(parent.context).apply {
             layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                 setMargins(20.dp.toInt(), 20.dp.toInt(), 20.dp.toInt(), 20.dp.toInt())
             }
@@ -23,8 +23,8 @@ class HorizontalRecyclerAdapter(private val items: List<String>) : RecyclerView.
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: SimpleHorizontalVH?, position: Int) {
-        holder?.textView?.text = items[position]
+    override fun onBindViewHolder(holder: SimpleHorizontalVH, position: Int) {
+        holder.textView.text = items[position]
     }
 
     class SimpleHorizontalVH(itemView: View?) : RecyclerView.ViewHolder(itemView) {

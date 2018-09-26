@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatDelegate;
 
 import com.esafirm.androidplayground.dagger.AppComponent;
 import com.facebook.stetho.Stetho;
+import com.squareup.leakcanary.LeakCanary;
 
 public class App extends Application {
 
@@ -19,13 +20,21 @@ public class App extends Application {
         return component;
     }
 
-    public static Context appContext(){
+    public static Context appContext() {
         return component.appContext();
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+
         Stetho.initializeWithDefaults(this);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
