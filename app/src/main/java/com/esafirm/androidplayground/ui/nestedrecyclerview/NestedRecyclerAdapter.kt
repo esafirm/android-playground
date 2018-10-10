@@ -1,6 +1,6 @@
 package com.esafirm.androidplayground.ui.nestedrecyclerview
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 
 class NestedRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

@@ -1,7 +1,7 @@
 package com.esafirm.androidplayground.main
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.esafirm.androidplayground.androidarch.AndroidArchSampleController
 import com.esafirm.androidplayground.anvil.AnvilSampleAct
 import com.esafirm.androidplayground.common.ControllerMaker
