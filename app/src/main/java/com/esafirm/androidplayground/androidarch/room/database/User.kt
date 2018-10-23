@@ -1,7 +1,7 @@
 package com.esafirm.androidplayground.androidarch.room.database
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity
 data class User(

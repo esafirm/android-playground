@@ -1,12 +1,12 @@
 package com.esafirm.androidplayground.conductor.sharedtransition
 
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.ViewCompat
 import butterknife.BindView
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler

@@ -1,11 +1,11 @@
 package com.esafirm.androidplayground.ui.cliptopadding
 
 import android.graphics.Color
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.Adapter
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.esafirm.androidplayground.utils.dp
 
 class ClipToPaddingAdapter : Adapter<ClipToPaddingAdapter.ClipToPaddingViewHolder>() {
@@ -25,5 +25,5 @@ class ClipToPaddingAdapter : Adapter<ClipToPaddingAdapter.ClipToPaddingViewHolde
                 setPadding(padding, padding, padding, padding)
             })
 
-    class ClipToPaddingViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
+    class ClipToPaddingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }

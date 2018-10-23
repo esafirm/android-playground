@@ -1,7 +1,7 @@
 package com.esafirm.androidplayground.rxjava2;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import com.esafirm.androidplayground.common.BaseAct;
 
 public class RxJava2SchedulerSampleAct extends BaseAct {

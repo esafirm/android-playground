@@ -1,6 +1,6 @@
 package com.esafirm.androidplayground.androidarch.room.database
 
-import android.arch.persistence.room.*
+import androidx.room.*
 
 @Dao
 abstract class UserDao {
