@@ -38,6 +38,11 @@ android {
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -49,10 +54,10 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     /* Android Support */
-    final supportVersion = '27.1.1'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    final androidXVersion = '1.0.0'
+    implementation "com.google.android.material:material:$androidXVersion"
+    implementation "androidx.appcompat:appcompat:$androidXVersion"
+    implementation "androidx.recyclerview:recyclerview:$androidXVersion"
 
     /* Dagger 2 */
     final daggerVersion = '2.17'
@@ -95,6 +100,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'androidx.room:room-runtime:2.0.0'
     kapt "androidx.room:room-compiler:2.0.0"
+
+    implementation "android.arch.work:work-runtime-ktx:1.0.0-alpha10"
 
     /* Stetho */
     implementation 'com.facebook.stetho:stetho:1.5.0'
