@@ -16,6 +16,7 @@ import com.esafirm.androidplayground.rxjava2.RxJava2SampleAct
 import com.esafirm.androidplayground.securities.SecurityMenuController
 import com.esafirm.androidplayground.ui.UISampleAct
 import com.esafirm.androidplayground.utils.ActivityStater
+import com.esafirm.androidplayground.utils.logMeasure
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -39,6 +40,14 @@ class MainActivity : AppCompatActivity() {
                         )
                 ) { index -> navigateToPage(index) }
         )
+    }
+
+    override fun onStart() = logMeasure("onStart") {
+        super.onStart()
+    }
+
+    override fun onResume() = logMeasure("onResume") {
+        super.onResume()
     }
 
     private fun navigateToPage(index: Int) {

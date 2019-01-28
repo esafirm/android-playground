@@ -14,15 +14,24 @@
 
         <!--Main-->
         <activity android:name=".main.MainActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN"/>-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name=".main.RouterAct"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+
+        <!--Fragment-->
+        <activity android:name=".lifecycle.ActivityLifecycle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".main.RouterAct"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
 
         <!--Dagger-->
         <activity android:name=".dagger.example.DaggerSampleAct"/>
