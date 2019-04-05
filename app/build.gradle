@@ -81,7 +81,7 @@ dependencies {
     implementation "com.github.esafirm:conductor-extra:$conductorExtraVersion"
     implementation "com.github.esafirm.conductor-extra:conductor-extra-butterknife:$conductorExtraVersion"
 
-    final butterknifeVersion = '9.0.0-SNAPSHOT'
+    final butterknifeVersion = '10.1.0'
     implementation "com.jakewharton:butterknife:$butterknifeVersion"
     kapt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
@@ -121,4 +121,9 @@ dependencies {
     /* Leak Canary */
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+
+    /* Coroutine */
+    final coroutineVersion = '1.1.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 }

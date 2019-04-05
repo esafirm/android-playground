@@ -7,6 +7,7 @@ import com.esafirm.androidplayground.anvil.AnvilSampleAct
 import com.esafirm.androidplayground.common.ControllerMaker
 import com.esafirm.androidplayground.common.MenuFactory
 import com.esafirm.androidplayground.conductor.ConductorSample
+import com.esafirm.androidplayground.coroutines.CoroutineSampleController
 import com.esafirm.androidplayground.dagger.example.DaggerSampleAct
 import com.esafirm.androidplayground.kotlin.KotlinSampleController
 import com.esafirm.androidplayground.network.NetworkSampleController
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
                                 "UI Example",
                                 "Reductor Sample",
                                 "Conductor Sample",
+                                "Coroutine Sample",
                                 "Security Sample",
                                 "Anvil Sample (React Render Like)",
                                 "Android Arch Sample",
@@ -48,12 +50,13 @@ class MainActivity : AppCompatActivity() {
             2 -> ActivityStater.start(this, UISampleAct::class.java)
             3 -> ActivityStater.start(this, ReductorSampelAct::class.java)
             4 -> RouterAct.start(this, ControllerMaker { ConductorSample() })
-            5 -> RouterAct.start(this, ControllerMaker { SecurityMenuController() })
-            6 -> RouterAct.start(this, ControllerMaker { AnvilSampleAct() })
-            7 -> RouterAct.start(this, ControllerMaker { AndroidArchSampleController() })
-            8 -> RouterAct.start(this, ControllerMaker { KotlinSampleController() })
-            9 -> RouterAct.start(this, ControllerMaker { NetworkSampleController() })
-            10 -> RouterAct.start(this, ControllerMaker { OthersSampleController() })
+            5 -> RouterAct.start(this, ControllerMaker { CoroutineSampleController() })
+            6 -> RouterAct.start(this, ControllerMaker { SecurityMenuController() })
+            7 -> RouterAct.start(this, ControllerMaker { AnvilSampleAct() })
+            8 -> RouterAct.start(this, ControllerMaker { AndroidArchSampleController() })
+            9 -> RouterAct.start(this, ControllerMaker { KotlinSampleController() })
+            10 -> RouterAct.start(this, ControllerMaker { NetworkSampleController() })
+            11 -> RouterAct.start(this, ControllerMaker { OthersSampleController() })
         }
     }
 }
