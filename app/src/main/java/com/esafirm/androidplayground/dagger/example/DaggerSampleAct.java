@@ -34,7 +34,7 @@ public class DaggerSampleAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         DaggerActivityComponent.builder()
-                .appComponent(App.component())
+                .appComponent(App.Companion.component())
                 .build()
                 .inject(this);
 
@@ -42,13 +42,13 @@ public class DaggerSampleAct extends AppCompatActivity {
         log(">> Non scoped injected object \n");
         log(classInAppComponent); // Wi
         log(classInAppComponent2);
-        log(App.component().classInAppComponent());
+        log(App.Companion.component().classInAppComponent());
 
         log("\n");
         log(">> Scoped injected object \n");
         log(scopedClass);
         log(scopedClass2);
-        log(App.component().singletonClass());
+        log(App.Companion.component().singletonClass());
 
         log("\n");
         log(">> Scoped with Provider\n");

@@ -15,6 +15,7 @@ import com.esafirm.androidplayground.others.OthersSampleController
 import com.esafirm.androidplayground.reductor.ReductorSampelAct
 import com.esafirm.androidplayground.rxjava2.RxJava2SampleAct
 import com.esafirm.androidplayground.securities.SecurityMenuController
+import com.esafirm.androidplayground.startup.STracker
 import com.esafirm.androidplayground.ui.UISampleAct
 import com.esafirm.androidplayground.utils.ActivityStater
 import java.util.*
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        STracker.end()
         setContentView(
                 MenuFactory.create(this,
                         Arrays.asList(
