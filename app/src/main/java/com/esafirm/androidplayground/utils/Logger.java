@@ -1,16 +1,14 @@
 package com.esafirm.androidplayground.utils;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.util.TypedValue;
-import android.view.ViewGroup;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.content.*;
+import android.graphics.*;
+import android.util.*;
+import android.view.*;
+import android.widget.*;
 
-import rx.Observable;
-import rx.functions.Action1;
-import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
+import rx.*;
+import rx.functions.*;
+import rx.subjects.*;
 
 @SuppressWarnings("unchecked")
 public class Logger {
@@ -20,6 +18,10 @@ public class Logger {
 
     public static void clear() {
         loggerBuilder.setLength(0);
+    }
+
+    public static void divider() {
+        log("-----------");
     }
 
     public static void log(Object o) {

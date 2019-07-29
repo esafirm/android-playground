@@ -12,13 +12,15 @@ class CoroutineSampleController : BaseController() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         return MenuFactory.create(container.context, listOf(
-                "Behavior Subject"
+                "Behavior Subject",
+                "Delay"
         )) { goToIndex(it) }
     }
 
     private fun goToIndex(index: Int) {
         when (index) {
             0 -> RouterAct.start(activity!!, ControllerMaker { BehaviorSubjectController() })
+            1 -> RouterAct.start(activity!!, ControllerMaker { DelayController() })
         }
     }
 }
