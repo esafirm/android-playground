@@ -17,16 +17,16 @@ import com.esafirm.androidplayground.utils.Logger.log
 
 class DaggerSampleAct : AppCompatActivity() {
 
-    @Inject internal var classInAppComponent: NonScopedClass? = null
-    @Inject internal var classInAppComponent2: NonScopedClass? = null
+    @set:Inject lateinit var classInAppComponent: NonScopedClass
+    @set:Inject lateinit var classInAppComponent2: NonScopedClass
 
-    @Inject internal var scopedClass: ScopedClass? = null
-    @Inject internal var scopedClass2: ScopedClass? = null
+    @set:Inject lateinit var scopedClass: ScopedClass
+    @set:Inject lateinit var scopedClass2: ScopedClass
 
-    @Inject internal var singletonClassProvider: Provider<ScopedClass>? = null
+    @set:Inject lateinit var singletonClassProvider: Provider<ScopedClass>
 
-    @Inject internal var scopedInContructorClass: ScopedInClass? = null
-    @Inject internal var scopedInContructorClass2: ScopedInClass? = null
+    @set:Inject lateinit var scopedInContructorClass: ScopedInClass
+    @set:Inject lateinit var scopedInContructorClass2: ScopedInClass
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

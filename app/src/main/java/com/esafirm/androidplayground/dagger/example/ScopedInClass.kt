@@ -6,5 +6,4 @@ import com.esafirm.androidplayground.dagger.ActivityScope
 import javax.inject.Inject
 
 @ActivityScope
-class ScopedInClass @Inject
-constructor()
+class ScopedInClass @Inject constructor()
