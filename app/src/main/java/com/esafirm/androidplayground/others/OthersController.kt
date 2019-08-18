@@ -11,9 +11,7 @@ import java.util.*
 class OthersSampleController : BaseController() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        return MenuFactory.create(container.context, Arrays.asList(
-                "Leak Test "
-        )) { goToIndex(it) }
+        return MenuFactory.create(container.context, listOf("Leak Test ")) { goToIndex(it) }
     }
 
     private fun goToIndex(index: Int) {
