@@ -2,7 +2,7 @@ package com.esafirm.androidplayground.rxjava2
 
 import android.os.Bundle
 import com.esafirm.androidplayground.common.BaseAct
-import com.esafirm.androidplayground.utils.Logger.*
+import com.esafirm.androidplayground.utils.Logger
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,17 +16,17 @@ class RxJava2ObservableFlowableAct : BaseAct() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        clear()
-        setContentView(getLogView(this))
+        Logger.clear()
+        setContentView(Logger.getLogView(this))
 
         disposable = Observable.interval(200, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .forEach { aLong -> log("Observable:$aLong") }
+            .forEach { aLong -> Logger.log("Observable:$aLong") }
 
         secondDisposable = Flowable.interval(200, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .onBackpressureLatest() // Flowable can be backpressured
-            .forEach { aLong -> log("Flowable:$aLong") }
+            .forEach { aLong -> Logger.log("Flowable:$aLong") }
     }
 
     override fun onDestroy() {
