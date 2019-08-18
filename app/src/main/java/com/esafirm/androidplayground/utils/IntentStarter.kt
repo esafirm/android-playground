@@ -9,7 +9,3 @@ import com.esafirm.androidplayground.main.RouterAct
 inline fun <reified T : Activity> Context.start() {
     startActivity(Intent(this, T::class.java))
 }
-
-fun Activity.routerStart(controller: ControllerMaker) {
-    RouterAct.start(this, controller)
-}

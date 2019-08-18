@@ -8,9 +8,7 @@ import com.esafirm.androidplayground.androidarch.room.RoomGettingStartedControll
 import com.esafirm.androidplayground.androidarch.room.TransactionController
 import com.esafirm.androidplayground.androidarch.workmanager.WorkManagerController
 import com.esafirm.androidplayground.common.BaseController
-import com.esafirm.androidplayground.common.ControllerMaker
 import com.esafirm.androidplayground.common.MenuFactory
-import com.esafirm.androidplayground.utils.routerStart
 
 class AndroidArchSampleController : BaseController() {
 
@@ -23,12 +21,13 @@ class AndroidArchSampleController : BaseController() {
         )) { goToIndex(it) }
     }
 
-    private fun goToIndex(index: Int) = activity?.run {
+    private fun goToIndex(index: Int) = start {
         when (index) {
-            0 -> routerStart(ControllerMaker { RoomGettingStartedController() })
-            1 -> routerStart(ControllerMaker { RelationController() })
-            2 -> routerStart(ControllerMaker { TransactionController() })
-            3 -> routerStart(ControllerMaker { WorkManagerController() })
+            0 -> RoomGettingStartedController()
+            1 -> RelationController()
+            2 -> TransactionController()
+            3 -> WorkManagerController()
+            else -> throw IllegalStateException("Undefined index!")
         }
     }
 }

@@ -87,6 +87,4 @@ class ViewStateSampleController : Controller() {
                 .pushChangeHandler(HorizontalChangeHandler())
                 .popChangeHandler(HorizontalChangeHandler()))
     }
-
-
 }

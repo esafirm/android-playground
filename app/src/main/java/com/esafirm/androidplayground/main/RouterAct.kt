@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 
 import com.bluelinelabs.conductor.Conductor
+import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.esafirm.androidplayground.R
@@ -38,7 +39,7 @@ class RouterAct : BaseAct() {
 
     companion object {
 
-        private val EXTRA_CONTROLLER = "Extra.Controller"
+        private const val EXTRA_CONTROLLER = "Extra.Controller"
 
         /* --------------------------------------------------- */
         /* > Stater */
