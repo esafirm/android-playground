@@ -51,14 +51,21 @@ class MainActivity : AppCompatActivity() {
             1 -> RxJava2SampleAct.start(this)
             2 -> ActivityStater.start(this, UISampleAct::class.java)
             3 -> ActivityStater.start(this, ReductorSampelAct::class.java)
-            4 -> RouterAct.start(this, ControllerMaker { ConductorSample() })
-            5 -> RouterAct.start(this, ControllerMaker { CoroutineSampleController() })
-            6 -> RouterAct.start(this, ControllerMaker { SecurityMenuController() })
-            7 -> RouterAct.start(this, ControllerMaker { AnvilSampleAct() })
-            8 -> RouterAct.start(this, ControllerMaker { AndroidArchSampleController() })
-            9 -> RouterAct.start(this, ControllerMaker { KotlinSampleController() })
-            10 -> RouterAct.start(this, ControllerMaker { NetworkSampleController() })
-            11 -> RouterAct.start(this, ControllerMaker { OthersSampleController() })
+            else -> startController(index)
         }
     }
+
+    private fun startController(index: Int) = RouterAct.start(this, ControllerMaker {
+        when (index) {
+            4 -> ConductorSample()
+            5 -> CoroutineSampleController()
+            6 -> SecurityMenuController()
+            7 -> AnvilSampleAct()
+            8 -> AndroidArchSampleController()
+            9 -> KotlinSampleController()
+            10 -> NetworkSampleController()
+            11 -> OthersSampleController()
+            else -> throw IllegalStateException("Undefined index!")
+        }
+    })
 }
