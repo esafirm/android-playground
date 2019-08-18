@@ -50,6 +50,11 @@
         <!--Others-->
         <activity android:name=".others.LeakTestActivity" />
 
+        <!--Flipper-->
+        <activity
+            android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
+            android:exported="true" />
+
         <!--Init Provider-->
         <provider
             android:name=".startup.LongLibInitProvider"
