@@ -35,7 +35,6 @@
         <activity android:name=".rxjava2.RxJava2ObservableFlowableAct" />
         <activity android:name=".rxjava2.RxJava2InteropAct" />
         <activity android:name=".rxjava2.RxJava2NullItemAct" />
-        <activity android:name=".rxjava2.RxJava2SchedulerSampleAct" />
         <activity android:name=".rxjava2.RxJava2RetryWhen" />
         <activity android:name=".rxjava2.RxJava2Single" />
 

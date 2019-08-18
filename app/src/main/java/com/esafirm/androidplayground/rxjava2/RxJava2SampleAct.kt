@@ -15,7 +15,6 @@ class RxJava2SampleAct : BaseAct() {
                 "Observable vs Flowable",
                 "Interop with v1",
                 "Null item on Stream",
-                "Schedulers",
                 "RetryWhen",
                 "Single | Kotlin Infix Operator"
             )) {
@@ -29,8 +28,7 @@ class RxJava2SampleAct : BaseAct() {
             0 -> ActivityStater.start(this, RxJava2ObservableFlowableAct::class.java)
             1 -> ActivityStater.start(this, RxJava2InteropAct::class.java)
             2 -> ActivityStater.start(this, RxJava2NullItemAct::class.java)
-            3 -> ActivityStater.start(this, RxJava2SchedulerSampleAct::class.java)
-            4 -> ActivityStater.start(this, RxJava2RetryWhen::class.java)
+            3 -> ActivityStater.start(this, RxJava2RetryWhen::class.java)
         }
     }
 
