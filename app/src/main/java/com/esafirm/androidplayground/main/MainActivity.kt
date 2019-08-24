@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.esafirm.androidplayground.androidarch.AndroidArchSampleController
 import com.esafirm.androidplayground.anvil.AnvilSampleAct
-import com.esafirm.androidplayground.common.ControllerMaker
 import com.esafirm.androidplayground.common.MenuFactory
 import com.esafirm.androidplayground.common.navigateTo
+import com.esafirm.androidplayground.common.navigateToController
 import com.esafirm.androidplayground.conductor.ConductorSample
 import com.esafirm.androidplayground.coroutines.CoroutineSampleController
 import com.esafirm.androidplayground.dagger.example.DaggerSampleAct
@@ -29,52 +29,20 @@ class MainActivity : AppCompatActivity() {
 
         val items = listOf(
             "Dagger Example" navigateTo { DaggerSampleAct.start(this) },
-            "RxJava2 Example" navigateTo { RxJava2SampleAct.start(this) }
+            "RxJava2 Example" navigateTo { RxJava2SampleAct.start(this) },
+            "UI Example" navigateTo { ActivityStater.start(this, UISampleAct::class.java) },
+            "Reductor" navigateTo { ActivityStater.start(this, ReductorSampelAct::class.java) },
+            "Conductor" navigateToController { ConductorSample() },
+            "Coroutine" navigateToController { CoroutineSampleController() },
+            "Security Sampels" navigateToController { SecurityMenuController() },
+            "Anvil Sample (React Render Like)" navigateToController { AnvilSampleAct() },
+            "Android Arch Sample" navigateToController { AndroidArchSampleController() },
+            "Kotlin Sample" navigateToController { KotlinSampleController() },
+            "Network Sample" navigateToController { NetworkSampleController() },
+            "Flipper" navigateToController { FlipperController() },
+            "Others" navigateToController { OthersSampleController() }
         )
 
-        setContentView(
-            MenuFactory.create(this,
-                listOf(
-                    "Dagger Example",
-                    "RxJava2 Example",
-                    "UI Example",
-                    "Reductor Sample",
-                    "Conductor Sample",
-                    "Coroutine Sample",
-                    "Security Sample",
-                    "Anvil Sample (React Render Like)",
-                    "Android Arch Sample",
-                    "Kotlin Sample",
-                    "Network Sample",
-                    "Flipper",
-                    "Others"
-                )
-            ) { index -> navigateToPage(index) }
-        )
+        setContentView(MenuFactory.create(this, items))
     }
-
-    private fun navigateToPage(index: Int) {
-        when (index) {
-            0 -> DaggerSampleAct.start(this)
-            1 -> RxJava2SampleAct.start(this)
-            2 -> ActivityStater.start(this, UISampleAct::class.java)
-            3 -> ActivityStater.start(this, ReductorSampelAct::class.java)
-            else -> startController(index)
-        }
-    }
-
-    private fun startController(index: Int) = RouterAct.start(this, ControllerMaker {
-        when (index) {
-            4 -> ConductorSample()
-            5 -> CoroutineSampleController()
-            6 -> SecurityMenuController()
-            7 -> AnvilSampleAct()
-            8 -> AndroidArchSampleController()
-            9 -> KotlinSampleController()
-            10 -> NetworkSampleController()
-            11 -> FlipperController()
-            12 -> OthersSampleController()
-            else -> throw IllegalStateException("Undefined index!")
-        }
-    })
 }

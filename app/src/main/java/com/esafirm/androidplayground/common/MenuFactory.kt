@@ -5,15 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import com.bluelinelabs.conductor.Controller
+import com.esafirm.androidplayground.main.RouterAct
 
 object MenuFactory {
 
-    class NavigateItem(val name: String, val onNavigate: () -> Unit)
+    class NavigateItem(val name: String, val onNavigate: (Context) -> Unit)
 
     fun create(context: Context, data: List<NavigateItem>): View {
         val items = data.map { it.name }
         val onNavigatePage = { index: Int ->
-            data[index].onNavigate.invoke()
+            data[index].onNavigate.invoke(context)
         }
         return create(context, items, onNavigatePage)
     }
@@ -38,5 +40,11 @@ object MenuFactory {
     }
 }
 
-infix fun String.navigateTo(onNavigatePage: () -> Unit) =
+infix fun String.navigateToController(onNavigatePage: () -> Controller) =
+    MenuFactory.NavigateItem(this) {
+        RouterAct.start(it, ControllerMaker(onNavigatePage))
+    }
+
+
+infix fun String.navigateTo(onNavigatePage: (Context) -> Unit) =
     MenuFactory.NavigateItem(this, onNavigatePage)
