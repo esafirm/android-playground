@@ -5,10 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.esafirm.androidplayground.common.BaseController
-import com.esafirm.androidplayground.utils.Logger
-import com.esafirm.androidplayground.utils.button
-import com.esafirm.androidplayground.utils.logger
-import com.esafirm.androidplayground.utils.row
+import com.esafirm.androidplayground.utils.*
 import retrofit2.Response
 
 
@@ -37,7 +34,7 @@ class FlipperController : BaseController() {
     }
 
     private fun triggerCrash() {
-
+        CrashHandler.logCrash(IllegalArgumentException("Hi from Flipper controller!"))
     }
 
     private fun callApi() {

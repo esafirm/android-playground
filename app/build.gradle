@@ -116,7 +116,10 @@ dependencies {
     final okHttpVersion = '3.9.1'
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+
+    final retrofitVersion = '2.5.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
     /* Leak Canary */
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'

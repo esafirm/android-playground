@@ -3,6 +3,7 @@ package com.esafirm.androidplayground.flipper
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 
@@ -16,8 +17,10 @@ object ApiCaller {
         val client = OkHttpClient.Builder()
             .addNetworkInterceptor(FlipperWrapper.createInterceptor())
             .build()
+
         Retrofit.Builder()
             .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("http://dummy.restapiexample.com/")
             .build()
     }
