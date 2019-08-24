@@ -12,10 +12,10 @@ class ComputeWorker(context: Context, workerParams: WorkerParameters) : Worker(c
 
     override fun doWork(): Result {
         return Observable.interval(1, TimeUnit.SECONDS)
-                .doOnNext { Logger.log("Testing") }
-                .filter { it >= 5 }
-                .map { Random().nextBoolean() }
-                .map { if (it) Result.SUCCESS else Result.RETRY }
-                .blockingFirst()
+            .doOnNext { Logger.log("Testing") }
+            .filter { it >= 5 }
+            .map { Random().nextBoolean() }
+            .map { if (it) Result.SUCCESS else Result.RETRY }
+            .blockingFirst()
     }
 }

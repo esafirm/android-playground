@@ -5,6 +5,7 @@ import com.esafirm.androidplayground.BuildConfig
 import com.facebook.flipper.android.AndroidFlipperClient
 import com.facebook.flipper.android.utils.FlipperUtils
 import com.facebook.flipper.plugins.crashreporter.CrashReporterPlugin
+import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin
 import com.facebook.flipper.plugins.inspector.DescriptorMapping
 import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
 import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
@@ -26,6 +27,7 @@ object FlipperWrapper {
             AndroidFlipperClient.getInstance(app).apply {
                 addPlugin(InspectorFlipperPlugin(app, DescriptorMapping.withDefaults()))
                 addPlugin(CrashReporterPlugin.getInstance())
+                addPlugin(DatabasesFlipperPlugin(app))
                 addPlugin(networkPlugin)
 
                 getAllSharedPreferences(app).forEach {

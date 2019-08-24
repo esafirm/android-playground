@@ -11,6 +11,8 @@ import retrofit2.Response
 
 class FlipperController : BaseController() {
 
+    private val databaseHelper by lazy { DatabaseHelper(requiredContext) }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         return row {
             button("Trigger crash") {
@@ -22,8 +24,30 @@ class FlipperController : BaseController() {
             button("Shared Preference put") {
                 putSharedPreference()
             }
+            button("Add data to Database") {
+                insertDatabase()
+            }
+            button("Get all data from Database") {
+                getAllData()
+            }
             logger()
         }
+    }
+
+    private fun insertDatabase() {
+        val data = FlipperData().apply {
+            name = "Robot_${System.currentTimeMillis()}"
+        }
+        databaseHelper.insertData(data)
+
+        Logger.log("Inserting ${data.name}")
+    }
+
+    private fun getAllData() {
+        val alls = databaseHelper.getAll().fold("") { acc, flipperData ->
+            "$acc\n${flipperData.name}"
+        }
+        Logger.log(alls)
     }
 
     private fun putSharedPreference() {
