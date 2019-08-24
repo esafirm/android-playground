@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.esafirm.androidplayground">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:name=".PlaygroundApp"
         android:allowBackup="true"
@@ -16,7 +14,9 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <!--Main-->
-        <activity android:name=".main.MainActivity">
+        <activity
+            android:name=".main.MainActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -63,5 +63,7 @@
             android:exported="false" />
 
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

@@ -1,10 +1,10 @@
 package com.esafirm.androidplayground.main
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.esafirm.androidplayground.androidarch.AndroidArchSampleController
 import com.esafirm.androidplayground.anvil.AnvilSampleAct
-import com.esafirm.androidplayground.common.MenuFactory
 import com.esafirm.androidplayground.common.navigateTo
 import com.esafirm.androidplayground.common.navigateToController
 import com.esafirm.androidplayground.conductor.ConductorSample
@@ -19,9 +19,13 @@ import com.esafirm.androidplayground.rxjava2.RxJava2SampleAct
 import com.esafirm.androidplayground.securities.SecurityMenuController
 import com.esafirm.androidplayground.startup.STracker
 import com.esafirm.androidplayground.ui.UISampleAct
-import com.esafirm.androidplayground.utils.ActivityStater
+import com.esafirm.androidplayground.utils.*
+import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ContextProvider {
+
+    override val requiredContext: Context
+        get() = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +47,13 @@ class MainActivity : AppCompatActivity() {
             "Others" navigateToController { OthersSampleController() }
         )
 
-        setContentView(MenuFactory.create(this, items))
+        setContentView(row {
+            input("Search item here…") { query ->
+                menu(items.filter {
+                    it.name.toLowerCase(Locale.getDefault())
+                        .contains(query.toLowerCase(Locale.getDefault()))
+                })
+            }
+        })
     }
 }
