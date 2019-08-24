@@ -2,7 +2,7 @@ package com.esafirm.androidplayground.dagger
 
 import android.content.Context
 
-import com.esafirm.androidplayground.App
+import com.esafirm.androidplayground.PlaygroundApp
 import com.esafirm.androidplayground.dagger.example.NonScopedClass
 import com.esafirm.androidplayground.dagger.example.ScopedClass
 import com.esafirm.androidplayground.dagger.modules.AppModule
@@ -20,7 +20,7 @@ interface AppComponent {
     fun singletonClass(): ScopedClass
 
     object Initializer {
-        fun make(app: App): AppComponent {
+        fun make(app: PlaygroundApp): AppComponent {
             return DaggerAppComponent.builder()
                 .appModule(AppModule(app))
                 .build()

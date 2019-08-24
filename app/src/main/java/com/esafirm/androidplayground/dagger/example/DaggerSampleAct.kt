@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
-import com.esafirm.androidplayground.App
+import com.esafirm.androidplayground.PlaygroundApp
 import com.esafirm.androidplayground.dagger.DaggerActivityComponent
 
 import javax.inject.Inject
@@ -32,7 +32,7 @@ class DaggerSampleAct : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         DaggerActivityComponent.builder()
-            .appComponent(App.component())
+            .appComponent(PlaygroundApp.component())
             .build()
             .inject(this)
 
@@ -40,13 +40,13 @@ class DaggerSampleAct : AppCompatActivity() {
         log(">> Non scoped injected object \n")
         log(classInAppComponent) // Wi
         log(classInAppComponent2)
-        log(App.component().classInAppComponent())
+        log(PlaygroundApp.component().classInAppComponent())
 
         log("\n")
         log(">> Scoped injected object \n")
         log(scopedClass)
         log(scopedClass2)
-        log(App.component().singletonClass())
+        log(PlaygroundApp.component().singletonClass())
 
         log("\n")
         log(">> Scoped with Provider\n")
