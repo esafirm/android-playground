@@ -1,10 +1,12 @@
 package com.esafirm.androidplayground.utils
 
 import android.content.Context
+import android.graphics.Color
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -80,4 +82,12 @@ fun ViewGroup.logger() = addView(Logger.getLogView(context))
 
 fun ViewGroup.menu(list: List<MenuFactory.NavigateItem>): View {
     return MenuFactory.render(this, list)
+}
+
+fun ViewGroup.webView(): WebView {
+    val webView = WebView(context).apply {
+        setBackgroundColor(Color.LTGRAY)
+    }
+    addView(webView)
+    return webView
 }

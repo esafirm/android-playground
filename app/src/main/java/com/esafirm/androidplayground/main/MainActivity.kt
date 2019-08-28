@@ -20,6 +20,7 @@ import com.esafirm.androidplayground.securities.SecurityMenuController
 import com.esafirm.androidplayground.startup.STracker
 import com.esafirm.androidplayground.ui.UISampleAct
 import com.esafirm.androidplayground.utils.*
+import com.esafirm.androidplayground.webview.VasSonicController
 import java.util.*
 
 class MainActivity : AppCompatActivity(), ContextProvider {
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity(), ContextProvider {
             "Kotlin Sample" navigateToController { KotlinSampleController() },
             "Network Sample" navigateToController { NetworkSampleController() },
             "Flipper" navigateToController { FlipperController() },
+            "VasSonic" navigateToController { VasSonicController() },
             "Others" navigateToController { OthersSampleController() }
         )
 

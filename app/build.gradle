@@ -137,4 +137,7 @@ dependencies {
     debugImplementation "com.facebook.flipper:flipper:$flipperVersion"
     debugImplementation "com.facebook.soloader:soloader:0.6.0"
     releaseImplementation "com.facebook.flipper:flipper-noop:$flipperVersion"
+
+    /* VasSonicController */
+    implementation 'com.tencent.sonic:sdk:3.1.0'
 }
