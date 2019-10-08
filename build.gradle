@@ -23,6 +23,11 @@ allprojects {
     }
 }
 
+task printInfo {
+    println "Root dir: $rootDir"
+    println "Root project: $rootProject.rootDir"
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
