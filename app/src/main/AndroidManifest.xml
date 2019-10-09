@@ -47,6 +47,13 @@
         <activity android:name=".ui.ConstraintLayoutAct" />
         <activity android:name=".ui.SpinnerPositionAct" />
 
+        <!--React Native-->
+        <activity
+            android:name=".rn.ReactActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+
         <!--Others-->
         <activity android:name=".others.LeakTestActivity" />
 
