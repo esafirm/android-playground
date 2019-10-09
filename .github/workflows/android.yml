@@ -13,6 +13,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '10.x'
+    - name: testing
+      run: ls
+    - name: another test
+      run: ls rn
 #    - name: Install deps
 #      run: |
 #        cd rn
