@@ -34,7 +34,7 @@ public class ReactActivity extends AppCompatActivity implements DefaultHardwareB
                 .build();
         // The string here (e.g. "MyReactNativeApp") has to match
         // the string in AppRegistry.registerComponent() in index.js
-        mReactRootView.startReactApplication(mReactInstanceManager, "MyReactNativeApp", null);
+        mReactRootView.startReactApplication(mReactInstanceManager, "rna", null);
 
         setContentView(mReactRootView);
     }
