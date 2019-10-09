@@ -140,4 +140,7 @@ dependencies {
 
     /* VasSonicController */
     implementation 'com.tencent.sonic:sdk:3.1.0'
+
+    /* React Native */
+    implementation "com.facebook.react:react-native:0.61.2" // From node_modules
 }
