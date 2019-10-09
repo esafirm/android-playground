@@ -13,5 +13,9 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    - name: Install deps
+      run: |
+        cd rn
+        npm install
     - name: Build with Gradle
       run: ./gradlew build
