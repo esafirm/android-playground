@@ -1,4 +1,4 @@
-name: Android CI
+name: Android Playground CI
 
 on: [push]
 
@@ -13,10 +13,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '10.x'
-    - name: Install deps
-      run: |
-        cd rn
-        npm install
+#    - name: Install deps
+#      run: |
+#        cd rn
+#        npm install
     - name: set up JDK 1.8
       uses: actions/setup-java@v1
       with:
