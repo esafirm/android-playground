@@ -6,17 +6,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.esafirm.androidplayground.dagger.AppComponent
 import com.esafirm.androidplayground.flipper.FlipperWrapper
 import com.esafirm.androidplayground.startup.STracker
-import com.facebook.flipper.android.AndroidFlipperClient
-import com.facebook.flipper.android.utils.FlipperUtils
-import com.facebook.flipper.plugins.inspector.DescriptorMapping
-import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
-import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
-import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin
-import com.facebook.soloader.SoLoader
 import com.facebook.stetho.Stetho
 import com.squareup.leakcanary.LeakCanary
-import java.util.prefs.Preferences
-
 
 class PlaygroundApp : Application() {
 
