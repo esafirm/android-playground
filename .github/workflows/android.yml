@@ -10,9 +10,9 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: set up Node
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '10.x'
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
     - name: Install deps
       run: |
         cd rn
