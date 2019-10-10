@@ -15,6 +15,7 @@ import com.esafirm.androidplayground.kotlin.KotlinSampleController
 import com.esafirm.androidplayground.network.NetworkSampleController
 import com.esafirm.androidplayground.others.OthersSampleController
 import com.esafirm.androidplayground.reductor.ReductorSampelAct
+import com.esafirm.androidplayground.rn.ReactActivity
 import com.esafirm.androidplayground.rxjava2.RxJava2SampleAct
 import com.esafirm.androidplayground.securities.SecurityMenuController
 import com.esafirm.androidplayground.startup.STracker
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity(), ContextProvider {
             "Kotlin Sample" navigateToController { KotlinSampleController() },
             "Network Sample" navigateToController { NetworkSampleController() },
             "Flipper" navigateToController { FlipperController() },
+            "React Native" navigateTo { ReactActivity.start(this) },
             "VasSonic" navigateToController { VasSonicController() },
             "Others" navigateToController { OthersSampleController() }
         )

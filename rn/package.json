@@ -1,0 +1,17 @@
+{
+  "name": "nolambda.rn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "react": "^16.9.0",
+    "react-native": "^0.61.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "react-native start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
