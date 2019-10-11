@@ -2,8 +2,14 @@ package com.esafirm.androidplayground.utils
 
 import com.facebook.flipper.plugins.crashreporter.CrashReporterPlugin
 
-object CrashHandler {
+open class CrashHandlerImpl(private vararg val handlers: (Exception) -> Unit) {
     fun logCrash(e: Exception) {
-        CrashReporterPlugin.getInstance().sendExceptionMessage(Thread.currentThread(), e)
+        handlers.forEach {
+            it.invoke(e)
+        }
     }
 }
+
+object CrashHandler : CrashHandlerImpl(
+    { CrashReporterPlugin.getInstance().sendExceptionMessage(Thread.currentThread(), it) }
+)

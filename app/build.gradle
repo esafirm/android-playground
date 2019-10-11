@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'jacoco-android'
 
 android {
 
@@ -37,6 +38,12 @@ android {
 
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
+
+        // React Native + Flipper
+        pickFirst 'lib/x86/libc++_shared.so'
+        pickFirst 'lib/x86_64/libc++_shared.so'
+        pickFirst 'lib/arm64-v8a/libc++_shared.so'
+        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
     }
 
     compileOptions {
@@ -44,12 +51,10 @@ android {
         targetCompatibility 1.8
     }
 
-    packagingOptions {
-        // React Native + Flipper
-        pickFirst 'lib/x86/libc++_shared.so'
-        pickFirst 'lib/x86_64/libc++_shared.so'
-        pickFirst 'lib/arm64-v8a/libc++_shared.so'
-        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
     }
 }
 
@@ -160,4 +165,23 @@ dependencies {
     def hermesPath = "$rootDir/rn/node_modules/hermes-engine/android/"
     debugImplementation files(hermesPath + "hermes-debug.aar")
     releaseImplementation files(hermesPath + "hermes-release.aar")
+
+
+    /* Test */
+    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.4.0'
+    testImplementation 'io.mockk:mockk:1.9.3'
+}
+
+jacoco {
+    toolVersion = "0.8.3"
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
+jacocoAndroidUnitTestReport {
+    csv.enabled false
+    html.enabled true
+    xml.enabled true
 }
