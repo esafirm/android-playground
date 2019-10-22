@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'jacoco-android'
 
 android {
 
@@ -159,6 +158,9 @@ dependencies {
     /* VasSonicController */
     implementation 'com.tencent.sonic:sdk:3.1.0'
 
+    /* Dummy */
+    implementation project(':lib_dummy')
+
     /* React Native */
     implementation "com.facebook.react:react-native:0.61.2" // From node_modules
 
@@ -169,18 +171,4 @@ dependencies {
     /* Test */
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.4.0'
     testImplementation 'io.mockk:mockk:1.9.3'
-}
-
-jacoco {
-    toolVersion = "0.8.3"
-}
-
-tasks.withType(Test) {
-    jacoco.includeNoLocationClasses = true
-}
-
-jacocoAndroidUnitTestReport {
-    csv.enabled false
-    html.enabled true
-    xml.enabled true
 }

@@ -18,15 +18,15 @@ class RxJava2Single : BaseAct() {
         setContentView(Logger.getLogView(this))
 
         compositeDisposable add
-                Flowable.just(1, 2, 3).reduce { integer, integer2 -> integer!! + integer2!! }
-                        .subscribe { Logger.log(it) }
+            Flowable.just(1, 2, 3).reduce { integer, integer2 -> integer + integer2 }
+                .subscribe { Logger.log(it) }
 
         compositeDisposable add
-                Single.just(1).map(Int::toString)
-                        .subscribe { s, throwable ->
-                            Logger.log(s)
-                            Logger.log(throwable)
-                        }
+            Single.just(1).map(Int::toString)
+                .subscribe { s, throwable ->
+                    Logger.log(s)
+                    Logger.log(throwable)
+                }
     }
 
     override fun onDestroy() {
