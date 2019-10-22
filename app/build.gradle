@@ -166,7 +166,6 @@ dependencies {
     debugImplementation files(hermesPath + "hermes-debug.aar")
     releaseImplementation files(hermesPath + "hermes-release.aar")
 
-
     /* Test */
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.4.0'
     testImplementation 'io.mockk:mockk:1.9.3'
