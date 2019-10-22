@@ -53,6 +53,13 @@ android {
     testOptions {
         unitTests.all {
             useJUnitPlatform()
+
+            // Configure whether failing tests should fail the build
+            ignoreFailures false
+
+            testLogging {
+                events "passed", "skipped", "failed"
+            }
         }
     }
 }

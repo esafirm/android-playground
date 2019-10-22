@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -23,6 +24,16 @@ android {
         }
     }
 
+    testOptions.unitTests.all {
+        useJUnitPlatform()
+
+        // Configure whether failing tests should fail the build
+        ignoreFailures false
+
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+    }
 }
 
 dependencies {
