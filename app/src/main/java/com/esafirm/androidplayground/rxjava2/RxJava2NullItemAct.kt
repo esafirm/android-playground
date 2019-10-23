@@ -31,7 +31,10 @@ class RxJava2NullItemAct : BaseAct() {
 
     @SuppressLint("CheckResult")
     private fun doStartObservable() {
-        io.reactivex.Observable.just<Any>(null!!)
-            .subscribe({ Logger.log("onNext on Observable.just(null)") }, { throwable -> Logger.log("onError on Observable.just(null)$throwable") })
+        io.reactivex.Observable.just<Any>(null)
+            .subscribe(
+                { Logger.log("onNext on Observable.just(null)") },
+                { throwable -> Logger.log("onError on Observable.just(null)$throwable") }
+            )
     }
 }
