@@ -10,7 +10,7 @@ android {
     defaultConfig {
         multiDexEnabled true
         applicationId "com.esafirm.androidplayground"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -138,7 +138,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
 
-    final retrofitVersion = '2.5.0'
+    final retrofitVersion = '2.6.0'
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
@@ -171,9 +171,14 @@ dependencies {
     /* React Native */
     implementation "com.facebook.react:react-native:0.61.2" // From node_modules
 
-    def hermesPath = "$rootDir/rn/node_modules/hermes-engine/android/"
+    final hermesPath = "$rootDir/rn/node_modules/hermes-engine/android/"
     debugImplementation files(hermesPath + "hermes-debug.aar")
     releaseImplementation files(hermesPath + "hermes-release.aar")
+
+    /* Beagle */
+    final beagleVersion = "1.2.1"
+    debugImplementation "com.github.pandulapeter.beagle:beagle:$beagleVersion"
+    releaseImplementation "com.github.pandulapeter.beagle:beagle-noop:$beagleVersion"
 
     /* Test */
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.4.0'

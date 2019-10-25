@@ -7,6 +7,7 @@ import com.esafirm.androidplayground.dagger.AppComponent
 import com.esafirm.androidplayground.flipper.FlipperWrapper
 import com.esafirm.androidplayground.startup.STracker
 import com.facebook.stetho.Stetho
+import com.pandulapeter.beagle.Beagle
 import com.squareup.leakcanary.LeakCanary
 
 class PlaygroundApp : Application() {
@@ -30,6 +31,7 @@ class PlaygroundApp : Application() {
         Stetho.initializeWithDefaults(this)
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         initFlipper()
+        BeagleInitializer.initialize(this)
     }
 
     private fun initFlipper() {
