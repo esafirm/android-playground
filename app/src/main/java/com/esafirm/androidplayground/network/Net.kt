@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object Net {
 
-    const val BASE_URL = "https://dog.ceo/api//"
+    const val BASE_URL = "https://dog.ceo/api/"
 
     private val okHttpClient by lazy {
         OkHttpClient.Builder()
