@@ -6,8 +6,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.esafirm.androidplayground.dagger.AppComponent
 import com.esafirm.androidplayground.flipper.FlipperWrapper
 import com.esafirm.androidplayground.startup.STracker
+import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.utils.ProcessUtils
 import com.facebook.stetho.Stetho
-import com.pandulapeter.beagle.Beagle
 import com.squareup.leakcanary.LeakCanary
 
 class PlaygroundApp : Application() {
@@ -18,6 +19,8 @@ class PlaygroundApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        Logger.log("onCreate: ${ProcessUtils.getCurrentProcessName(this)}")
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
@@ -35,7 +38,7 @@ class PlaygroundApp : Application() {
     }
 
     private fun initFlipper() {
-       FlipperWrapper.setup(this)
+        FlipperWrapper.setup(this)
     }
 
     companion object {

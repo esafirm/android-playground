@@ -6,9 +6,10 @@ import android.content.Context
 import android.content.pm.ProviderInfo
 import android.database.Cursor
 import android.net.Uri
+import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.utils.ProcessUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.IllegalStateException
 
 abstract class InitProvider : ContentProvider() {
 
@@ -16,9 +17,11 @@ abstract class InitProvider : ContentProvider() {
 
     override fun attachInfo(context: Context?, info: ProviderInfo?) {
         super.attachInfo(context, info)
+
         if (context == null) {
             throw IllegalStateException("Context should not be null")
         } else {
+            Logger.log("Name: ${ProcessUtils.getCurrentProcessName(context)}")
             GlobalScope.launch {
                 onInit(context)
             }

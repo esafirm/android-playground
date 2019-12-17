@@ -14,6 +14,7 @@ import com.esafirm.androidplayground.flipper.FlipperController
 import com.esafirm.androidplayground.kotlin.KotlinSampleController
 import com.esafirm.androidplayground.network.NetworkSampleController
 import com.esafirm.androidplayground.others.OthersSampleController
+import com.esafirm.androidplayground.provider.ProcessInfoController
 import com.esafirm.androidplayground.reductor.ReductorSampelAct
 import com.esafirm.androidplayground.rn.ReactActivity
 import com.esafirm.androidplayground.rxjava2.RxJava2SampleAct
@@ -48,7 +49,8 @@ class MainActivity : AppCompatActivity(), ContextProvider {
             "Flipper" navigateToController { FlipperController() },
             "React Native" navigateTo { ReactActivity.start(this) },
             "VasSonic" navigateToController { VasSonicController() },
-            "Others" navigateToController { OthersSampleController() }
+            "Others" navigateToController { OthersSampleController() },
+            "Process Info" navigateToController { ProcessInfoController() }
         )
 
         setContentView(row {
