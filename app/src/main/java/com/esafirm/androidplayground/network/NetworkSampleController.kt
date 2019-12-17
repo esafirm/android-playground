@@ -4,21 +4,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.esafirm.androidplayground.common.BaseController
-import com.esafirm.androidplayground.common.MenuFactory
+import com.esafirm.androidplayground.common.navigateToController
+import com.esafirm.androidplayground.utils.menu
+import com.esafirm.androidplayground.utils.row
 
 class NetworkSampleController : BaseController() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        return MenuFactory.create(
-                container.context,
-                listOf("OkHttp - Upload Progress")
-        ) { goToIndex(it) }
-    }
-
-    private fun goToIndex(index: Int) = start {
-        when(index) {
-            0 -> UploadProgressController()
-            else -> throw IllegalStateException("Undefined index!")
+        val items = listOf(
+            "OkHttp - Upload Progress" navigateToController { UploadProgressController() },
+            "Simple Network" navigateToController { SimpleNetworkController() }
+        )
+        return row {
+            menu(items)
         }
     }
 }
