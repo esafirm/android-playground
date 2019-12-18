@@ -20,7 +20,7 @@ class PlaygroundApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Logger.log("onCreate: ${ProcessUtils.getCurrentProcessName(this)}")
+        Logger.log("onCreate: ${ProcessUtils.isMainProcess(this)}")
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.

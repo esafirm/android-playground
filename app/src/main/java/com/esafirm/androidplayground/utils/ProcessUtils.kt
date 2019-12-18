@@ -5,10 +5,11 @@ import android.content.Context
 
 object ProcessUtils {
 
-    fun getCurrentProcessName(context: Context): String {
+    private fun getCurrentProcessName(
+        pid: Int,
+        manager: ActivityManager
+    ): String? {
         var processName = ""
-        val pid = android.os.Process.myPid()
-        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         for (processInfo in manager.runningAppProcesses) {
             if (processInfo.pid == pid) {
                 processName = processInfo.processName
@@ -18,10 +19,16 @@ object ProcessUtils {
         return processName
     }
 
-    fun isMainProcess(ctx: Context): Boolean {
+    fun isMainProcess(
+        ctx: Context,
+        pid: Int = android.os.Process.myPid(),
+        manager: ActivityManager? = ctx.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+    ): Boolean {
+        if (manager?.runningAppProcesses == null) return true
+
         val context = ctx.applicationContext
         val packageName = context.packageName
-        val currentProcessName = getCurrentProcessName(context)
+        val currentProcessName = getCurrentProcessName(pid, manager)
         return !packageName.isNullOrEmpty() && packageName == currentProcessName
     }
 }

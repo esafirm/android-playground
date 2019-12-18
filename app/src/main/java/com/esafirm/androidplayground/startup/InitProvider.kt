@@ -21,7 +21,7 @@ abstract class InitProvider : ContentProvider() {
         if (context == null) {
             throw IllegalStateException("Context should not be null")
         } else {
-            Logger.log("Name: ${ProcessUtils.getCurrentProcessName(context)}")
+            Logger.log("Name: ${ProcessUtils.isMainProcess(context)}")
             GlobalScope.launch {
                 onInit(context)
             }

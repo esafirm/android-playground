@@ -17,7 +17,7 @@ class ProcessInfoController : BaseController() {
             button("Check process") {
                 Toast.makeText(
                     applicationContext,
-                    ProcessUtils.getCurrentProcessName(requiredContext),
+                    ProcessUtils.isMainProcess(requiredContext).toString(),
                     Toast.LENGTH_LONG
                 ).show()
             }
