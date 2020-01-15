@@ -59,6 +59,7 @@
 
         <!--Others-->
         <activity android:name=".others.LeakTestActivity" />
+        <activity android:name=".others.LeakCoroutineActivity" />
 
         <!--Flipper-->
         <activity

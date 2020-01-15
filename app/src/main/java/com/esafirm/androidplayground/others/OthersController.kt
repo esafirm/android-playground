@@ -14,7 +14,8 @@ class OthersSampleController : BaseController() {
         return MenuFactory.create(
             container.context,
             listOf(
-                "Leak Test" navigateTo { activity?.start<LeakTestActivity>() }
+                "Leak Test" navigateTo { activity?.start<LeakTestActivity>() },
+                "Leak Coroutine Test" navigateTo { activity?.start<LeakCoroutineActivity>() }
             )
         )
     }
