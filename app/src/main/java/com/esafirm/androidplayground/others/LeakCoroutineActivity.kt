@@ -1,21 +1,25 @@
 package com.esafirm.androidplayground.others
 
 import android.os.Bundle
-import android.os.SystemClock
 import com.esafirm.androidplayground.common.BaseAct
 import com.esafirm.androidplayground.utils.Logger
 import com.esafirm.androidplayground.utils.button
 import com.esafirm.androidplayground.utils.logger
 import com.esafirm.androidplayground.utils.row
 import kotlinx.coroutines.*
+import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext
 
 class LeakCoroutineActivity : BaseAct(), CoroutineScope {
 
     private var counter = 0
 
+    val job = SupervisorJob()
+
+    private val executors = Executors.newSingleThreadExecutor()
+
     // Must use [SupervisorJob] to actually free from the leak
-    override val coroutineContext: CoroutineContext = Dispatchers.Default
+    override val coroutineContext: CoroutineContext = Dispatchers.Default + job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,22 +32,60 @@ class LeakCoroutineActivity : BaseAct(), CoroutineScope {
                         runCoroutine()
                     }
                 )
+
+                button(
+                    text = "Click Me to Thread",
+                    onClick = {
+                        runJavaThread()
+                    }
+                )
             }
         )
+    }
+
+    private fun runJavaThread() {
+        executors.submit {
+//            runTask()
+        }
     }
 
     private fun runCoroutine() {
         Logger.log("Clicked!")
         launch {
-            counter++
-            Logger.log("Counter active!")
-            SystemClock.sleep(10_000)
-            Logger.log("Sleep done!")
+            runTask()
+        }.invokeOnCompletion {
+            Logger.log("Coroutine on completion: $it")
+        }
+    }
+
+    private suspend fun runTask() {
+        counter++
+        Logger.log("Counter active!")
+        runTaskSuspending()
+        Logger.log("Coroutine isActive: $isActive")
+        Logger.log("Sleep done! Counter: $counter")
+    }
+
+    private suspend fun runTaskSuspending() = withContext(Dispatchers.Default) {
+        longRunningWorks()
+    }
+
+    private fun longRunningWorks() {
+        try {
+            var timer = 0
+            while (timer < 10) {
+                timer += 1
+                Thread.sleep(1_000)
+                Logger.log("Count: $timer")
+            }
+        } catch (e: Exception) {
+            Logger.log("Sleep exception : $e")
         }
     }
 
     override fun onStop() {
         super.onStop()
         coroutineContext.cancelChildren()
+        executors.shutdownNow()
     }
 }

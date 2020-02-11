@@ -11,7 +11,8 @@ class CoroutineSampleController : BaseController() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         return MenuFactory.create(container.context, listOf(
                 "Behavior Subject",
-                "Delay"
+                "Delay",
+                "Blocking Controller"
         )) { goToIndex(it) }
     }
 
@@ -19,6 +20,7 @@ class CoroutineSampleController : BaseController() {
         when (index) {
             0 -> BehaviorSubjectController()
             1 -> DelayController()
+            2 -> UIBlockingCntroller()
             else -> throw IllegalStateException("Undefined index")
         }
     }
