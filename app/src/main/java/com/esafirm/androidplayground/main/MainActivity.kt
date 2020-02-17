@@ -11,6 +11,7 @@ import com.esafirm.androidplayground.conductor.ConductorSample
 import com.esafirm.androidplayground.coroutines.CoroutineSampleController
 import com.esafirm.androidplayground.dagger.example.DaggerSampleAct
 import com.esafirm.androidplayground.flipper.FlipperController
+import com.esafirm.androidplayground.images.ShowImageController
 import com.esafirm.androidplayground.kotlin.KotlinSampleController
 import com.esafirm.androidplayground.network.NetworkSampleController
 import com.esafirm.androidplayground.others.OthersSampleController
@@ -50,7 +51,8 @@ class MainActivity : AppCompatActivity(), ContextProvider {
             "React Native" navigateTo { ReactActivity.start(this) },
             "VasSonic" navigateToController { VasSonicController() },
             "Others" navigateToController { OthersSampleController() },
-            "Process Info" navigateToController { ProcessInfoController() }
+            "Process Info" navigateToController { ProcessInfoController() },
+            "Images" navigateToController { ShowImageController() }
         )
 
         setContentView(row {
