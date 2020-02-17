@@ -45,7 +45,7 @@ class LeakCoroutineActivity : BaseAct(), CoroutineScope {
 
     private fun runJavaThread() {
         executors.submit {
-//            runTask()
+            longRunningWorks()
         }
     }
 
@@ -73,7 +73,9 @@ class LeakCoroutineActivity : BaseAct(), CoroutineScope {
     private fun longRunningWorks() {
         try {
             var timer = 0
-            while (timer < 10) {
+            // Is active must be used to enable cancel on computation
+            // Otherwise the `while` will be still running
+            while (timer < 10 && isActive) {
                 timer += 1
                 Thread.sleep(1_000)
                 Logger.log("Count: $timer")
@@ -85,7 +87,7 @@ class LeakCoroutineActivity : BaseAct(), CoroutineScope {
 
     override fun onStop() {
         super.onStop()
-        coroutineContext.cancelChildren()
+        coroutineContext.cancel()
         executors.shutdownNow()
     }
 }
