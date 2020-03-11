@@ -15,7 +15,7 @@ class ComputeWorker(context: Context, workerParams: WorkerParameters) : Worker(c
             .doOnNext { Logger.log("Testing") }
             .filter { it >= 5 }
             .map { Random().nextBoolean() }
-            .map { if (it) Result.SUCCESS else Result.RETRY }
+            .map { if (it) Result.success() else Result.retry() }
             .blockingFirst()
     }
 }

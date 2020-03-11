@@ -9,3 +9,6 @@
 /captures
 .externalNativeBuild
 app/.kotlintest/
+
+## Project specific
+app/google-services.json

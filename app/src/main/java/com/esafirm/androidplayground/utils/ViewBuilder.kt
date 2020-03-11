@@ -43,6 +43,10 @@ fun ContextProvider.scroll(
     return scrollView
 }
 
+fun ContextProvider.menu(vararg items: MenuFactory.NavigateItem): View {
+    return MenuFactory.create(requiredContext, items.toList())
+}
+
 fun ContextProvider.row(block: ViewGroup.() -> Unit): LinearLayout {
     return linearLayout(requiredContext, LinearLayout.VERTICAL).also(block)
 }

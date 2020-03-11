@@ -10,6 +10,7 @@ import com.esafirm.androidplayground.common.navigateToController
 import com.esafirm.androidplayground.conductor.ConductorSample
 import com.esafirm.androidplayground.coroutines.CoroutineSampleController
 import com.esafirm.androidplayground.dagger.example.DaggerSampleAct
+import com.esafirm.androidplayground.firebase.FirebaseController
 import com.esafirm.androidplayground.flipper.FlipperController
 import com.esafirm.androidplayground.images.ShowImageController
 import com.esafirm.androidplayground.kotlin.KotlinSampleController
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity(), ContextProvider {
             "Reductor" navigateTo { ActivityStater.start(this, ReductorSampelAct::class.java) },
             "Conductor" navigateToController { ConductorSample() },
             "Coroutine" navigateToController { CoroutineSampleController() },
+            "Firebase" navigateToController { FirebaseController() },
             "Security Sampels" navigateToController { SecurityMenuController() },
             "Anvil Sample (React Render Like)" navigateToController { AnvilSampleAct() },
             "Android Arch Sample" navigateToController { AndroidArchSampleController() },

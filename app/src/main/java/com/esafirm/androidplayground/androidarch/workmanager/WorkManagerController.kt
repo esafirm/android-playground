@@ -8,8 +8,8 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import androidx.work.WorkStatus
 import com.esafirm.androidplayground.common.BaseController
 import com.esafirm.androidplayground.utils.Logger
 import com.esafirm.androidplayground.utils.button
@@ -50,21 +50,21 @@ class WorkManagerController : BaseController() {
     private fun startContinuousWorker() {
         Logger.log("Start continuous work")
         WorkManager.getInstance()
-                .beginWith(OneTimeWorkRequestBuilder<ComputeWorker>().build())
-                .then(OneTimeWorkRequestBuilder<ComputeWorker>().build())
-                .enqueue()
+            .beginWith(OneTimeWorkRequestBuilder<ComputeWorker>().build())
+            .then(OneTimeWorkRequestBuilder<ComputeWorker>().build())
+            .enqueue()
     }
 
     private fun startListenableWorker() {
         val tag = "WorkTag"
         val workRequest = OneTimeWorkRequestBuilder<ComputeWorker>()
-                .addTag(tag)
-                .build()
+            .addTag(tag)
+            .build()
 
         val workId = workRequest.id
-        val liveData = WorkManager.getInstance().getStatusByIdLiveData(workId)
+        val liveData = WorkManager.getInstance().getWorkInfoByIdLiveData(workId)
 
-        val observer = { status: WorkStatus ->
+        val observer = { status: WorkInfo ->
             Logger.log("Work completed: $status")
         }
 
@@ -85,7 +85,7 @@ class WorkManagerController : BaseController() {
     private fun startPeriodicWorker() {
         if (Build.VERSION.SDK_INT >= 26) {
             WorkManager.getInstance().enqueue(
-                    PeriodicWorkRequestBuilder<ComputeWorker>(repeatInterval = Duration.ofSeconds(5)).build())
+                PeriodicWorkRequestBuilder<ComputeWorker>(repeatInterval = Duration.ofSeconds(5)).build())
         } else {
             Toast.makeText(activity, "SDK >= 26 only", Toast.LENGTH_SHORT).show()
         }
