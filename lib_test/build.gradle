@@ -4,8 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
-
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 16
@@ -45,4 +44,7 @@ dependencies {
     /* Test */
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.4.0'
     testImplementation 'io.mockk:mockk:1.9.3'
+
+    testImplementation 'org.robolectric:robolectric:4.3.1'
+    testImplementation 'junit:junit:4.13'
 }

@@ -15,7 +15,7 @@ interface DummyService {
 object ApiCaller {
     private val retrofit by lazy {
         val client = OkHttpClient.Builder()
-            .addNetworkInterceptor(FlipperWrapper.createInterceptor())
+            .addInterceptor(FlipperWrapper.createInterceptor())
             .build()
 
         Retrofit.Builder()

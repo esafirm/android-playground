@@ -64,7 +64,7 @@ class FlipperController : BaseController() {
     private fun callApi() {
         ApiCaller.getEmployee().enqueue(object : retrofit2.Callback<List<Employee>> {
             override fun onFailure(call: retrofit2.Call<List<Employee>>, t: Throwable) {
-                Logger.log("onFailure")
+                Logger.log("onFailure: $t")
             }
 
             override fun onResponse(call: retrofit2.Call<List<Employee>>, response: Response<List<Employee>>) {

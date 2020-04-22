@@ -153,23 +153,28 @@ dependencies {
 
     /* Flipper */
     // Because we include react native, flipper must exclude it deps
-    final flipperVersion = '0.23.4'
+    final flipperVersion = '0.36.0'
     debugImplementation("com.facebook.flipper:flipper:$flipperVersion") {
-        exclude group: 'com.facebook.flipper', module: 'fbjni'
-        exclude group: 'com.facebook.yoga', module: 'yoga'
-        exclude group: 'com.facebook.litho', module: 'litho-annotations'
+        exclude group:'com.facebook.yoga'
+        exclude group:'com.facebook.fbjni', module: 'fbjni'
+        exclude group:'com.facebook.litho', module: 'litho-annotations'
     }
-    debugImplementation "com.facebook.soloader:soloader:0.6.0"
+    debugImplementation("com.facebook.flipper:flipper-network-plugin:$flipperVersion") {
+        exclude group:'com.facebook.yoga'
+        exclude group:'com.facebook.fbjni', module: 'fbjni'
+        exclude group:'com.facebook.litho', module: 'litho-annotations'
+    }
+    debugImplementation "com.facebook.soloader:soloader:0.8.2"
     releaseImplementation "com.facebook.flipper:flipper-noop:$flipperVersion"
 
     /* VasSonicController */
     implementation 'com.tencent.sonic:sdk:3.1.0'
 
-    /* Dummy */
-    implementation project(':lib_dummy')
+    /* For Testing Test */
+    implementation project(':lib_test')
 
     /* React Native */
-    implementation "com.facebook.react:react-native:0.61.2" // From node_modules
+    implementation "com.facebook.react:react-native:0.62.1" // From node_modules
 
     final hermesPath = "$rootDir/rn/node_modules/hermes-engine/android/"
     debugImplementation files(hermesPath + "hermes-debug.aar")
@@ -190,4 +195,5 @@ dependencies {
     /* Test */
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.4.0'
     testImplementation 'io.mockk:mockk:1.9.3'
+    testImplementation 'org.robolectric:robolectric:4.3.1'
 }

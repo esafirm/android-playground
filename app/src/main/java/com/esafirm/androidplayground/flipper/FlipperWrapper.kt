@@ -19,7 +19,7 @@ object FlipperWrapper {
 
     private val networkPlugin = NetworkFlipperPlugin()
 
-    fun createInterceptor() = FlipperOkhttpInterceptor(networkPlugin)
+    fun createInterceptor() = FlipperOkhttpInterceptor(networkPlugin, true)
 
     fun setup(app: Application) {
         SoLoader.init(app, false)

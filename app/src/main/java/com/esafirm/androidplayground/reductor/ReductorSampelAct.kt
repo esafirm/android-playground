@@ -11,13 +11,13 @@ class ReductorSampelAct : BaseAct() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(
-                MenuFactory.create(this, Arrays.asList(
+                MenuFactory.create(this, listOf(
                         "Counter"
-                )) { index -> navigateToIndex(index) }
+                )) { navigateToIndex() }
         )
     }
 
-    fun navigateToIndex(index: Int) {
+    private fun navigateToIndex() {
         ActivityStater.start(this, ReductorCounterAct::class.java)
     }
 }

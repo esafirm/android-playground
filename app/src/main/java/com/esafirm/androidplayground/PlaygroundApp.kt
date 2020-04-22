@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.esafirm.androidplayground.dagger.AppComponent
+import com.esafirm.androidplayground.flipper.FlipperWrapper
 import com.esafirm.androidplayground.startup.STracker
 import com.esafirm.androidplayground.utils.Logger
 import com.esafirm.androidplayground.utils.ProcessUtils
@@ -29,7 +30,7 @@ class PlaygroundApp : Application() {
     }
 
     private fun initFlipper() {
-//        FlipperWrapper.setup(this)
+        FlipperWrapper.setup(this)
     }
 
     companion object {
