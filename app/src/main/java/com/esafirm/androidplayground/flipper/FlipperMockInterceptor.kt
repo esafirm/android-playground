@@ -1,7 +1,6 @@
 package com.esafirm.androidplayground.flipper
 
 import android.text.TextUtils
-import android.util.Pair
 import com.facebook.flipper.core.FlipperConnection
 import com.facebook.flipper.core.FlipperObject
 import com.facebook.flipper.plugins.common.BufferingFlipperPlugin.MockResponseConnectionListener
@@ -25,15 +24,9 @@ import java.util.*
  */
 class FlipperMockInterceptor @JvmOverloads constructor(
     private val plugin: NetworkFlipperPlugin,
-    private val maxBodyBytes: Long = DEFAULT_MAX_BODY_BYTES
+    private val maxBodyBytes: Long = DEFAULT_MAX_BODY_BYTES,
+    private val storage: MockStorage = MemoryMockStorage()
 ) : Interceptor, MockResponseConnectionListener {
-
-    private class PartialRequestInfo internal constructor(
-        url: String?, method: String?
-    ) : Pair<String?, String?>(url, method)
-
-    // pair of request url and method
-    private val mockResponseMap: MutableMap<PartialRequestInfo, ResponseInfo?> = HashMap(0)
 
     init {
         plugin.setConnectionListener(this)
@@ -113,19 +106,17 @@ class FlipperMockInterceptor @JvmOverloads constructor(
     }
 
     private fun registerMockResponse(partialRequest: PartialRequestInfo, response: ResponseInfo) {
-        if (!mockResponseMap.containsKey(partialRequest)) {
-            mockResponseMap[partialRequest] = response
-        }
+        storage.put(partialRequest, response)
     }
 
     private fun getMockResponse(request: Request): Response? {
         val url = request.url.toString()
         val method = request.method
         val partialRequest = PartialRequestInfo(url, method)
-        if (!mockResponseMap.containsKey(partialRequest)) {
+        if (!storage.contains(partialRequest)) {
             return null
         }
-        val mockResponse = mockResponseMap[partialRequest] ?: return null
+        val mockResponse = storage.get(partialRequest) ?: return null
         val builder = Response.Builder()
         builder
             .request(request)
@@ -172,7 +163,7 @@ class FlipperMockInterceptor @JvmOverloads constructor(
             "mockResponses"
         ) { params, responder ->
             val array = params.getArray("routes")
-            mockResponseMap.clear()
+            storage.clear()
             for (i in 0 until array.length()) {
                 val route = array.getObject(i)
                 val requestUrl = route.getString("requestUrl")
@@ -187,7 +178,6 @@ class FlipperMockInterceptor @JvmOverloads constructor(
     }
 
     override fun onDisconnect() {
-        mockResponseMap.clear()
     }
 
     companion object {
