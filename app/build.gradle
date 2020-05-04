@@ -153,7 +153,7 @@ dependencies {
 
     /* Flipper */
     // Because we include react native, flipper must exclude it deps
-    final flipperVersion = '0.36.0'
+    final flipperVersion = '0.40.0'
     debugImplementation("com.facebook.flipper:flipper:$flipperVersion") {
         exclude group:'com.facebook.yoga'
         exclude group:'com.facebook.fbjni', module: 'fbjni'

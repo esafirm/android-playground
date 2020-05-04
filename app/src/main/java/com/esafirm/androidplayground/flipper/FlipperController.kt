@@ -5,7 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.esafirm.androidplayground.common.BaseController
-import com.esafirm.androidplayground.utils.*
+import com.esafirm.androidplayground.utils.CrashHandler
+import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.utils.button
+import com.esafirm.androidplayground.utils.logger
+import com.esafirm.androidplayground.utils.row
+import retrofit2.Call
 import retrofit2.Response
 
 
@@ -18,8 +23,11 @@ class FlipperController : BaseController() {
             button("Trigger crash") {
                 triggerCrash()
             }
-            button("Call API") {
+            button("Call API [GET]") {
                 callApi()
+            }
+            button("Call API [POST]") {
+                callPostApi()
             }
             button("Shared Preference put") {
                 putSharedPreference()
@@ -44,10 +52,10 @@ class FlipperController : BaseController() {
     }
 
     private fun getAllData() {
-        val alls = databaseHelper.getAll().fold("") { acc, flipperData ->
+        val all = databaseHelper.getAll().fold("") { acc, flipperData ->
             "$acc\n${flipperData.name}"
         }
-        Logger.log(alls)
+        Logger.log(all)
     }
 
     private fun putSharedPreference() {
@@ -69,6 +77,25 @@ class FlipperController : BaseController() {
 
             override fun onResponse(call: retrofit2.Call<List<Employee>>, response: Response<List<Employee>>) {
                 Logger.log("onResponse")
+            }
+        })
+    }
+
+    private fun callPostApi() {
+        val employee = Employee(
+            employee_age = "22",
+            employee_name = "Someone",
+            employee_salary = "Cukup",
+            id = "123123",
+            profile_image = "https://www.google.com"
+        )
+        ApiCaller.createEmployee(employee).enqueue(object : retrofit2.Callback<Employee> {
+            override fun onFailure(call: Call<Employee>, t: Throwable) {
+                Logger.log("POST onFailure: $t")
+            }
+
+            override fun onResponse(call: Call<Employee>, response: Response<Employee>) {
+                Logger.log("POST onResponse")
             }
         })
     }
