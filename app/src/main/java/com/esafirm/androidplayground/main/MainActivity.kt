@@ -10,6 +10,7 @@ import com.esafirm.androidplayground.common.navigateToController
 import com.esafirm.androidplayground.conductor.ConductorSample
 import com.esafirm.androidplayground.coroutines.CoroutineSampleController
 import com.esafirm.androidplayground.dagger.example.DaggerSampleAct
+import com.esafirm.androidplayground.ffmpeg.FfmpegController
 import com.esafirm.androidplayground.firebase.FirebaseController
 import com.esafirm.androidplayground.flipper.FlipperController
 import com.esafirm.androidplayground.images.ShowImageController
@@ -23,7 +24,11 @@ import com.esafirm.androidplayground.rxjava2.RxJava2SampleAct
 import com.esafirm.androidplayground.securities.SecurityMenuController
 import com.esafirm.androidplayground.startup.STracker
 import com.esafirm.androidplayground.ui.UISampleAct
-import com.esafirm.androidplayground.utils.*
+import com.esafirm.androidplayground.utils.ActivityStater
+import com.esafirm.androidplayground.utils.ContextProvider
+import com.esafirm.androidplayground.utils.input
+import com.esafirm.androidplayground.utils.menu
+import com.esafirm.androidplayground.utils.row
 import com.esafirm.androidplayground.webview.VasSonicController
 import java.util.*
 
@@ -44,6 +49,7 @@ class MainActivity : AppCompatActivity(), ContextProvider {
             "Conductor" navigateToController { ConductorSample() },
             "Coroutine" navigateToController { CoroutineSampleController() },
             "Firebase" navigateToController { FirebaseController() },
+            "FFmpeg" navigateToController { FfmpegController() },
             "Security Sampels" navigateToController { SecurityMenuController() },
             "Anvil Sample (React Render Like)" navigateToController { AnvilSampleAct() },
             "Android Arch Sample" navigateToController { AndroidArchSampleController() },
