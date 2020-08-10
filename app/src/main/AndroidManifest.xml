@@ -68,6 +68,8 @@
             android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
             android:exported="true" />
 
+        <service android:name=".service.SampleService"/>
+
         <!--Init Provider-->
         <provider
             android:name=".startup.LongLibInitProvider"

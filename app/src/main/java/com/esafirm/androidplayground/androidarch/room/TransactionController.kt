@@ -98,9 +98,9 @@ class TransactionController : BaseController() {
             }
 
             listOf(User(name = "Siska", age = 20), User(name = "Saski", age = 21), User(name = "Sesko", age = 100))
-                    .forEach {
-                        userDao.insertUser(it)
-                    }
+                .forEach {
+                    userDao.insertUser(it)
+                }
 
             val userId = userDao.getUsers().first().userId!!
             carDao.insertCar(Car(name = "Brio", owner = userId))
