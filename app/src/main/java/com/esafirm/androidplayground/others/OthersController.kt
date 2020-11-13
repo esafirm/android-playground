@@ -17,7 +17,8 @@ class OthersSampleController : BaseController() {
             listOf(
                 "Leak Test" navigateTo { activity?.start<LeakTestActivity>() },
                 "Leak Coroutine Test" navigateTo { activity?.start<LeakCoroutineActivity>() },
-                "Read & Write File" navigateToController { FileController() }
+                "Read & Write File" navigateToController { FileController() },
+                "Parcel Test" navigateToController { ParcelController() }
             )
         )
     }
