@@ -5,14 +5,14 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
 
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion rootProject.ext.compileSdk
 
     defaultConfig {
+        minSdkVersion rootProject.ext.minSdk
+        targetSdkVersion rootProject.ext.compileSdk
+
         multiDexEnabled true
         applicationId "com.esafirm.androidplayground"
-        minSdkVersion 21
-        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -147,7 +147,7 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.1'
 
     /* Coroutine */
-    final coroutineVersion = '1.1.0'
+    final coroutineVersion = '1.4.1'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 

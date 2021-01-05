@@ -26,7 +26,7 @@ class TestSharedTransitionChangeHandler(var names: List<String>) : SharedElement
     }
 
     override fun restoreFromBundle(bundle: Bundle) {
-        names = bundle.getStringArrayList(KEY_WAITING).toList()
+        names = bundle.getStringArrayList(KEY_WAITING)!!.toList()
     }
 
     override fun getSharedElementTransition(container: ViewGroup, from: View?, to: View?, isPush: Boolean): Transition? {

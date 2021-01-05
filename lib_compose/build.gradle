@@ -1,0 +1,64 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+final composeVersion = '1.0.0-alpha07'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdk
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdk
+        targetSdkVersion rootProject.ext.compileSdk
+        versionCode 1
+        versionName "1.0"
+
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+        useIR = true
+    }
+    composeOptions {
+        kotlinCompilerVersion rootProject.ext.kotlin_version
+        kotlinCompilerExtensionVersion composeVersion
+    }
+}
+
+dependencies {
+    implementation "androidx.compose.ui:ui:$composeVersion"
+    // Tooling support (Previews, etc.)
+    implementation "androidx.ui:ui-tooling:$composeVersion"
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation "androidx.compose.foundation:foundation:$composeVersion"
+    // Material Design
+    implementation "androidx.compose.material:material:$composeVersion"
+    // Material design icons
+    implementation "androidx.compose.material:material-icons-core:$composeVersion"
+    implementation "androidx.compose.material:material-icons-extended:$composeVersion"
+    // Integration with observables
+    implementation "androidx.compose.runtime:runtime-livedata:$composeVersion"
+
+    // UI Tests
+    androidTestImplementation "androidx.ui:ui-test:$composeVersion"
+}
+
+repositories {
+    google()
+}

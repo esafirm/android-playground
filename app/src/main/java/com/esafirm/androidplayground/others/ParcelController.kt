@@ -24,7 +24,7 @@ class ParcelController : BaseController() {
                 }
 
                 val item = bundle.getParcelable<ArrayOfSpecialOfferViewModel>("key")
-                Logger.log(item.specialOffers.first().item)
+                Logger.log(item!!.specialOffers.first().item)
             }
             logger()
         }

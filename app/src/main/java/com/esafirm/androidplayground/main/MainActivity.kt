@@ -14,6 +14,7 @@ import com.esafirm.androidplayground.dagger.example.DaggerSampleAct
 import com.esafirm.androidplayground.ffmpeg.FfmpegController
 import com.esafirm.androidplayground.firebase.FirebaseController
 import com.esafirm.androidplayground.flipper.FlipperController
+import com.esafirm.androidplayground.flow.FlowSampleController
 import com.esafirm.androidplayground.images.ShowImageController
 import com.esafirm.androidplayground.kotlin.KotlinSampleController
 import com.esafirm.androidplayground.network.NetworkSampleController
@@ -26,11 +27,7 @@ import com.esafirm.androidplayground.securities.SecurityMenuController
 import com.esafirm.androidplayground.service.SampleService
 import com.esafirm.androidplayground.startup.STracker
 import com.esafirm.androidplayground.ui.UISampleAct
-import com.esafirm.androidplayground.utils.ActivityStater
-import com.esafirm.androidplayground.utils.ContextProvider
-import com.esafirm.androidplayground.utils.input
-import com.esafirm.androidplayground.utils.menu
-import com.esafirm.androidplayground.utils.row
+import com.esafirm.androidplayground.utils.*
 import com.esafirm.androidplayground.webview.VasSonicController
 import java.util.*
 
@@ -58,6 +55,7 @@ class MainActivity : AppCompatActivity(), ContextProvider {
             "Anvil Sample (React Render Like)" navigateToController { AnvilSampleAct() },
             "Android Arch Sample" navigateToController { AndroidArchSampleController() },
             "Kotlin Sample" navigateToController { KotlinSampleController() },
+            "Kotlin Flow" navigateToController { FlowSampleController() },
             "Network Sample" navigateToController { NetworkSampleController() },
             "Flipper" navigateToController { FlipperController() },
             "React Native" navigateTo { ReactActivity.start(this) },

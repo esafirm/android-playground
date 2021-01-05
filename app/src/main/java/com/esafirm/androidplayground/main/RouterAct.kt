@@ -21,7 +21,7 @@ class RouterAct : BaseAct() {
         setContentView(R.layout.activity_router)
 
         val maker = intent
-            .extras
+            .extras!!
             .getSerializable(EXTRA_CONTROLLER) as ControllerMaker
 
         router = Conductor.attachRouter(this, findViewById(R.id.container), savedInstanceState)

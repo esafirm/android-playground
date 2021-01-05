@@ -2,14 +2,19 @@
 apply from: './jacoco.gradle'
 
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext {
+        kotlin_version = '1.4.10'
+        compileSdk = 29
+        minSdk = 21
+    }
+
     repositories {
         google()
         mavenCentral()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.0-alpha16'
+        classpath 'com.android.tools.build:gradle:4.2.0-beta02'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.3.3'
@@ -37,4 +42,3 @@ task printInfo {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
