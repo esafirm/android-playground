@@ -15,6 +15,7 @@ import com.esafirm.androidplayground.ffmpeg.FfmpegController
 import com.esafirm.androidplayground.firebase.FirebaseController
 import com.esafirm.androidplayground.flipper.FlipperController
 import com.esafirm.androidplayground.flow.FlowSampleController
+import com.esafirm.androidplayground.fragment.ViewPagerCurrentFragmentSampleActivity
 import com.esafirm.androidplayground.images.ShowImageController
 import com.esafirm.androidplayground.kotlin.KotlinSampleController
 import com.esafirm.androidplayground.network.NetworkSampleController
@@ -51,6 +52,7 @@ class MainActivity : AppCompatActivity(), ContextProvider {
             "Coroutine" navigateToController { CoroutineSampleController() },
             "Firebase" navigateToController { FirebaseController() },
             "FFmpeg" navigateToController { FfmpegController() },
+            "Fragment Samples" navigateTo { ViewPagerCurrentFragmentSampleActivity.start(this) },
             "Security Sampels" navigateToController { SecurityMenuController() },
             "Anvil Sample (React Render Like)" navigateToController { AnvilSampleAct() },
             "Android Arch Sample" navigateToController { AndroidArchSampleController() },

@@ -1,2 +1,1 @@
 include ':app', ':lib_test'
-include ':lib_compose'

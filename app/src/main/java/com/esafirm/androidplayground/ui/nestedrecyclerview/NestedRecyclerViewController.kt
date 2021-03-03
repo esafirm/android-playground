@@ -28,23 +28,23 @@ class NestedRecyclerViewController : BinderController {
 
     private fun createItems() = listOf(
             HeadlineNewsItem(listOf("Headline 1", "Headline 2", "Headline 3", "Headline 4", "Headline 5", "Headline 1", "Headline 2", "Headline 3", "Headline 4", "Headline 5")),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 10"),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 10"),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 1"),
-            SingleNewsItem("This is a news 10")
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 10"),
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 10"),
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 1"),
+            SingleItem("This is a news 10")
     )
 
 }

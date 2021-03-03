@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.*
 import androidx.annotation.DrawableRes
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.esafirm.androidplayground.common.MenuFactory
 
@@ -132,4 +134,16 @@ fun ViewGroup.image(
             .into(this)
 
     })
+}
+
+fun ViewGroup.recyclerView(
+    passedAdapter: RecyclerView.Adapter<*>,
+    manager: RecyclerView.LayoutManager = LinearLayoutManager(context)
+) {
+    val recycler = RecyclerView(context).apply {
+        matchParent(horizontal = true, vertical = true)
+        layoutManager = manager
+        adapter = passedAdapter
+    }
+    addView(recycler)
 }

@@ -78,6 +78,7 @@ dependencies {
     implementation "com.google.android.material:material:$androidXVersion"
     implementation "androidx.appcompat:appcompat:$androidXVersion"
     implementation "androidx.recyclerview:recyclerview:$androidXVersion"
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     /* Dagger 2 */
     final daggerVersion = '2.17'

@@ -16,28 +16,54 @@ interface AdapterItem {
     fun create(viewParent: ViewGroup?): RecyclerView.ViewHolder
 }
 
-class SingleNewsItem(private val news: String) : AdapterItem {
+class AbstractSingleItem(
+    private val text: String,
+    private val extraBind: (SingleViewHolder) -> Unit = {},
+    private val extraCreate: (SingleViewHolder) -> Unit = {}
+) : AdapterItem {
 
     override fun bind(viewHolder: RecyclerView.ViewHolder) {
-        viewHolder as SingleNewsViewHolder
-        viewHolder.textView.text = news
+        viewHolder as SingleViewHolder
+        viewHolder.textView.text = text
+
+        extraBind.invoke(viewHolder)
     }
 
     override fun create(viewParent: ViewGroup?): RecyclerView.ViewHolder {
         val context = viewParent?.context
-        return SingleNewsViewHolder(TextView(context).apply {
+        val viewHolder = SingleViewHolder(TextView(context).apply {
+            layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
+                setMargins(20.dp.toInt(), 16.dp.toInt(), 20.dp.toInt(), 16.dp.toInt())
+            }
+            setTextColor(Color.BLACK)
+        })
+
+        extraCreate.invoke(viewHolder)
+        return viewHolder
+    }
+}
+
+class SingleItem(private val text: String) : AdapterItem {
+
+    override fun bind(viewHolder: RecyclerView.ViewHolder) {
+        viewHolder as SingleViewHolder
+        viewHolder.textView.text = text
+    }
+
+    override fun create(viewParent: ViewGroup?): RecyclerView.ViewHolder {
+        val context = viewParent?.context
+        return SingleViewHolder(TextView(context).apply {
             layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                 setMargins(20.dp.toInt(), 16.dp.toInt(), 20.dp.toInt(), 16.dp.toInt())
             }
             setTextColor(Color.BLACK)
         })
     }
-
-    class SingleNewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView by lazy { itemView as TextView }
-    }
 }
 
+class SingleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val textView by lazy { itemView as TextView }
+}
 
 class HeadlineNewsItem(private val newsList: List<String>) : AdapterItem {
 
@@ -57,5 +83,26 @@ class HeadlineNewsItem(private val newsList: List<String>) : AdapterItem {
 
     class HeadlineNEwsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val recyclerView by lazy { itemView as RecyclerView }
+    }
+}
+
+class CommonAdapter(
+    private val items: List<AdapterItem>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return items.firstOrNull { it.javaClass.hashCode() == viewType }.let {
+            it!!.create(parent)
+        }
+    }
+
+    override fun getItemCount(): Int = items.size
+
+    override fun getItemViewType(position: Int): Int {
+        return items[position].javaClass.hashCode()
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        items[position].bind(holder)
     }
 }
