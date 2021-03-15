@@ -25,12 +25,17 @@ import com.esafirm.androidplayground.reductor.ReductorSampelAct
 import com.esafirm.androidplayground.rn.ReactActivity
 import com.esafirm.androidplayground.rxjava2.RxJava2SampleAct
 import com.esafirm.androidplayground.securities.SecurityMenuController
+import com.esafirm.androidplayground.serialize.SerializeController
 import com.esafirm.androidplayground.service.SampleService
 import com.esafirm.androidplayground.startup.STracker
 import com.esafirm.androidplayground.ui.UISampleAct
-import com.esafirm.androidplayground.utils.*
+import com.esafirm.androidplayground.utils.ActivityStater
+import com.esafirm.androidplayground.utils.ContextProvider
+import com.esafirm.androidplayground.utils.input
+import com.esafirm.androidplayground.utils.menu
+import com.esafirm.androidplayground.utils.row
 import com.esafirm.androidplayground.webview.VasSonicController
-import java.util.*
+import java.util.Locale
 
 class MainActivity : AppCompatActivity(), ContextProvider {
 
@@ -61,6 +66,7 @@ class MainActivity : AppCompatActivity(), ContextProvider {
             "Network Sample" navigateToController { NetworkSampleController() },
             "Flipper" navigateToController { FlipperController() },
             "React Native" navigateTo { ReactActivity.start(this) },
+            "Serialization Sample" navigateToController { SerializeController() },
             "VasSonic" navigateToController { VasSonicController() },
             "Others" navigateToController { OthersSampleController() },
             "Process Info" navigateToController { ProcessInfoController() },

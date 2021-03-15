@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlinx-serialization'
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -195,6 +196,9 @@ dependencies {
 
     /* FFMPEG */
     implementation 'nl.bravobit:android-ffmpeg:1.1.7'
+
+    /* Kotlinx Serialization */
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0"
 
     /* Test */
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.4.0'
