@@ -36,7 +36,7 @@
         <activity android:name=".dagger.example.DaggerSampleAct" />
 
         <!--RxJava-->
-        <activity android:name=".rxjava2.RxJava2SampleAct" />
+        <activity android:name=".rxjava2.RxJava2SampleController" />
         <activity android:name=".rxjava2.RxJava2ObservableFlowableAct" />
         <activity android:name=".rxjava2.RxJava2InteropAct" />
         <activity android:name=".rxjava2.RxJava2NullItemAct" />

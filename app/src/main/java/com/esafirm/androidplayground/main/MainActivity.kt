@@ -23,7 +23,7 @@ import com.esafirm.androidplayground.others.OthersSampleController
 import com.esafirm.androidplayground.provider.ProcessInfoController
 import com.esafirm.androidplayground.reductor.ReductorSampelAct
 import com.esafirm.androidplayground.rn.ReactActivity
-import com.esafirm.androidplayground.rxjava2.RxJava2SampleAct
+import com.esafirm.androidplayground.rxjava2.RxJava2SampleController
 import com.esafirm.androidplayground.securities.SecurityMenuController
 import com.esafirm.androidplayground.serialize.SerializeController
 import com.esafirm.androidplayground.service.SampleService
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), ContextProvider {
 
         val items = listOf(
             "Dagger Example" navigateTo { DaggerSampleAct.start(this) },
-            "RxJava2 Example" navigateTo { RxJava2SampleAct.start(this) },
+            "RxJava2 Example" navigateToController { RxJava2SampleController() },
             "UI Example" navigateTo { ActivityStater.start(this, UISampleAct::class.java) },
             "Reductor" navigateTo { ActivityStater.start(this, ReductorSampelAct::class.java) },
             "Conductor" navigateToController { ConductorSample() },

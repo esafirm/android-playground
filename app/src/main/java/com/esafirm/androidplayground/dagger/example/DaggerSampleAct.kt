@@ -38,7 +38,7 @@ class DaggerSampleAct : AppCompatActivity() {
 
         clear()
         log(">> Non scoped injected object \n")
-        log(classInAppComponent) // Wi
+        log(classInAppComponent)
         log(classInAppComponent2)
         log(PlaygroundApp.component().classInAppComponent())
 
@@ -50,8 +50,8 @@ class DaggerSampleAct : AppCompatActivity() {
 
         log("\n")
         log(">> Scoped with Provider\n")
-        log(singletonClassProvider!!.get()) // Will inject the same thing
-        log(singletonClassProvider!!.get())
+        log(singletonClassProvider.get()) // Will inject the same thing
+        log(singletonClassProvider.get())
 
         log("\n")
         log(">> Scoped in constructor\n")
