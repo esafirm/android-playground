@@ -13,7 +13,8 @@ class CoroutineSampleController : BaseController() {
         return MenuFactory.create(container.context, listOf(
             "Behavior Subject" navigateToController { BehaviorSubjectController() },
             "Delay" navigateToController { DelayController() },
-            "Blocking Controller" navigateToController { UIBlockingCntroller() }
+            "Blocking Controller" navigateToController { UIBlockingCntroller() },
+            "Unconfined Test" navigateToController { UnconfinedTestController() }
         ))
     }
 }

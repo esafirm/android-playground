@@ -29,7 +29,8 @@ class UISampleAct : BaseAct() {
                 "Zipper View" navigateToController { ZipperViewController() },
                 "Nested RecyclerView Adapter" navigateToController { NestedRecyclerViewController() },
                 "Grayscale Screen Test" navigateToController { GrayscaleTestController() },
-                "VectorDrawable Test" navigateToController { VectorTestController() }
+                "VectorDrawable Test" navigateToController { VectorTestController() },
+                "Run Themed Activity" navigateTo { ActivityStater.start(this, ThemedActivity::class.java) }
             ))
         )
     }

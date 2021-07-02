@@ -36,7 +36,6 @@
         <activity android:name=".dagger.example.DaggerSampleAct" />
 
         <!--RxJava-->
-        <activity android:name=".rxjava2.RxJava2SampleController" />
         <activity android:name=".rxjava2.RxJava2ObservableFlowableAct" />
         <activity android:name=".rxjava2.RxJava2InteropAct" />
         <activity android:name=".rxjava2.RxJava2NullItemAct" />
@@ -51,6 +50,9 @@
         <activity android:name=".ui.UISampleAct" />
         <activity android:name=".ui.ConstraintLayoutAct" />
         <activity android:name=".ui.SpinnerPositionAct" />
+        <activity
+            android:name=".ui.ThemedActivity"
+            android:theme="@style/AppTheme.Splash" />
 
         <!--React Native-->
         <activity
