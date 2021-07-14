@@ -40,7 +40,7 @@ class SimpleDialogFragment : BaseDialogFragment() {
         viewModel.dataStream.observe(viewLifecycleOwner) { data ->
             textView.text = """
                 Is restore state: ${viewModel.isRestoreState}
-                Data: $data
+                Data: ${data.length}
             """.trimIndent()
         }
     }

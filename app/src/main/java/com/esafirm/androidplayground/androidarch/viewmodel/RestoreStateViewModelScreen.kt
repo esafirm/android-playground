@@ -25,11 +25,12 @@ class RestoreStateViewModelScreen : BaseAct() {
 
         setContentView(row {
             button("Set Data") { setData(requiredContext) }
+            button("Navigate") { start(this@RestoreStateViewModelScreen) }
             logger()
         })
 
         viewModel.dataStream.observe(this) { data ->
-            Logger.log("Data in ViewHolder: $data")
+            Logger.log("Data in ViewHolder: ${data.length}")
         }
         Logger.log("Is restored: ${viewModel.isRestoreState}")
     }

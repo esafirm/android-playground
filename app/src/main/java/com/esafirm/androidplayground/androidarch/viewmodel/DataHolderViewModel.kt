@@ -1,5 +1,6 @@
 package com.esafirm.androidplayground.androidarch.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -25,7 +26,7 @@ class DataHolderViewModel(
     private val store = DataHolderStore()
 
     val isRestoreState by lazy {
-        if (savedStateHandle.get<Boolean>(KEY_IS_RESTORED) != null) {
+        if (savedStateHandle.get<Boolean>(KEY_IS_RESTORED) == null) {
             savedStateHandle[KEY_IS_RESTORED] = true
             return@lazy false
         }
@@ -66,5 +67,10 @@ class DataHolderViewModel(
         launch {
             store.setData(key, data)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("DataHolder", "onCleared")
     }
 }
