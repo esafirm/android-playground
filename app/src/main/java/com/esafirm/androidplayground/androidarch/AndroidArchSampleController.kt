@@ -6,29 +6,29 @@ import android.view.ViewGroup
 import com.esafirm.androidplayground.androidarch.room.RelationController
 import com.esafirm.androidplayground.androidarch.room.RoomGettingStartedController
 import com.esafirm.androidplayground.androidarch.room.TransactionController
+import com.esafirm.androidplayground.androidarch.viewmodel.RestoreStateViewModelScreen
 import com.esafirm.androidplayground.androidarch.workmanager.WorkManagerController
 import com.esafirm.androidplayground.common.BaseController
 import com.esafirm.androidplayground.common.MenuFactory
+import com.esafirm.androidplayground.common.navigateTo
+import com.esafirm.androidplayground.common.navigateToController
 
 class AndroidArchSampleController : BaseController() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        return MenuFactory.create(container.context, listOf(
-                "Room - Getting Started",
-                "Room - Relation",
-                "Room - Transaction",
-                "Work Manager"
-        )) { goToIndex(it) }
-    }
-
-    private fun goToIndex(index: Int) = start {
-        when (index) {
-            0 -> RoomGettingStartedController()
-            1 -> RelationController()
-            2 -> TransactionController()
-            3 -> WorkManagerController()
-            else -> throw IllegalStateException("Undefined index!")
-        }
+        return MenuFactory.create(
+            container.context, listOf(
+                "Room - Getting Started" navigateToController { RoomGettingStartedController() },
+                "Room - Relation" navigateToController { RelationController() },
+                "Room - Transaction" navigateToController { TransactionController() },
+                "Work Manager" navigateToController { WorkManagerController() },
+                "View Model Save State" navigateTo {
+                    RestoreStateViewModelScreen.start(
+                        requiredContext
+                    )
+                }
+            )
+        )
     }
 }
 

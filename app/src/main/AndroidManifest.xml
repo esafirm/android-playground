@@ -32,6 +32,9 @@
             android:name=".main.RouterAct"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
+        <!--Arch Component-->
+        <activity android:name=".androidarch.viewmodel.RestoreStateViewModelScreen" />
+
         <!--Dagger-->
         <activity android:name=".dagger.example.DaggerSampleAct" />
 
