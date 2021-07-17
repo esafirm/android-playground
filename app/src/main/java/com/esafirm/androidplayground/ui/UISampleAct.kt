@@ -7,6 +7,8 @@ import com.esafirm.androidplayground.common.navigateTo
 import com.esafirm.androidplayground.common.navigateToController
 import com.esafirm.androidplayground.ui.attach.AttachTestController
 import com.esafirm.androidplayground.ui.cliptopadding.ClipToPaddingController
+import com.esafirm.androidplayground.ui.glide.GlideController
+import com.esafirm.androidplayground.ui.glide.GlideListController
 import com.esafirm.androidplayground.ui.grayscalefilter.GrayscaleTestController
 import com.esafirm.androidplayground.ui.nestedrecyclerview.NestedRecyclerViewController
 import com.esafirm.androidplayground.ui.nestedscroll.NestedScrollingController
@@ -20,8 +22,18 @@ class UISampleAct : BaseAct() {
         setContentView(
             MenuFactory.create(this, listOf(
                 "Attach Listener" navigateToController { AttachTestController() },
-                "Constraint Layout" navigateTo { ActivityStater.start(this, ConstraintLayoutAct::class.java) },
-                "Spinner Dropdown Position" navigateTo { ActivityStater.start(this, SpinnerPositionAct::class.java) },
+                "Constraint Layout" navigateTo {
+                    ActivityStater.start(
+                        this,
+                        ConstraintLayoutAct::class.java
+                    )
+                },
+                "Spinner Dropdown Position" navigateTo {
+                    ActivityStater.start(
+                        this,
+                        SpinnerPositionAct::class.java
+                    )
+                },
                 "Xfermode" navigateToController { XfermodeController() },
                 "View Drag Helper" navigateToController { ViewDragHelperController() },
                 "Clip to Padding" navigateToController { ClipToPaddingController() },
@@ -30,7 +42,14 @@ class UISampleAct : BaseAct() {
                 "Nested RecyclerView Adapter" navigateToController { NestedRecyclerViewController() },
                 "Grayscale Screen Test" navigateToController { GrayscaleTestController() },
                 "VectorDrawable Test" navigateToController { VectorTestController() },
-                "Run Themed Activity" navigateTo { ActivityStater.start(this, ThemedActivity::class.java) }
+                "Run Themed Activity" navigateTo {
+                    ActivityStater.start(
+                        this,
+                        ThemedActivity::class.java
+                    )
+                },
+                "Glide Measure" navigateToController { GlideController() },
+                "Glide Measure List" navigateToController { GlideListController() }
             ))
         )
     }

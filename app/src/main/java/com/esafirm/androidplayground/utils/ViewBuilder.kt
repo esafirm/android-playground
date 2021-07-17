@@ -7,8 +7,14 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -88,6 +94,21 @@ fun ViewGroup.input(placeholder: String = "", onTextChange: (String) -> Unit): V
     onTextChange("")
 
     return view
+}
+
+fun ViewGroup.switch(label: String, onChange: (Boolean) -> Unit) {
+    addView(SwitchCompat(context).apply {
+        matchParent(vertical = false)
+        text = label
+        setOnCheckedChangeListener { _, isChecked -> onChange(isChecked) }
+    })
+}
+
+fun ViewGroup.text(text: String) {
+    addView(TextView(context).apply {
+        matchParent(horizontal = false, vertical = false)
+        this.text = text
+    })
 }
 
 fun ViewGroup.button(text: String, onClick: () -> Unit) =
