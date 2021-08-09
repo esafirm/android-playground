@@ -30,6 +30,7 @@ class GlideListController : BaseController() {
                 useOnPreDraw = isChecked
             }
             button("Attach") {
+                GlideRequestTrackerStore.clear()
                 adapter.setup(items, useOnPreDraw)
             }
             button("Print result") {

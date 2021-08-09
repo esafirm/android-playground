@@ -9,6 +9,7 @@ private const val IMAGE_URL =
     "https://s-light.tiket.photos/t/01E25EBZS3W0FY9GTG6C42E1SE/original/mobile-modules/2021/07/05/84b94d79-4a46-47a5-9cc1-caf129191fc1-1625495902018-f425ad5f10accdce8e3c2c561cde9ff9.png"
 private const val IMAGE_URL_SMALL =
     "https://s-light.tiket.photos/t/01E25EBZS3W0FY9GTG6C42E1SE/rsfit500500gsm/mobile-modules/2021/07/05/84b94d79-4a46-47a5-9cc1-caf129191fc1-1625495902018-f425ad5f10accdce8e3c2c561cde9ff9.png"
+private const val IMAGE_PICSUM = "https://picsum.photos/200/300"
 
 internal fun ImageView.requestImage(useCache: Boolean = false) {
     val tracker = GlideRequestTracker.start()

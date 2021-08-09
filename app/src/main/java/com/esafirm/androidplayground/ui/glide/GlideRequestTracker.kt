@@ -5,7 +5,10 @@ import android.util.Log
 object GlideRequestTrackerStore {
     private val tracked = mutableListOf<Pair<EventType, Long>>()
 
-    @Synchronized
+    fun clear() {
+        tracked.clear()
+    }
+
     fun add(type: EventType, time: Long) {
         tracked.add(type to time)
     }
@@ -15,15 +18,24 @@ object GlideRequestTrackerStore {
         val whole = tracked.filter { it.first == EventType.WHOLE }
         val preDraw = tracked.filter { it.first == EventType.PREDRAW }
 
-        val requestAverage = request.map { it.second }.reduce { acc, l -> acc + l } / request.size
-        val wholeAverage = whole.map { it.second }.reduce { acc, l -> acc + l } / request.size
+        val requestAverage = request.average()
+        val wholeAverage = whole.average()
 
         Log.d("GlideMeasure", "Requests avg: $requestAverage ms")
         Log.d("GlideMeasure", "Whole avg: $wholeAverage ms")
+        Log.d("GlideMeasure", "PreDraw avg: ${preDraw.average()} ms")
+        Log.d("GlideMeasure", "---------------")
+        Log.d("GlideMeasure", "Requests median: ${request.median()} ms")
+        Log.d("GlideMeasure", "Whole median: ${whole.median()} ms")
+        Log.d("GlideMeasure", "PreDraw median: ${preDraw.median()} ms")
+    }
 
-        if(preDraw.isEmpty().not()) {
+    private fun List<Pair<EventType, Long>>.average(): Long {
+        return if (isEmpty()) 0 else map { it.second }.reduce { acc, l -> acc + l } / size
+    }
 
-        }
+    private fun List<Pair<EventType, Long>>.median(): Long {
+        return if (isEmpty()) 0 else map { it.second }[size / 2]
     }
 }
 
