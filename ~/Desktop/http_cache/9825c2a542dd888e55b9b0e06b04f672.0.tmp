@@ -1,0 +1,14 @@
+http://localhost:8080/
+GET
+0
+HTTP/1.1 200 OK
+9
+Date: Sun, 15 Aug 2021 11:20:18 GMT
+Server: ktor-server-core/1.6.2
+Vary: Origin
+ETag: "123abc"
+Content-Length: 25
+Content-Type: application/json; charset=UTF-8
+Connection: keep-alive
+OkHttp-Sent-Millis: 1629026418779
+OkHttp-Received-Millis: 1629026418785

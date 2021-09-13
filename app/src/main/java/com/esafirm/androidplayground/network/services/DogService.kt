@@ -1,5 +1,6 @@
-package com.esafirm.androidplayground.network
+package com.esafirm.androidplayground.network.services
 
+import com.esafirm.androidplayground.network.RandomDogImage
 import retrofit2.http.GET
 
 interface DogService {

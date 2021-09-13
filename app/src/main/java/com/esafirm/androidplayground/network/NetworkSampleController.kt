@@ -13,7 +13,8 @@ class NetworkSampleController : BaseController() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val items = listOf(
             "OkHttp - Upload Progress" navigateToController { UploadProgressController() },
-            "Simple Network" navigateToController { SimpleNetworkController() }
+            "Simple Network" navigateToController { SimpleNetworkController() },
+            "Cache Test" navigateToController { ResponseCacheController() }
         )
         return row {
             menu(items)
