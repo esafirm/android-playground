@@ -18,7 +18,7 @@ android {
     }
 
     buildFeatures {
-        compose true
+        viewBinding true
     }
 
     buildTypes {
@@ -36,7 +36,7 @@ android {
         useIR = true
     }
     composeOptions {
-        kotlinCompilerVersion rootProject.ext.kotlin_version
+        kotlinCompilerVersion rootProject.ext.kotlinVersion
         kotlinCompilerExtensionVersion composeVersion
     }
 }
