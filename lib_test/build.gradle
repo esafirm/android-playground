@@ -1,22 +1,22 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+final composeVer = rootProject.ext.composeVersion
+
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion rootProject.ext.compileSdk
 
     buildFeatures {
         compose true
     }
 
-    defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+    composeOptions {
+        kotlinCompilerExtensionVersion = composeVer
+    }
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdk
+        targetSdkVersion rootProject.ext.compileSdk
     }
 
     buildTypes {
@@ -40,14 +40,18 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
+
+    // Compose
+    implementation "androidx.compose.runtime:runtime:$composeVer"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.core:core-ktx:1.7.0'
 
     /* Test */
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.4.0'
     testImplementation 'io.mockk:mockk:1.9.3'
 
-    testImplementation 'org.robolectric:robolectric:4.3.1'
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'org.robolectric:robolectric:4.5.1'
+    testImplementation 'junit:junit:4.13.2'
 }
