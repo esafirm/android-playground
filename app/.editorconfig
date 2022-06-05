@@ -1,0 +1,15 @@
+root = true
+
+[*.{kt, kts}]
+indent_size = 4
+continuation_indent_size = 4
+ij_continuation_indent_size = 4
+insert_final_newline = true
+max_line_length = 120
+# don't use wildcard for Kotlin imports
+ij_kotlin_name_count_to_use_star_import = 999
+ij_kotlin_name_count_to_use_star_import_for_members = 999
+
+[*.java]
+wildcard_import_limit = 999
+ij_java_names_count_to_use_import_on_demand = 999
