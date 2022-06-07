@@ -33,8 +33,8 @@ jobs:
         id: gradle-cache
         with:
           path: |
-            .gradle/wrapper
-            .gradle/caches/modules-2
+            /home/runner/.gradle/wrapper
+            /home/runner/.gradle/caches/modules-2
           key: ${{ runner.os }}-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
 
       # Setup google-service.json is
