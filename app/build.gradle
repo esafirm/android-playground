@@ -186,7 +186,7 @@ dependencies {
     implementation project(':lib_test')
 
     /* React Native */
-    implementation "com.facebook.react:react-native:0.62.1" // From node_modules
+    implementation "com.facebook.react:react-native:0.68.2" // From node_modules
 
     final hermesPath = "$rootDir/rn/node_modules/hermes-engine/android/"
     debugImplementation files(hermesPath + "hermes-debug.aar")
