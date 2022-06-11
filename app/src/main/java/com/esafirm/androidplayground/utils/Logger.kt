@@ -49,6 +49,7 @@ object Logger {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         textView.setTextColor(Color.BLACK)
+        textView.setTextIsSelectable(true)
         textView.setPadding(padding, padding / 2, padding, padding / 2)
 
         var disposable: Disposable? = null

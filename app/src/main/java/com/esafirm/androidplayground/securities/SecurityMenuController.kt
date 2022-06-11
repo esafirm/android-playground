@@ -6,21 +6,27 @@ import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
 import com.esafirm.androidplayground.common.BaseController
 import com.esafirm.androidplayground.common.MenuFactory
-import java.util.*
 
 class SecurityMenuController : BaseController() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        return MenuFactory.create(container.context, Arrays.asList(
+        return MenuFactory.create(
+            container.context, listOf(
                 "Bcrypt",
-                "Facebook Conceal"
-        )) {
-            router.pushController(RouterTransaction.with(
+                "Facebook Conceal",
+                "AES Encrypt Decrypt",
+            )
+        ) {
+            router.pushController(
+                RouterTransaction.with(
                     when (it) {
                         0 -> BcryptController()
-                        else -> ConcealController()
+                        1 -> ConcealController()
+                        2 -> AesEncryptDecryptController()
+                        else -> error("No controller for $it")
                     }
-            ))
+                )
+            )
         }
     }
 }
