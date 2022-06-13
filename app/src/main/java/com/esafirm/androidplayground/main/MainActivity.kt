@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), ContextProvider {
             "Firebase" navigateToController { FirebaseController() },
             "FFmpeg" navigateToController { FfmpegController() },
             "Fragment Samples" navigateTo { ViewPagerCurrentFragmentSampleActivity.start(this) },
-            "Security Sampels" navigateToController { SecurityMenuController() },
+            "Security Samples" navigateToController { SecurityMenuController() },
             "Anvil Sample (React Render Like)" navigateToController { AnvilSampleAct() },
             "Android Arch Sample" navigateToController { AndroidArchSampleController() },
             "Kotlin Sample" navigateToController { KotlinSampleController() },

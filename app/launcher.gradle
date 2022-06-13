@@ -1,0 +1,27 @@
+// Running the APK on your Android Device
+android.applicationVariants.all { variant ->
+    if (variant.install) {
+        tasks.create(name: "run${variant.name.capitalize()}", type: Exec, dependsOn: variant.install) {
+            group = 'Run'
+            description "Installs and Runs the APK for ${variant.description}."
+            def getMainActivity = { file ->
+                def app = new XmlSlurper().parse(file).application
+                def nodes = app."activity-alias".isEmpty() ? app.activity : app."activity-alias"
+
+                nodes.find {
+                    it.'intent-filter'.find { filter ->
+                        return filter.action.find {
+                            it.'@android:name'.text() == 'android.intent.action.MAIN'
+                        } && filter.category.find {
+                            it.'@android:name'.text() == 'android.intent.category.LAUNCHER'
+                        }
+                    }
+                }.'@android:name'
+            }
+            doFirst {
+                def activityClass = getMainActivity("${projectDir}/src/main/AndroidManifest.xml")
+                commandLine android.adbExe, 'shell', 'am', 'start', '-n', "${variant.applicationId}/${activityClass}"
+            }
+        }
+    }
+}

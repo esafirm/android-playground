@@ -6,6 +6,8 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+apply from: "./launcher.gradle"
+
 android {
     kotlinOptions {
         jvmTarget = '1.8'
