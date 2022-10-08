@@ -1,0 +1,10 @@
+final daggerVersion = '2.43.1'
+
+ext {
+    deps = [
+        dagger2 = [
+            dagger  : "com.google.dagger:dagger:$daggerVersion",
+            compiler: "com.google.dagger:dagger-compiler:$daggerVersion"
+        ]
+    ]
+}
