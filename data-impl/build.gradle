@@ -8,8 +8,8 @@ anvil {
 }
 
 dependencies {
-    implementation project(':data-api')
+    api project(':data-api')
     implementation project(':anvil-scope')
 
-    implementation "com.google.dagger:dagger:2.43.1"
+    implementation "com.google.dagger:dagger:2.43.2"
 }

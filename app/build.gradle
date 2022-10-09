@@ -7,7 +7,7 @@ plugins {
     id 'com.squareup.anvil'
 }
 
-apply from: "./launcher.gradle"
+apply from: "launcher.gradle"
 
 android {
     kotlinOptions {
