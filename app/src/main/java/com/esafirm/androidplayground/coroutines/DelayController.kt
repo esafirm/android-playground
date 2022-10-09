@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.esafirm.androidplayground.common.BaseController
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

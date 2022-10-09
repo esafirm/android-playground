@@ -10,7 +10,7 @@ import com.esafirm.androidplayground.androidarch.room.database.AppDatabase
 import com.esafirm.androidplayground.androidarch.room.database.Car
 import com.esafirm.androidplayground.androidarch.room.database.User
 import com.esafirm.androidplayground.common.BaseController
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 import com.esafirm.androidplayground.utils.matchParent
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers

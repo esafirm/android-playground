@@ -3,7 +3,7 @@ package com.esafirm.androidplayground.androidarch.workmanager
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 import io.reactivex.Observable
 import java.util.*
 import java.util.concurrent.TimeUnit

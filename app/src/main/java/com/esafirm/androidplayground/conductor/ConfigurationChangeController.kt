@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.Controller
 import com.esafirm.androidplayground.R
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 import com.esafirm.conductorextra.butterknife.BinderController
 import com.esafirm.conductorextra.isMarkedSavedState
 

@@ -11,9 +11,9 @@ import com.esafirm.androidplayground.dagger.DaggerActivityComponent
 import javax.inject.Inject
 import javax.inject.Provider
 
-import com.esafirm.androidplayground.utils.Logger.clear
-import com.esafirm.androidplayground.utils.Logger.getLogView
-import com.esafirm.androidplayground.utils.Logger.log
+import com.esafirm.androidplayground.libs.Logger.clear
+import com.esafirm.androidplayground.libs.Logger.getLogView
+import com.esafirm.androidplayground.libs.Logger.log
 
 class DaggerSampleAct : AppCompatActivity() {
 

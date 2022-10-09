@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.pm.ProviderInfo
 import android.database.Cursor
 import android.net.Uri
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 import com.esafirm.androidplayground.utils.ProcessUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

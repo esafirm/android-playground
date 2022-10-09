@@ -2,7 +2,7 @@ package com.esafirm.androidplayground.rxjava2
 
 import android.os.Bundle
 import com.esafirm.androidplayground.common.BaseAct
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable

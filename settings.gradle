@@ -10,4 +10,5 @@ include ':app', ':lib_test'
 include 'feature-printer'
 include ':data-api', ':data-impl'
 include ':anvil-scope'
+include 'lib-logger'
 

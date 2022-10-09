@@ -12,7 +12,7 @@ class FeaturePrinterModule {
 
     @Provides
     fun providePrinter(dataProvider: DataProvider): Printer {
-        return DataPrinter(dataProvider)
+        return LoggerDataPrinter(dataProvider)
     }
 }
 

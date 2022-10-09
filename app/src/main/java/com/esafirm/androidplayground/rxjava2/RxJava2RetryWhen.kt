@@ -6,7 +6,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.esafirm.androidplayground.common.BaseAct
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 

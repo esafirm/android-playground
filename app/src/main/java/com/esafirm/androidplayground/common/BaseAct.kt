@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.esafirm.androidplayground.utils.ContextProvider
 
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 
 @SuppressLint("Registered")
 open class BaseAct : AppCompatActivity(), ContextProvider {

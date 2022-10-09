@@ -1,0 +1,20 @@
+plugins {
+    id 'kotlin-android'
+    id 'com.android.library'
+}
+
+android {
+    namespace 'com.esafirm.androidplayground.libs.logger'
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdk
+        targetSdkVersion rootProject.ext.compileSdk
+        compileSdkVersion rootProject.ext.compileSdk
+    }
+}
+
+
+dependencies {
+    implementation deps.rx.rxJava2
+    implementation deps.rx.rxJava2Android
+}

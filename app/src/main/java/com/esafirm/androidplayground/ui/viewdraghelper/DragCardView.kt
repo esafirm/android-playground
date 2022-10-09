@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import com.esafirm.androidplayground.R
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 import com.esafirm.androidplayground.utils.clamp
 import com.esafirm.androidplayground.utils.dp
 

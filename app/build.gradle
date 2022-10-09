@@ -77,7 +77,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "androidx.multidex:multidex:2.0.0"
+    // Project related
+    implementation project(':lib-logger')
 
     /* Kotlin */
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
@@ -99,7 +100,8 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.1.5'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation "com.github.akarnokd:rxjava2-interop:0.10.0"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     /* Conductor */
     final conductorVersion = '2.1.4'
