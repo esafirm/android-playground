@@ -1,0 +1,27 @@
+plugins {
+    id 'kotlin-android'
+    id 'com.android.library'
+    id 'com.squareup.anvil'
+}
+
+android {
+    namespace 'com.esafirm.androidplayground.feature.printer'
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdk
+        targetSdkVersion rootProject.ext.compileSdk
+        compileSdkVersion rootProject.ext.compileSdk
+    }
+}
+
+anvil {
+    generateDaggerFactories = true
+}
+
+dependencies {
+    implementation project(':data-api')
+    implementation project(':anvil-scope')
+    implementation project(':lib-logger')
+
+    implementation deps.dagger2.dagger
+}

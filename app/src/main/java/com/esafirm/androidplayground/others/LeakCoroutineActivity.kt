@@ -2,7 +2,7 @@ package com.esafirm.androidplayground.others
 
 import android.os.Bundle
 import com.esafirm.androidplayground.common.BaseAct
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 import com.esafirm.androidplayground.utils.button
 import com.esafirm.androidplayground.utils.logger
 import com.esafirm.androidplayground.utils.row

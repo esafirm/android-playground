@@ -8,7 +8,12 @@ import android.widget.Button
 import com.esafirm.androidplayground.androidarch.room.database.AppDatabase
 import com.esafirm.androidplayground.androidarch.room.database.User
 import com.esafirm.androidplayground.common.BaseController
-import com.esafirm.androidplayground.utils.*
+import com.esafirm.androidplayground.libs.Logger
+import com.esafirm.androidplayground.utils.button
+import com.esafirm.androidplayground.utils.column
+import com.esafirm.androidplayground.utils.logger
+import com.esafirm.androidplayground.utils.matchParent
+import com.esafirm.androidplayground.utils.row
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

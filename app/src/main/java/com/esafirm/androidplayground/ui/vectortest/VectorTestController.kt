@@ -11,7 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.esafirm.androidplayground.R
 import com.esafirm.androidplayground.common.BaseController
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 
 /** This controller test how we can achieve using VectorDrawable in many OS level **/
 /**

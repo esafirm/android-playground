@@ -11,7 +11,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.esafirm.androidplayground.dagger.AppComponent
 import com.esafirm.androidplayground.flipper.FlipperWrapper
 import com.esafirm.androidplayground.startup.STracker
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 import com.esafirm.androidplayground.utils.ProcessUtils
 import com.facebook.stetho.Stetho
 import com.gu.toolargetool.TooLargeTool

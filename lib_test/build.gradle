@@ -1,18 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
-final composeVer = rootProject.ext.composeVersion
-
 android {
     compileSdkVersion rootProject.ext.compileSdk
-
-    buildFeatures {
-        compose true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = composeVer
-    }
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdk
@@ -40,9 +30,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    // Compose
-    implementation "androidx.compose.runtime:runtime:$composeVer"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'androidx.appcompat:appcompat:1.4.1'

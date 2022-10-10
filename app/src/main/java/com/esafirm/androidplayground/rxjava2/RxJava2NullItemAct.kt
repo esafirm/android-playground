@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import com.esafirm.androidplayground.common.BaseAct
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 
 class RxJava2NullItemAct : BaseAct() {
     public override fun onCreate(savedInstanceState: Bundle?) {

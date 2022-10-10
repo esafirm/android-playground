@@ -1,4 +1,4 @@
-package com.esafirm.androidplayground.utils
+package com.esafirm.androidplayground.libs
 
 import android.content.Context
 import android.graphics.Color

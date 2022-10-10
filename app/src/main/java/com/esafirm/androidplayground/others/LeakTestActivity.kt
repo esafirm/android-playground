@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.ListView
 import com.esafirm.androidplayground.R
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 
 class Test(val view: View?)
 

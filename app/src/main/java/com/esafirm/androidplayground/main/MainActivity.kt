@@ -5,7 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.esafirm.androidplayground.androidarch.AndroidArchSampleController
+import com.esafirm.androidplayground.anvil.AnvilController
 import com.esafirm.androidplayground.anvil.AnvilSampleAct
+import com.esafirm.androidplayground.anvildi.AnvilDIController
 import com.esafirm.androidplayground.common.navigateTo
 import com.esafirm.androidplayground.common.navigateToController
 import com.esafirm.androidplayground.conductor.ConductorSample
@@ -60,6 +62,7 @@ class MainActivity : AppCompatActivity(), ContextProvider {
             "Fragment Samples" navigateTo { ViewPagerCurrentFragmentSampleActivity.start(this) },
             "Security Samples" navigateToController { SecurityMenuController() },
             "Anvil Sample (React Render Like)" navigateToController { AnvilSampleAct() },
+            "Anvil DI (Dagger Support)" navigateToController { AnvilDIController() },
             "Android Arch Sample" navigateToController { AndroidArchSampleController() },
             "Kotlin Sample" navigateToController { KotlinSampleController() },
             "Kotlin Flow" navigateToController { FlowSampleController() },

@@ -8,7 +8,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.esafirm.androidplayground.R
 import com.esafirm.androidplayground.common.BaseAct
-import com.esafirm.androidplayground.utils.Logger
+import com.esafirm.androidplayground.libs.Logger
 import com.esafirm.androidplayground.utils.button
 import com.esafirm.androidplayground.utils.logger
 import com.esafirm.androidplayground.utils.row

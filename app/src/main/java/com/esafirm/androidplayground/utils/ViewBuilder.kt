@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.esafirm.androidplayground.common.MenuFactory
+import com.esafirm.androidplayground.libs.Logger
 
 enum class ScrollDirection {
     HORIZONTAL,

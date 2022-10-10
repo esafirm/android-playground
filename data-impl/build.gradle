@@ -1,0 +1,15 @@
+plugins {
+    id 'kotlin'
+    id 'com.squareup.anvil'
+}
+
+anvil {
+    generateDaggerFactories = true
+}
+
+dependencies {
+    api project(':data-api')
+    implementation project(':anvil-scope')
+
+    implementation "com.google.dagger:dagger:2.43.2"
+}
