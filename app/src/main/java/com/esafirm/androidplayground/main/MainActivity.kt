@@ -5,14 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.esafirm.androidplayground.androidarch.AndroidArchSampleController
-import com.esafirm.androidplayground.anvil.AnvilController
 import com.esafirm.androidplayground.anvil.AnvilSampleAct
 import com.esafirm.androidplayground.anvildi.AnvilDIController
 import com.esafirm.androidplayground.common.navigateTo
 import com.esafirm.androidplayground.common.navigateToController
 import com.esafirm.androidplayground.conductor.ConductorSample
 import com.esafirm.androidplayground.coroutines.CoroutineSampleController
-import com.esafirm.androidplayground.dagger.example.DaggerSampleAct
+import com.esafirm.androidplayground.dagger.example.DaggerSampleController
 import com.esafirm.androidplayground.ffmpeg.FfmpegController
 import com.esafirm.androidplayground.firebase.FirebaseController
 import com.esafirm.androidplayground.flipper.FlipperController
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity(), ContextProvider {
         startService(Intent(this, SampleService::class.java))
 
         val items = listOf(
-            "Dagger Example" navigateTo { DaggerSampleAct.start(this) },
+            "Dagger Example" navigateToController { DaggerSampleController() },
             "RxJava2 Example" navigateToController { RxJava2SampleController() },
             "UI Example" navigateTo { ActivityStater.start(this, UISampleAct::class.java) },
             "Reductor" navigateTo { ActivityStater.start(this, ReductorSampelAct::class.java) },

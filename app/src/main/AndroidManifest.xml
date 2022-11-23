@@ -36,9 +36,6 @@
         <!--Arch Component-->
         <activity android:name=".androidarch.viewmodel.RestoreStateViewModelScreen" />
 
-        <!--Dagger-->
-        <activity android:name=".dagger.example.DaggerSampleAct" />
-
         <!--RxJava-->
         <activity android:name=".rxjava2.RxJava2ObservableFlowableAct" />
         <activity android:name=".rxjava2.RxJava2InteropAct" />
