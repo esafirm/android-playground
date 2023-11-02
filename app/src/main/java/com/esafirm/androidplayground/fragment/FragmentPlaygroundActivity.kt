@@ -3,20 +3,56 @@ package com.esafirm.androidplayground.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.esafirm.androidplayground.R
+import com.esafirm.androidplayground.common.BaseAct
+import com.esafirm.androidplayground.utils.button
+import com.esafirm.androidplayground.utils.matchParent
+import com.esafirm.androidplayground.utils.row
 
 
-class ViewPagerCurrentFragmentSampleActivity : AppCompatActivity() {
+class FragmentPlaygroundActivity : BaseAct() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(row {
+            matchParent(vertical = false)
+
+            button("ViewPager Sample") {
+                runViewPagerSample()
+            }
+            button("Fragment TransactionTooLarge") {
+                runFragmentTransactionTooLargeSample()
+            }
+        })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        print("Save instance state called: $outState -- size: ${outState.size()}")
+        super.onSaveInstanceState(outState)
+    }
+
+    private fun runFragmentTransactionTooLargeSample() {
+        val frame = FrameLayout(this).apply {
+            matchParent()
+            id = R.id.content
+        }
+        setContentView(frame)
+
+        supportFragmentManager.beginTransaction()
+            .add(R.id.content, SampleBigArgumentFragment.newInstance(), "SampleBigArgumentFragment")
+            .commit()
+    }
+
+    private fun runViewPagerSample() {
         setContentView(R.layout.activity_current_fragment)
 
         val viewPager2 = findViewById<ViewPager2>(R.id.viewPager)
@@ -39,7 +75,7 @@ class ViewPagerCurrentFragmentSampleActivity : AppCompatActivity() {
 
     companion object {
         fun start(context: Context) {
-            context.startActivity(Intent(context, ViewPagerCurrentFragmentSampleActivity::class.java))
+            context.startActivity(Intent(context, FragmentPlaygroundActivity::class.java))
         }
     }
 }
@@ -51,7 +87,7 @@ class SampleFragment : Fragment(R.layout.fragment_current_fragment) {
             text = "Click Me!"
         }
         textView.setOnClickListener {
-            val fragments = activity!!.supportFragmentManager.fragments
+            val fragments = requireActivity().supportFragmentManager.fragments
             val hostFragments = fragments.joinToString { "$it" }
             val index = fragments.indexOf(this)
             val currentVisible = fragments.first { it.isVisible }
