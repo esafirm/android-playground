@@ -26,6 +26,7 @@ android {
             events "passed", "skipped", "failed"
         }
     }
+    namespace 'com.esafirm.androidplayground.dummy'
 }
 
 dependencies {
