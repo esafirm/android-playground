@@ -3,62 +3,52 @@
 /* --------------------------------------------------- */
 
 /**
- *  List of modules that don't require Jacoco
- */
-final ignoredByJacoco = [
-        'presentation'
-]
+ *  Apply additional build steps to sub-projects*/
+rootProject.subprojects { project ->
 
-/**
- *  Apply additional build steps to sub-projects
- */
-subprojects { prj ->
+    println("Applying Jacoco to project: ${project.name}")
 
     // Apply Jacoco only if the project is not in the ignore list
-    if (!ignoredByJacoco.contains(prj.name)) {
-        apply plugin: 'jacoco'
+    plugins.apply('jacoco')
 
-        jacoco {
-            version "0.8.3"
+    jacoco {
+        version "0.8.3"
+    }
+
+    project.tasks.withType(Test).configureEach {
+        jacoco.includeNoLocationClasses = true
+    }
+
+    project.tasks.register("jacocoReport", JacocoReport) {
+        group = 'Reporting'
+        description = 'Generate Jacoco coverage reports after running tests.'
+
+        reports {
+            html.required = true
         }
 
-        tasks.withType(Test) {
-            jacoco.includeNoLocationClasses = true
-        }
+        final fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', 'android/**/*.*']
+        final kotlinTree = fileTree(dir: "${project.buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+        final javacTree = fileTree(dir: "${project.buildDir}/intermediates/javac/debug", excludes: fileFilter)
+        final mainSrc = "${project.projectDir}/src/main/java"
 
-        task jacocoReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
-            group = 'Reporting'
-            description = 'Generate Jacoco coverage reports after running tests.'
-
-            reports {
-                xml.enabled = true
-                html.enabled = true
-            }
-
-            final fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', 'android/**/*.*']
-            final kotlinTree = fileTree(dir: "${prj.buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
-            final javacTree = fileTree(dir: "${prj.buildDir}/intermediates/javac/debug", excludes: fileFilter)
-            final mainSrc = "${prj.projectDir}/src/main/java"
-
-            sourceDirectories.setFrom files([mainSrc])
-            classDirectories.setFrom files([kotlinTree, javacTree])
-            executionData.setFrom fileTree(dir: prj.buildDir, includes: [
-                    'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
-            ])
-        }
+        sourceDirectories.setFrom files([mainSrc])
+        classDirectories.setFrom files([kotlinTree, javacTree])
+        executionData.setFrom fileTree(dir: project.buildDir, includes: ['jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'])
     }
 }
-
-apply plugin: 'jacoco'
 
 jacoco {
     toolVersion "0.8.3"
 }
 
+
 /**
- *  Root task that generates an aggregated Jacoco test coverage report for all sub-projects
- */
-task jacocoFullReport(type: JacocoReport, group: 'Coverage reports') {
+ *  Root task that generates an aggregated Jacoco test coverage report for all sub-projects*/
+rootProject.tasks.register("jacocoFullReport") {
+    group = "Reporting"
+    description = "Generates an aggregate report from all subprojects"
+
     group = 'Reporting'
     description = 'Generates an aggregate report from all subprojects'
 

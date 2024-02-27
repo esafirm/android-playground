@@ -78,10 +78,10 @@ class RelationController : BaseController() {
         Logger.log("=========")
 
         val userDao = database.userDao()
-        userDao.getUserWithCars()
-                .filter { it.cars?.isEmpty()?.not() ?: false }
-                .forEach {
-                    Logger.log("User $it")
-                }
+//        userDao.getUserWithCars()
+//                .filter { it.cars?.isEmpty()?.not() ?: false }
+//                .forEach {
+//                    Logger.log("User $it")
+//                }
     }
 }

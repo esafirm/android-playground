@@ -80,11 +80,11 @@ fun ViewGroup.input(placeholder: String = "", onTextChange: (String) -> Unit): V
     val view = EditText(context).apply {
         hint = placeholder
         addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
-            override fun onViewDetachedFromWindow(v: View?) {
+            override fun onViewDetachedFromWindow(v: View) {
                 removeTextChangedListener(textWatcher)
             }
 
-            override fun onViewAttachedToWindow(v: View?) {
+            override fun onViewAttachedToWindow(v: View) {
                 addTextChangedListener(textWatcher)
             }
         })

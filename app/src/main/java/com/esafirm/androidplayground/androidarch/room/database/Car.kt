@@ -5,16 +5,16 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-        tableName = "car",
-        foreignKeys = [ForeignKey(
-                entity = User::class,
-                parentColumns = ["userId"],
-                childColumns = ["owner"]
-        )]
+    tableName = "car",
+    foreignKeys = [ForeignKey(
+        entity = User::class,
+        parentColumns = ["userId"],
+        childColumns = ["owner"]
+    )]
 )
 data class Car(
-        @PrimaryKey(autoGenerate = true)
-        val carId: Int? = null,
-        val name: String,
-        val owner: Int
+    @PrimaryKey(autoGenerate = true)
+    val carId: Int? = null,
+    val name: String,
+    val owner: Int
 )

@@ -23,17 +23,17 @@ abstract class UserDao {
     abstract fun getUsersWithCar(name: String): List<User>
 
     @Transaction
-    open fun replaceUser(old: User, new: User) {
-        insertUser(new)
-        deleteUsers(old)
+    open fun replaceUser(oldUser: User, newUser: User) {
+        insertUser(newUser)
+        deleteUsers(oldUser)
     }
 
     @Transaction
-    open fun replaceUserWithError(old: User, new: User) {
-        insertUser(new)
+    open fun replaceUserWithError(oldUser: User, newUser: User) {
+        insertUser(newUser)
         if (true) {
             throw IllegalStateException()
         }
-        deleteUsers(old)
+        deleteUsers(oldUser)
     }
 }

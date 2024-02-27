@@ -91,7 +91,7 @@ class VasSonicController : BaseController() {
         webSettings.allowContentAccess = true
         webSettings.databaseEnabled = true
         webSettings.domStorageEnabled = true
-        webSettings.setAppCacheEnabled(true)
+        webSettings.cacheMode = android.webkit.WebSettings.LOAD_DEFAULT
         webSettings.savePassword = false
         webSettings.saveFormData = false
         webSettings.useWideViewPort = true

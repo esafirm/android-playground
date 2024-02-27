@@ -40,11 +40,11 @@ private fun View.setOnAttach(
     onDetach: () -> Unit
 ) {
     addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
-        override fun onViewAttachedToWindow(v: View?) {
+        override fun onViewAttachedToWindow(v: View) {
             onAttach()
         }
 
-        override fun onViewDetachedFromWindow(v: View?) {
+        override fun onViewDetachedFromWindow(v: View) {
             onDetach()
         }
     })
