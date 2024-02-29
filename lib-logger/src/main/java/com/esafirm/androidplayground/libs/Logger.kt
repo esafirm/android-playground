@@ -55,11 +55,8 @@ object Logger {
         var disposable: Disposable? = null
 
         textView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
-            override fun onViewDetachedFromWindow(p0: View?) {
-                disposable?.dispose()
-            }
 
-            override fun onViewAttachedToWindow(p0: View?) {
+            override fun onViewAttachedToWindow(view: View) {
                 disposable?.dispose()
                 disposable = obs.observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
@@ -67,6 +64,10 @@ object Logger {
                         textView.text = it
                     }
 
+            }
+
+            override fun onViewDetachedFromWindow(view: View) {
+                disposable?.dispose()
             }
         })
 

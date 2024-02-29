@@ -54,7 +54,7 @@ class FlowBindingController : BaseController() {
 
     private fun View.clicks(): Flow<View> = callbackFlow {
         this@clicks.setOnClickListener {
-            this.offer(it)
+            this.trySend(it)
         }
         awaitClose { this@clicks.setOnClickListener(null) }
     }
