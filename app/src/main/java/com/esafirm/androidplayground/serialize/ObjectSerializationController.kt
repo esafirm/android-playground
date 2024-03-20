@@ -11,10 +11,35 @@ import com.esafirm.androidplayground.utils.row
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ObjectWithDefault(
+private data class ObjectWithDefault(
     val a: String = "a",
     val b: String? = "b"
 )
+
+private interface UniqueItem {
+    val id: String
+}
+
+@Serializable
+private data class Invite(
+    val inviteId: String = "",
+    override val id: String
+) : UniqueItem
+
+@Serializable
+private data class SmartInvite(
+    val inviteId: String = "",
+    override val id: String = inviteId
+) : UniqueItem
+
+@Serializable
+private class ClassWithDelegateObject(
+    val id: String
+) {
+    val description by lazy(LazyThreadSafetyMode.NONE) {
+        "A lazy description"
+    }
+}
 
 class ObjectSerializationController : BaseController() {
 
@@ -22,21 +47,61 @@ class ObjectSerializationController : BaseController() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         return row {
-            button("Serialize") {
-                val defaultObj = ObjectWithDefault("abc ")
-                val result = adapter.of(ObjectWithDefault.serializer()).to(defaultObj)
-                Logger.log("default obj a:${defaultObj.a} b:${defaultObj.b}")
-                Logger.log(result)
-            }
-            button("Deserialize") {
-                val json = """
-                    { "a": "abc" }
-                """.trimIndent()
-
-                Logger.log(adapter.of(ObjectWithDefault.serializer()).from(json))
-            }
+            addSerializeButton()
+            addDeserializeButton()
+            addDeserializeWithDefaultValues()
+            addDeserializeWithDelegateField()
             logger()
         }
     }
-}
 
+    private fun ViewGroup.addDeserializeWithDelegateField() {
+        button("Delegate filed behavior") {
+            val serializer = adapter.of(ClassWithDelegateObject.serializer())
+
+            try {
+                val json = """{ "id": "123123123AAA", "description": "Description from JSON" }"""
+                Logger.log(serializer.from(json))
+            } catch (e: Exception) {
+                Logger.log(e)
+            }
+
+            val obj = ClassWithDelegateObject(id = "ID_FROM_CONSTRUCTOR")
+            val result = serializer.to(obj)
+
+            Logger.log("Serialize: $result")
+        }
+    }
+
+    private fun ViewGroup.addDeserializeWithDefaultValues() {
+        button("Deserialize Default Value #1") {
+
+            val json = """{ "id": "123123123AAA" }"""
+            Logger.log(adapter.of(Invite.serializer()).from(json))
+        }
+
+        button("Deserialize Default Value #2") {
+
+            val json = """{ "inviteId": "123123123AAA" }"""
+            Logger.log(adapter.of(SmartInvite.serializer()).from(json))
+        }
+    }
+
+    private fun ViewGroup.addDeserializeButton() {
+        button("Deserialize") {
+
+            val json = """{ "a": "abc" }"""
+            Logger.log(adapter.of(ObjectWithDefault.serializer()).from(json))
+        }
+    }
+
+    private fun ViewGroup.addSerializeButton() {
+        button("Serialize") {
+            val defaultObj = ObjectWithDefault("abc ")
+            val result = adapter.of(ObjectWithDefault.serializer()).to(defaultObj)
+            Logger.log("default obj a:${defaultObj.a} b:${defaultObj.b}")
+            Logger.log(result)
+        }
+    }
+
+}
