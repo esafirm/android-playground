@@ -70,6 +70,9 @@ class ObjectSerializationController : BaseController() {
             val result = serializer.to(obj)
 
             Logger.log("Serialize: $result")
+
+            Logger.log("Accessing description: ${obj.description}")
+            Logger.log("Serialize again: ${serializer.to(obj)}")
         }
     }
 

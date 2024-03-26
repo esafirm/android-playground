@@ -1,6 +1,8 @@
 package com.esafirm.androidplayground.dagger.modules
 
 import com.esafirm.androidplayground.dagger.ControllerScope
+import com.esafirm.androidplayground.anvildi.ContentLoader
+import com.esafirm.androidplayground.dagger.example.DaggerSampleController
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named

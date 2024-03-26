@@ -14,16 +14,25 @@ import com.google.android.gms.common.Feature
 /**
  * A controller to showcase the functionality of Anvil
  */
-class AnvilDIController : BaseController() {
+class AnvilDIController : BaseController(), ContentIdProvider {
 
     private val component by lazy {
         DaggerAnvilAppComponent.create()
     }
 
+    private val controllerComponent by lazy {
+        DaggerAnvilControllerComponent
+            .factory()
+            .create(this)
+    }
+
+    override val contentId: Int = 100
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         return row {
             button("Print Data") {
                 (component as FeaturePrintComponent).printer().print()
+                controllerComponent.contentLoader().loadContent()
             }
             logger()
         }
