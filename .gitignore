@@ -1,0 +1,14 @@
+.idea/
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+app/.kotlintest/
+
+## Project specific
+app/google-services.json
