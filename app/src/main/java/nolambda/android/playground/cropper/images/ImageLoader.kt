@@ -16,7 +16,6 @@ internal fun rememberLoadedImage(
     view: IntSize,
     imgToView: Matrix
 ): DecodeResult? {
-    // TODO provide better caching system
     var full by remember { mutableStateOf<DecodeResult?>(null) }
     var enhanced by remember { mutableStateOf<DecodeResult?>(null) }
 

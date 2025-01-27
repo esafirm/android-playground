@@ -27,8 +27,8 @@ import nolambda.android.playground.cropper.animateImgTransform
 import nolambda.android.playground.cropper.asMatrix
 import nolambda.android.playground.cropper.cropperTouch
 import nolambda.android.playground.cropper.images.rememberLoadedImage
-import nolambda.android.playground.cropper.utils.ViewMat
 import nolambda.android.playground.cropper.utils.ViewMatrix
+import nolambda.android.playground.cropper.utils.setAspect
 import nolambda.android.playground.cropper.utils.times
 
 @Composable
@@ -39,25 +39,32 @@ fun CropperPreview(
     val style = LocalCropperStyle.current
     val imgTransform by animateImgTransform(target = state.transform)
     val imgMat = remember(imgTransform, state.src.size) { imgTransform.asMatrix(state.src.size) }
-    val viewMat = remember { ViewMat() }
+    val viewMatrix = remember { ViewMatrix() }
     var view by remember { mutableStateOf(IntSize.Zero) }
     var pendingDrag by remember { mutableStateOf<DragHandle?>(null) }
     val viewPadding = LocalDensity.current.run { style.touchRad.toPx() }
-    val totalMat = remember(viewMat.matrix, imgMat) { imgMat * viewMat.matrix }
+    val totalMat = remember(viewMatrix.matrix, imgMat) { imgMat * viewMatrix.matrix }
     val image = rememberLoadedImage(state.src, view, totalMat)
 
-    val cropRect = remember(state.region, viewMat.matrix) {
-        viewMat.matrix.map(state.region)
+    val cropRect = remember(state.region, viewMatrix.matrix) {
+        viewMatrix.matrix.map(state.region)
     }
     val cropPath = remember(state.shape, cropRect) {
         state.shape.asPath(cropRect)
+    }
+
+    // Set the cropper initial aspect ratio
+    LaunchedEffect(Unit) {
+        android.util.Log.d("CropperPreview", "CropperPreview: ${state.region}")
+        state.region = state.region.setAspect(style.defaultAspectRatio)
+
     }
 
     BringToView(
         autoZoomEnabled = style.autoZoom,
         hasOverride = pendingDrag != null,
         outer = view.toSize().toRect().deflate(viewPadding),
-        mat = viewMat,
+        mat = viewMatrix,
         local = state.region,
     )
     Canvas(
@@ -66,12 +73,17 @@ fun CropperPreview(
             .background(color = style.backgroundColor)
             .cropperTouch(
                 region = state.region,
-                onRegion = { state.region = it },
+                onRegion = {
+                    /*state.region = it */
+                },
                 touchRad = style.touchRad,
                 handles = style.handles,
-                viewMatrix = viewMat,
+                viewMatrix = viewMatrix,
                 pending = pendingDrag,
                 onPending = { pendingDrag = it },
+                onTranslate = { delta ->
+                    viewMatrix.translate(delta)
+                }
             )
     ) {
         withTransform({ transform(totalMat) }) {

@@ -28,6 +28,7 @@ internal class DragHandle(
 internal fun Modifier.cropperTouch(
     region: Rect,
     onRegion: (Rect) -> Unit,
+    onTranslate: (Offset) -> Unit,
     touchRad: Dp,
     handles: List<Offset>,
     viewMatrix: ViewMatrix,
@@ -46,10 +47,12 @@ internal fun Modifier.cropperTouch(
             drag = DragState(
                 begin = { pos ->
                     val localPos = viewMatrix.invMatrix.map(pos)
-                    handles.findHandle(
-                        region, localPos,
-                        touchRadPx2
-                    )?.let { handle ->
+                    val handle = handles.findHandle(
+                        region = region,
+                        pos = localPos,
+                        touchRadPx2 = touchRadPx2
+                    )
+                    if (handle != null) {
                         onPending(DragHandle(handle, localPos, region))
                     }
                 },
@@ -60,6 +63,7 @@ internal fun Modifier.cropperTouch(
                         val newRegion = if (pending.handle != MoveHandle) {
                             pending.initialRegion.resize(pending.handle, delta)
                         } else {
+                            onTranslate(delta)
                             pending.initialRegion.translate(delta)
                         }
                         onRegion(newRegion)

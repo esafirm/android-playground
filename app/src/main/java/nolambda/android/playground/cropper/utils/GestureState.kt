@@ -33,9 +33,9 @@ internal interface DragState {
 }
 
 internal inline fun DragState(
-    crossinline begin: (pos: Offset) -> Unit = { },
-    crossinline done: () -> Unit = {},
-    crossinline next: (delta: Offset, pos: Offset, pointers: Int) -> Unit = { _, _, _ -> },
+    crossinline begin: (pos: Offset) -> Unit,
+    crossinline done: () -> Unit,
+    crossinline next: (delta: Offset, pos: Offset, pointers: Int) -> Unit,
 ): DragState = object : DragState {
     override fun onBegin(x: Float, y: Float) = begin(Offset(x, y))
     override fun onNext(dx: Float, dy: Float, x: Float, y: Float, pointers: Int) =

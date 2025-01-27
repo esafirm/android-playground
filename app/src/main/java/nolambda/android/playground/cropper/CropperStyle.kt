@@ -49,6 +49,9 @@ interface CropperStyle {
     /** All available aspect ratios */
     val aspectRatios: List<AspectRatio>
 
+    /** The default aspect ratio that will be applied to the cropper */
+    val defaultAspectRatio: AspectRatio
+
     /** Whether the view needs to be zoomed in automatically
      * to fit the crop rect after any change */
     val autoZoom: Boolean
@@ -96,6 +99,7 @@ fun CropperStyle(
     overlay: Color = Color.Black.copy(alpha = .5f),
     shapes: List<CropShape>? = DefaultCropShapes,
     aspects: List<AspectRatio> = DefaultAspectRatios,
+    defaultAspectRatio: AspectRatio = AspectRatio(1, 1),
     autoZoom: Boolean = true,
 ): CropperStyle = object : CropperStyle {
     override val touchRad: Dp get() = touchRad
@@ -104,6 +108,7 @@ fun CropperStyle(
     override val shapes: List<CropShape>? get() = shapes?.takeIf { it.isNotEmpty() }
     override val aspectRatios get() = aspects
     override val autoZoom: Boolean get() = autoZoom
+    override val defaultAspectRatio: AspectRatio = defaultAspectRatio
 
     override fun DrawScope.drawCropRect(region: Rect) {
         val strokeWidth = rectStrokeWidth.toPx()

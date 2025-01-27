@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.toSize
 import nolambda.android.playground.cropper.images.getDecodeParams
 import nolambda.android.playground.cropper.utils.*
-import nolambda.android.playground.cropper.utils.ViewMat
+import nolambda.android.playground.cropper.utils.ViewMatrix
 import nolambda.android.playground.cropper.utils.atOrigin
 import nolambda.android.playground.cropper.utils.coerceAtMost
 import nolambda.android.playground.cropper.utils.roundUp
@@ -35,7 +35,7 @@ private suspend fun CropState.doCreateResult(maxSize: IntSize?): ImageBitmap? {
         .roundUp()
     val result = ImageBitmap(finalSize.width, finalSize.height)
     val canvas = Canvas(result)
-    val viewMat = ViewMat()
+    val viewMat = ViewMatrix()
     viewMat.snapFit(region, finalSize.toSize().toRect())
     val imgMat = transform.asMatrix(src.size)
     val totalMat = imgMat * viewMat.matrix

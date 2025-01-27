@@ -19,7 +19,6 @@ import nolambda.android.playground.cropper.utils.keepAspect
 import nolambda.android.playground.cropper.utils.next90
 import nolambda.android.playground.cropper.utils.prev90
 import nolambda.android.playground.cropper.utils.scaleToFit
-import nolambda.android.playground.cropper.utils.setAspect
 import nolambda.android.playground.cropper.utils.setSize
 import nolambda.android.playground.cropper.utils.toRect
 

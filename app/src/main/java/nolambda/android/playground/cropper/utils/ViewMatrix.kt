@@ -18,12 +18,13 @@ internal interface ViewMatrix {
     fun zoom(center: Offset, scale: Float)
     suspend fun fit(inner: Rect, outer: Rect)
     fun snapFit(inner: Rect, outer: Rect)
+    fun translate(offset: Offset)
     val matrix: Matrix
     val invMatrix: Matrix
     val scale: Float
 }
 
-internal fun ViewMat() = object : ViewMatrix {
+internal fun ViewMatrix() = object : ViewMatrix {
     var c0 = Offset.Zero
     var mat by mutableStateOf(Matrix(), neverEqualPolicy())
     val inv by derivedStateOf {
@@ -84,5 +85,9 @@ internal fun ViewMat() = object : ViewMatrix {
 
     private fun Rect.similar(other: Rect): Boolean {
         return (intersect(other).area / area) > .95f
+    }
+
+    override fun translate(offset: Offset) {
+        update { it.translate(offset.x, offset.y) }
     }
 }
