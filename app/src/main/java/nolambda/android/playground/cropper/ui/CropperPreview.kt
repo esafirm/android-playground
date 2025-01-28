@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.toSize
 import kotlinx.coroutines.delay
-import nolambda.android.playground.cropper.CropRegion
+import nolambda.android.playground.cropper.CropSpec
 import nolambda.android.playground.cropper.CropState
 import nolambda.android.playground.cropper.DragHandle
 import nolambda.android.playground.cropper.LocalCropperStyle
@@ -29,12 +29,14 @@ import nolambda.android.playground.cropper.animateImgTransform
 import nolambda.android.playground.cropper.asMatrix
 import nolambda.android.playground.cropper.cropperTouch
 import nolambda.android.playground.cropper.images.rememberLoadedImage
+import nolambda.android.playground.cropper.shapePathOrError
 import nolambda.android.playground.cropper.utils.ViewMatrix
-import nolambda.android.playground.cropper.utils.ViewMatrixImpl
 import nolambda.android.playground.cropper.utils.setAspect
 import nolambda.android.playground.cropper.utils.times
-import kotlin.math.abs
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.milliseconds
+
+private val AutoContainsDelay = 200.milliseconds
 
 @Composable
 fun CropperPreview(
@@ -47,7 +49,7 @@ fun CropperPreview(
     var pendingDrag by remember { mutableStateOf<DragHandle?>(null) }
     val actionSession = remember { ActionSession() }
 
-    val viewMatrix: ViewMatrix = remember { ViewMatrixImpl() }
+    val viewMatrix = state.viewMatrix
     val imgTransform by animateImgTransform(target = state.transform)
     val imgMat = remember(imgTransform, state.src.size) { imgTransform.asMatrix(state.src.size) }
     val totalMat = remember(viewMatrix.matrix, imgMat) { imgMat * viewMatrix.matrix }
@@ -58,52 +60,25 @@ fun CropperPreview(
     val outerRect = remember(viewSize, viewPadding) {
         viewSize.toSize().toRect().deflate(viewPadding)
     }
+    val cropSpec = state.cropSpec
 
     LaunchedEffect(outerRect) {
         if (outerRect.isEmpty) return@LaunchedEffect
+
         state.region = state.region.setAspect(style.defaultAspectRatio)
         viewMatrix.fit(viewMatrix.matrix.map(state.region), outerRect)
+
+        val cropRect = viewMatrix.matrix.map(state.region)
+        state.cropSpec = CropSpec.Ready(rect = cropRect)
     }
 
     LaunchedEffect(state.transform) {
         actionSession.next()
     }
 
-    val cropRect = remember(state.region, outerRect) {
-        viewMatrix.matrix.map(state.region)
-    }
-    val cropPath = remember(state.shape, cropRect) {
-        state.shape.asPath(cropRect)
-    }
-
-    // Calculate the crop area
-    val bounds = imgRect
-    val cropRegion = cropRect
-
-    val actualCropLeft =
-        if (bounds.left < 0) abs(bounds.left) + cropRegion.left else cropRegion.left - bounds.left
-    val actualCropTop =
-        if (bounds.top < 0) abs(bounds.top) + cropRegion.top else cropRegion.top - bounds.top
-
-    state.cropRegion = CropRegion(
-        x = actualCropLeft,
-        y = actualCropTop,
-        width = cropRegion.width,
-        height = cropRegion.height,
-        scale = viewMatrix.scale,
-    )
-
-    android.util.Log.d(
-        "Cropper", """
-        --> CropArea: ${state.cropRegion}
-        --> CropRect: $cropRect
-        --> ImgRect: $imgRect
-    """.trimIndent()
-    )
-
     AutoContains(
         mat = viewMatrix,
-        cropRect = cropRect,
+        cropSpec = cropSpec,
         imgRect = imgRect,
         outerRect = outerRect,
         inner = state.region,
@@ -130,11 +105,13 @@ fun CropperPreview(
                     }
                 },
                 onTranslate = { delta ->
-                    viewMatrix.translate(
-                        offset = delta,
-                        crop = cropRect,
-                        imgRect = imgRect
-                    )
+                    cropSpec.whenReady {
+                        viewMatrix.translate(
+                            offset = delta,
+                            crop = (cropSpec as CropSpec.Ready).rect,
+                            imgRect = imgRect
+                        )
+                    }
                 }
             )
     ) {
@@ -148,33 +125,42 @@ fun CropperPreview(
             }
         }
         with(style) {
-            clipPath(cropPath, ClipOp.Difference) {
-                drawRect(color = overlayColor)
+            cropSpec.whenReady {
+                clipPath(state.shapePathOrError(), ClipOp.Difference) {
+                    drawRect(color = overlayColor)
+                }
+                drawCropRect(it.rect)
             }
-            drawCropRect(cropRect)
         }
-
     }
 }
 
 @Composable
 private fun AutoContains(
     mat: ViewMatrix,
-    cropRect: Rect,
+    cropSpec: CropSpec,
     imgRect: Rect,
     inner: Rect,
     outerRect: Rect,
     actionId: Int,
 ) {
     if (actionId == ActionSession.DEFAULT) return
-    LaunchedEffect(actionId, outerRect, cropRect) {
-        delay(200)
-        mat.animateContains(
-            inner = mat.matrix.map(inner),
-            outer = outerRect,
-            crop = cropRect,
-            imgRect = imgRect,
-        )
+    cropSpec.whenReady { spec ->
+        LaunchedEffect(actionId, outerRect, spec.rect) {
+            delay(AutoContainsDelay)
+            mat.animateContains(
+                inner = mat.matrix.map(inner),
+                outer = outerRect,
+                crop = spec.rect,
+                imgRect = imgRect,
+            )
+        }
+    }
+}
+
+private inline fun CropSpec.whenReady(body: (CropSpec.Ready) -> Unit) {
+    if (this is CropSpec.Ready) {
+        body(this)
     }
 }
 

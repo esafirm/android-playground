@@ -8,10 +8,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.toRect
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.toIntRect
 import androidx.compose.ui.unit.toSize
 import nolambda.android.playground.cropper.images.ImageSrc
+import nolambda.android.playground.cropper.utils.ViewMatrix
+import nolambda.android.playground.cropper.utils.ViewMatrixImpl
 import nolambda.android.playground.cropper.utils.constrainOffset
 import nolambda.android.playground.cropper.utils.constrainResize
 import nolambda.android.playground.cropper.utils.eq
@@ -21,16 +24,15 @@ import nolambda.android.playground.cropper.utils.prev90
 import nolambda.android.playground.cropper.utils.scaleToFit
 import nolambda.android.playground.cropper.utils.setSize
 import nolambda.android.playground.cropper.utils.toRect
+import kotlin.math.abs
 
-data class CropRegion(
-    val x: Float,
-    val y: Float,
-    val width: Float,
-    val height: Float,
-    val scale: Float,
-) {
-    val actualWidth: Float get() = width / scale
-    val actualHeight: Float get() = height / scale
+sealed class CropSpec {
+    class Ready(
+        val rect: Rect,
+        val shape: CropShape = RectCropShape,
+    ) : CropSpec()
+
+    object Empty : CropSpec()
 }
 
 /** State for the current image being cropped */
@@ -41,11 +43,11 @@ interface CropState {
     val imgRect: Rect
     var region: Rect
     var aspectLock: Boolean
-    var shape: CropShape
     val accepted: Boolean
+    var cropSpec: CropSpec
+    val viewMatrix: ViewMatrix
     fun done(accept: Boolean)
     fun reset()
-    var cropRegion: CropRegion?
 }
 
 internal fun CropState(
@@ -54,10 +56,10 @@ internal fun CropState(
 ): CropState = object : CropState {
 
     val defaultTransform: ImgTransform = ImgTransform.Identity
-    val defaultShape: CropShape = RectCropShape
     val defaultAspectLock: Boolean = false
 
-    override var cropRegion: CropRegion? = null
+    override val viewMatrix = ViewMatrixImpl()
+    override var cropSpec by mutableStateOf<CropSpec>(CropSpec.Empty)
 
     override val src: ImageSrc get() = src
     private var _transform: ImgTransform by mutableStateOf(defaultTransform)
@@ -68,7 +70,7 @@ internal fun CropState(
             _transform = value
         }
 
-    val defaultRegion = src.size.toSize().toRect()
+    private val defaultRegion = src.size.toSize().toRect()
 
     private var _region by mutableStateOf(defaultRegion)
     override var region
@@ -84,7 +86,6 @@ internal fun CropState(
 
     override val imgRect by derivedStateOf { getTransformedImageRect(transform, src.size) }
 
-    override var shape: CropShape by mutableStateOf(defaultShape)
     override var aspectLock by mutableStateOf(defaultAspectLock)
 
     private fun onTransformUpdated(old: ImgTransform, new: ImgTransform) {
@@ -94,9 +95,9 @@ internal fun CropState(
 
     override fun reset() {
         transform = defaultTransform
-        shape = defaultShape
         _region = defaultRegion
         aspectLock = defaultAspectLock
+        cropSpec = CropSpec.Empty
     }
 
     override var accepted: Boolean by mutableStateOf(false)
@@ -153,5 +154,40 @@ internal fun updateRegion(
             result.isEmpty -> result.setSize(old, Size(1f, 1f)).constrainOffset(bounds)
             else -> result
         }
+    }
+}
+
+internal fun CropState.generateCropRegion(): Rect {
+    val scale = viewMatrix.scale
+    val spec = cropSpec
+    if (spec is CropSpec.Ready) {
+        val bounds = viewMatrix.matrix.map(imgRect)
+        val cropRect = spec.rect
+
+        val actualX =
+            if (bounds.left < 0) abs(bounds.left) + cropRect.left else cropRect.left - bounds.left
+        val actualY =
+            if (bounds.top < 0) abs(bounds.top) + cropRect.top else cropRect.top - bounds.top
+
+        val left = actualX.coerceAtLeast(0f) / scale + imgRect.left
+        val top = actualY.coerceAtLeast(0f) / scale + imgRect.top
+
+        val actualWidth = cropRect.width / scale
+        val actualHeight = cropRect.height / scale
+
+        return Rect(
+            left = left,
+            top = top,
+            right = (left + actualWidth).coerceAtMost(imgRect.right),
+            bottom = (top + actualHeight).coerceAtMost(imgRect.bottom),
+        )
+    }
+    return Rect.Zero
+}
+
+internal fun CropState.shapePathOrError(rect: Rect? = null): Path {
+    return when (val spec = cropSpec) {
+        is CropSpec.Ready -> spec.shape.asPath(rect ?: spec.rect)
+        else -> error("CropSpec is not available. $this")
     }
 }

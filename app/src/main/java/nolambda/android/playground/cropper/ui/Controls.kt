@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.BorderHorizontal
 import androidx.compose.material.icons.filled.Flip
 import androidx.compose.material.icons.filled.FlipToFront
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -90,20 +89,6 @@ internal fun CropperControls(
                     lock = state.aspectLock,
                     onLock = { state.aspectLock = it }
                 )
-            }
-            LocalCropperStyle.current.shapes?.let { shapes ->
-                Box {
-                    var menu by remember { mutableStateOf(false) }
-                    IconButton(onClick = { menu = !menu }) {
-                        Icon(Icons.Default.Star, null)
-                    }
-                    if (menu) ShapeSelectionMenu(
-                        onDismiss = { menu = false },
-                        selected = state.shape,
-                        onSelect = { state.shape = it },
-                        shapes = shapes
-                    )
-                }
             }
         }
     }

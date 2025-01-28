@@ -30,7 +30,7 @@ public suspend fun ImageCropper.crop(
  * Set [cacheBeforeUse] to false if you're certain that reopening it multiple times won't be a problem,
  * true otherwise.
  */
-public suspend fun ImageCropper.crop(
+suspend fun ImageCropper.crop(
     uri: Uri,
     context: Context,
     maxResultSize: IntSize? = DefaultMaxCropSize,

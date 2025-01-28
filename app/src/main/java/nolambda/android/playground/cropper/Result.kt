@@ -1,6 +1,5 @@
 package nolambda.android.playground.cropper
 
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.toRect
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.FilterQuality
@@ -30,17 +29,7 @@ suspend fun CropState.createResult(
 }
 
 private suspend fun CropState.doImageCrop(maxSize: IntSize?): ImageBitmap? {
-    val cropRegion = cropRegion ?: return null
-
-    val left = cropRegion.x.coerceAtLeast(0f) / cropRegion.scale + imgRect.left
-    val top = cropRegion.y.coerceAtLeast(0f) / cropRegion.scale + imgRect.top
-
-    val finalRegion = Rect(
-        left = left,
-        top = top,
-        right = (left + cropRegion.actualWidth).coerceAtMost(imgRect.right),
-        bottom = (top + cropRegion.actualHeight).coerceAtMost(imgRect.bottom),
-    )
+    val finalRegion = generateCropRegion()
 
     val finalSize = finalRegion.size
         .coerceAtMost(maxSize?.toSize())
@@ -54,7 +43,7 @@ private suspend fun CropState.doImageCrop(maxSize: IntSize?): ImageBitmap? {
     val imgMat = transform.asMatrix(src.size)
     val totalMat = imgMat * viewMat.matrix
 
-    canvas.clipPath(shape.asPath(finalRegion.atOrigin()))
+    canvas.clipPath(shapePathOrError(rect = finalRegion.atOrigin()))
     canvas.concat(totalMat)
 
     val inParams = getDecodeParams(view = finalSize, img = src.size, totalMat) ?: return null

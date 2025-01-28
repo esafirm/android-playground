@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Matrix
 import kotlin.math.min
 
 @Stable
-internal interface ViewMatrix {
+interface ViewMatrix {
     fun zoomStart(center: Offset)
     fun zoom(center: Offset, scale: Float)
     fun fit(inner: Rect, outer: Rect)

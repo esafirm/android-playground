@@ -14,10 +14,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ImagesViewModel(private val app: Application) : AndroidViewModel(app) {
-    val imageCropper = ImageCropper()
+
     private val _selectedImage = MutableStateFlow<ImageBitmap?>(null)
-    val selectedImage = _selectedImage.asStateFlow()
     private val _cropError = MutableStateFlow<CropError?>(null)
+
+    val imageCropper = ImageCropper()
+    val selectedImage = _selectedImage.asStateFlow()
     val cropError = _cropError.asStateFlow()
 
     fun cropErrorShown() {
@@ -26,7 +28,7 @@ class ImagesViewModel(private val app: Application) : AndroidViewModel(app) {
 
     fun setSelectedImage(uri: Uri) {
         viewModelScope.launch {
-            when(val result = imageCropper.crop(uri, app)) {
+            when (val result = imageCropper.crop(uri, app)) {
                 CropResult.Cancelled -> {}
                 is CropError -> _cropError.value = result
                 is CropResult.Success -> {

@@ -1,13 +1,20 @@
 package nolambda.android.playground.cropper
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.unit.IntSize
-import nolambda.android.playground.cropper.images.ImageBitmapSrc
-import nolambda.android.playground.cropper.images.ImageSrc
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.takeWhile
+import nolambda.android.playground.cropper.images.ImageBitmapSrc
+import nolambda.android.playground.cropper.images.ImageSrc
+
 /** Union type denoting the possible results after a crop operation is done */
 sealed interface CropResult {
     /** The final result as an ImageBitmap.
@@ -23,6 +30,7 @@ enum class CropError : CropResult {
     /** The supplied image is invalid, not supported by the codec
      * or you don't have the required permissions to read it */
     LoadingError,
+
     /** The result could not be saved. Try reducing the maxSize supplied to [ImageCropper.crop] */
     SavingError
 }
@@ -74,7 +82,7 @@ suspend fun ImageCropper.crop(
 }
 
 @Composable
-fun rememberImageCropper() : ImageCropper {
+fun rememberImageCropper(): ImageCropper {
     return remember { ImageCropper() }
 }
 
@@ -82,9 +90,11 @@ fun rememberImageCropper() : ImageCropper {
  * Creates an [ImageCropper] instance.
  */
 fun ImageCropper(): ImageCropper = object : ImageCropper {
-    override var cropState: CropState? by mutableStateOf(null)
     private val cropStateFlow = snapshotFlow { cropState }
+
+    override var cropState: CropState? by mutableStateOf(null)
     override var loadingStatus: CropperLoading? by mutableStateOf(null)
+
     override suspend fun crop(
         maxResultSize: IntSize?,
         createSrc: suspend () -> ImageSrc?
@@ -96,6 +106,7 @@ fun ImageCropper(): ImageCropper = object : ImageCropper {
         cropState = newCrop
         cropStateFlow.takeWhile { it === newCrop }.collect()
         if (!newCrop.accepted) return CropResult.Cancelled
+
         return withLoading(CropperLoading.SavingResult) {
             val result = newCrop.createResult(maxResultSize)
             if (result == null) CropError.SavingError
