@@ -22,9 +22,9 @@ import nolambda.android.playground.cropper.utils.keepAspect
 import nolambda.android.playground.cropper.utils.next90
 import nolambda.android.playground.cropper.utils.prev90
 import nolambda.android.playground.cropper.utils.scaleToFit
+import nolambda.android.playground.cropper.utils.setAspect
 import nolambda.android.playground.cropper.utils.setSize
 import nolambda.android.playground.cropper.utils.toRect
-import kotlin.math.abs
 
 sealed class CropSpec {
     class Ready(
@@ -164,10 +164,8 @@ internal fun CropState.generateCropRegion(): Rect {
         val bounds = viewMatrix.matrix.map(imgRect)
         val cropRect = spec.rect
 
-        val actualX =
-            if (bounds.left < 0) abs(bounds.left) + cropRect.left else cropRect.left - bounds.left
-        val actualY =
-            if (bounds.top < 0) abs(bounds.top) + cropRect.top else cropRect.top - bounds.top
+        val actualX = cropRect.left - bounds.left
+        val actualY = cropRect.top - bounds.top
 
         val left = actualX.coerceAtLeast(0f) / scale + imgRect.left
         val top = actualY.coerceAtLeast(0f) / scale + imgRect.top
@@ -190,4 +188,17 @@ internal fun CropState.shapePathOrError(rect: Rect? = null): Path {
         is CropSpec.Ready -> spec.shape.asPath(rect ?: spec.rect)
         else -> error("CropSpec is not available. $this")
     }
+}
+
+internal fun CropState.initializeCropSpec(
+    outer: Rect,
+    aspectRatio: AspectRatio,
+) {
+    val image = src.size.toSize().toRect()
+    val region = image.setAspect(aspectRatio)
+
+    viewMatrix.fit(viewMatrix.matrix.map(region), outer)
+    val cropRect = viewMatrix.matrix.map(region)
+
+    cropSpec = CropSpec.Ready(rect = cropRect)
 }

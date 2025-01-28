@@ -10,7 +10,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Matrix
+import nolambda.android.playground.cropper.AspectRatio
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 @Stable
 interface ViewMatrix {
@@ -20,7 +22,7 @@ interface ViewMatrix {
     fun translate(offset: Offset, crop: Rect, imgRect: Rect)
 
     suspend fun animateFit(inner: Rect, outer: Rect)
-    suspend fun animateContains(inner: Rect, outer: Rect, crop: Rect, imgRect: Rect)
+    suspend fun animateContains(outer: Rect, crop: Rect, imgRect: Rect)
 
     val matrix: Matrix
     val invMatrix: Matrix
@@ -93,14 +95,15 @@ internal class ViewMatrixImpl : ViewMatrix {
     }
 
     override suspend fun animateContains(
-        inner: Rect,
         outer: Rect,
         crop: Rect,
         imgRect: Rect,
     ) {
         val needToScale = crop.width > imgRect.width || crop.height > imgRect.height
+        val aspectRatio = AspectRatio(crop.width.roundToInt(), crop.height.roundToInt())
         if (needToScale) {
-            animateFit(inner, outer)
+            val cropDst = imgRect.setAspect(aspectRatio)
+            animateFit(cropDst, outer)
             return
         }
 

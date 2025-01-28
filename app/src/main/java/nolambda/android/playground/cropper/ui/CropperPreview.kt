@@ -29,9 +29,9 @@ import nolambda.android.playground.cropper.animateImgTransform
 import nolambda.android.playground.cropper.asMatrix
 import nolambda.android.playground.cropper.cropperTouch
 import nolambda.android.playground.cropper.images.rememberLoadedImage
+import nolambda.android.playground.cropper.initializeCropSpec
 import nolambda.android.playground.cropper.shapePathOrError
 import nolambda.android.playground.cropper.utils.ViewMatrix
-import nolambda.android.playground.cropper.utils.setAspect
 import nolambda.android.playground.cropper.utils.times
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
@@ -64,12 +64,7 @@ fun CropperPreview(
 
     LaunchedEffect(outerRect) {
         if (outerRect.isEmpty) return@LaunchedEffect
-
-        state.region = state.region.setAspect(style.defaultAspectRatio)
-        viewMatrix.fit(viewMatrix.matrix.map(state.region), outerRect)
-
-        val cropRect = viewMatrix.matrix.map(state.region)
-        state.cropSpec = CropSpec.Ready(rect = cropRect)
+        state.initializeCropSpec(outer = outerRect, aspectRatio = style.defaultAspectRatio)
     }
 
     LaunchedEffect(state.transform) {
@@ -81,7 +76,6 @@ fun CropperPreview(
         cropSpec = cropSpec,
         imgRect = imgRect,
         outerRect = outerRect,
-        inner = state.region,
         actionId = actionSession.actionId,
     )
 
@@ -140,7 +134,6 @@ private fun AutoContains(
     mat: ViewMatrix,
     cropSpec: CropSpec,
     imgRect: Rect,
-    inner: Rect,
     outerRect: Rect,
     actionId: Int,
 ) {
@@ -149,7 +142,6 @@ private fun AutoContains(
         LaunchedEffect(actionId, outerRect, spec.rect) {
             delay(AutoContainsDelay)
             mat.animateContains(
-                inner = mat.matrix.map(inner),
                 outer = outerRect,
                 crop = spec.rect,
                 imgRect = imgRect,
