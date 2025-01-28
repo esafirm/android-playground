@@ -30,7 +30,6 @@ fun DemoContent(
             state = cropState,
             style = CropperStyle(
                 handlesConfig = HandlesConfig.None,
-                autoZoom = false,
             ),
         )
     }

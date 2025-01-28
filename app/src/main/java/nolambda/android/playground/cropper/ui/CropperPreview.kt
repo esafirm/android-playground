@@ -1,10 +1,8 @@
 package nolambda.android.playground.cropper.ui
 
-import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -42,31 +40,34 @@ fun CropperPreview(
     modifier: Modifier = Modifier
 ) {
     val style = LocalCropperStyle.current
+    val viewPadding = LocalDensity.current.run { style.touchRad.toPx() }
 
     var pendingDrag by remember { mutableStateOf<DragHandle?>(null) }
     val actionSession = remember { ActionSession() }
 
+    val viewMatrix: ViewMatrix = remember { ViewMatrixImpl() }
     val imgTransform by animateImgTransform(target = state.transform)
     val imgMat = remember(imgTransform, state.src.size) { imgTransform.asMatrix(state.src.size) }
-    val viewMatrix: ViewMatrix = remember { ViewMatrixImpl() }
-    var view by remember { mutableStateOf(IntSize.Zero) }
-    val viewPadding = LocalDensity.current.run { style.touchRad.toPx() }
     val totalMat = remember(viewMatrix.matrix, imgMat) { imgMat * viewMatrix.matrix }
-    val image = rememberLoadedImage(state.src, view, totalMat)
+    var viewSize by remember { mutableStateOf(IntSize.Zero) }
+    val image = rememberLoadedImage(state.src, viewSize, totalMat)
 
-    var isInitialized by remember { mutableStateOf(false) }
-    val cropRect = remember(state.region, isInitialized) {
+    val imgRect = viewMatrix.matrix.map(state.imgRect)
+    val outerRect = remember(viewSize, viewPadding) {
+        viewSize.toSize().toRect().deflate(viewPadding)
+    }
+
+    LaunchedEffect(outerRect) {
+        if (outerRect.isEmpty) return@LaunchedEffect
+        state.region = state.region.setAspect(style.defaultAspectRatio)
+        viewMatrix.fit(viewMatrix.matrix.map(state.region), outerRect)
+    }
+
+    val cropRect = remember(state.region, outerRect) {
         viewMatrix.matrix.map(state.region)
     }
     val cropPath = remember(state.shape, cropRect) {
         state.shape.asPath(cropRect)
-    }
-    val imgRect = viewMatrix.matrix.map(state.imgRect)
-    val outerRect = view.toSize().toRect().deflate(viewPadding)
-
-    // Set the cropper initial aspect ratio
-    LaunchedEffect(Unit) {
-        state.region = state.region.setAspect(style.defaultAspectRatio)
     }
 
     AutoContains(
@@ -78,35 +79,24 @@ fun CropperPreview(
         actionId = actionSession.actionId,
     )
 
-    BringToView(
-        autoZoomEnabled = false,
-        hasOverride = pendingDrag != null,
-        outer = outerRect,
-        mat = viewMatrix,
-        inner = state.region,
-    ) {
-        isInitialized = true
-    }
-
     Canvas(
         modifier = modifier
-            .onGloballyPositioned { view = it.size }
+            .onGloballyPositioned { viewSize = it.size }
             .background(color = style.backgroundColor)
             .cropperTouch(
                 region = state.region,
-                onRegion = { state.region = it },
                 touchRad = style.touchRad,
                 handles = style.handles,
                 viewMatrix = viewMatrix,
                 pending = pendingDrag,
+
+                onRegion = { state.region = it },
+                onZoomEnd = { actionSession.next() },
                 onPending = { nextPending ->
                     pendingDrag = nextPending
                     if (nextPending == null) {
                         actionSession.next()
                     }
-                },
-                onZoomEnd = {
-                    actionSession.next()
                 },
                 onTranslate = { delta ->
                     viewMatrix.translate(
@@ -133,39 +123,6 @@ fun CropperPreview(
             drawCropRect(cropRect)
         }
 
-    }
-}
-
-/**
- * A composable to control the view matrix to fit the region.
- */
-@Composable
-private fun BringToView(
-    autoZoomEnabled: Boolean,
-    hasOverride: Boolean,
-    mat: ViewMatrix,
-    outer: Rect,
-    inner: Rect,
-    onInitialized: () -> Unit = {}
-) {
-    if (outer.isEmpty) return
-    DisposableEffect(Unit) {
-        mat.fit(mat.matrix.map(inner), outer)
-        onInitialized()
-        onDispose { }
-    }
-    if (!autoZoomEnabled) return
-    var overrideBlock by remember { mutableStateOf(false) }
-    LaunchedEffect(hasOverride, outer, inner) {
-        if (hasOverride) overrideBlock = true
-        else {
-            if (overrideBlock) {
-                delay(500)
-                overrideBlock = false
-            }
-            Log.d("CropperPreview", "BringToView: inner rect: $inner")
-            mat.animateFit(mat.matrix.map(inner), outer)
-        }
     }
 }
 
