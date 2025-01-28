@@ -18,7 +18,7 @@ class ImagesViewModel(private val app: Application) : AndroidViewModel(app) {
     private val _selectedImage = MutableStateFlow<ImageBitmap?>(null)
     private val _cropError = MutableStateFlow<CropError?>(null)
 
-    val imageCropper = ImageCropper()
+    val imageCropper = ImageCropper.create()
     val selectedImage = _selectedImage.asStateFlow()
     val cropError = _cropError.asStateFlow()
 
@@ -26,14 +26,14 @@ class ImagesViewModel(private val app: Application) : AndroidViewModel(app) {
         _cropError.value = null
     }
 
-    fun setSelectedImage(uri: Uri) {
-        viewModelScope.launch {
-            when (val result = imageCropper.crop(uri, app)) {
-                CropResult.Cancelled -> {}
-                is CropError -> _cropError.value = result
-                is CropResult.Success -> {
-                    _selectedImage.value = result.bitmap
-                }
+    fun setSelectedImage(uri: Uri) = viewModelScope.launch {
+        val result = imageCropper.crop(uri, app)
+
+        when (result) {
+            CropResult.Cancelled -> {}
+            is CropError -> _cropError.value = result
+            is CropResult.Success -> {
+                _selectedImage.value = result.bitmap
             }
         }
     }

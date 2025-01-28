@@ -1,10 +1,8 @@
 package nolambda.android.playground.cropper
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.graphics.ImageBitmap
@@ -66,6 +64,10 @@ interface ImageCropper {
         maxResultSize: IntSize? = DefaultMaxCropSize,
         createSrc: suspend () -> ImageSrc?
     ): CropResult
+
+    companion object {
+        fun create(): ImageCropper = ImageCropperImpl()
+    }
 }
 
 /**
@@ -81,15 +83,10 @@ suspend fun ImageCropper.crop(
     ImageBitmapSrc(bmp)
 }
 
-@Composable
-fun rememberImageCropper(): ImageCropper {
-    return remember { ImageCropper() }
-}
-
 /**
  * Creates an [ImageCropper] instance.
  */
-fun ImageCropper(): ImageCropper = object : ImageCropper {
+internal class ImageCropperImpl : ImageCropper {
     private val cropStateFlow = snapshotFlow { cropState }
 
     override var cropState: CropState? by mutableStateOf(null)
@@ -102,7 +99,7 @@ fun ImageCropper(): ImageCropper = object : ImageCropper {
         cropState = null
         val src = withLoading(CropperLoading.PreparingImage) { createSrc() }
             ?: return CropError.LoadingError
-        val newCrop = CropState(src) { cropState = null }
+        val newCrop = createCropState(src) { cropState = null }
         cropState = newCrop
         cropStateFlow.takeWhile { it === newCrop }.collect()
         if (!newCrop.accepted) return CropResult.Cancelled

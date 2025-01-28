@@ -12,30 +12,15 @@ import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.util.concurrent.atomic.AtomicBoolean
 
-internal data class ImageStreamSrc(
+internal class ImageStreamSrc private constructor(
     private val dataSource: ImageStream,
+    private val exifInfo: ExifInfo,
+
     override val size: IntSize
 ) : ImageSrc {
 
-    private val allowRegion = AtomicBoolean(true)
-
-    private suspend fun openRegion(params: DecodeParams): DecodeResult? {
-        return dataSource.tryUse { stream ->
-            regionDecoder(stream)!!.decodeRegion(params)
-        }?.let { bmp ->
-            DecodeResult(params, bmp.asImageBitmap())
-        }
-    }
-
-    private suspend fun openFull(sampleSize: Int): DecodeResult? {
-        //BitmapFactory.decode supports more formats than BitmapRegionDecoder.
-        return dataSource.tryUse { stream ->
-            val options = BitmapFactory.Options().apply { inSampleSize = sampleSize }
-            BitmapFactory.decodeStream(stream, null, options)
-        }?.let { bmp ->
-            DecodeResult(DecodeParams(sampleSize, size.toIntRect()), bmp.asImageBitmap())
-        }
-    }
+    // P.S: Not working properly with transform bitmap. Let's revisit later
+    private val allowRegion = AtomicBoolean(false)
 
     override suspend fun open(params: DecodeParams): DecodeResult? {
         if (allowRegion.get()) {
@@ -47,22 +32,52 @@ internal data class ImageStreamSrc(
         return null
     }
 
-    companion object {
-        private suspend fun <R> ImageStream.tryUse(op: (InputStream) -> R): R? {
-            return withContext(Dispatchers.IO) {
-                openStream()?.use { stream -> runCatching { op(stream) } }
-            }?.onFailure {
-                it.printStackTrace()
-            }?.getOrNull()
-        }
-
-        suspend operator fun invoke(dataSource: ImageStream): ImageStreamSrc? {
-            val size = dataSource.tryUse { it.getImageSize() }
-                ?.takeIf { it.width > 0 && it.height > 0 }
-                ?: return null
-            return ImageStreamSrc(dataSource, size)
+    /**
+     * Open a region of the image with the given parameters.
+     */
+    private suspend fun openRegion(params: DecodeParams): DecodeResult? {
+        return dataSource.tryUse { stream ->
+            regionDecoder(stream)!!.decodeRegion(params)?.asTransformedBitmap()
+        }?.let { bmp ->
+            DecodeResult(params, bmp.asImageBitmap())
         }
     }
+
+    /**
+     * Open the full image with the given sample size.
+     *
+     * BitmapFactory.decode supports more formats than BitmapRegionDecoder.
+     */
+    private suspend fun openFull(sampleSize: Int): DecodeResult? {
+        return dataSource.tryUse { stream ->
+            val options = BitmapFactory.Options().apply { inSampleSize = sampleSize }
+            BitmapFactory.decodeStream(stream, null, options)?.asTransformedBitmap()
+        }?.let { bmp ->
+            DecodeResult(DecodeParams(sampleSize, size.toIntRect()), bmp.asImageBitmap())
+        }
+    }
+
+    private fun Bitmap.asTransformedBitmap(): Bitmap {
+        return BitmapExifUtils.transformBitmap(this, exifInfo)
+    }
+
+    companion object {
+        suspend operator fun invoke(dataSource: ImageStream): ImageStreamSrc? {
+            val exif = BitmapExifUtils.getExifInfo(dataSource)
+            val size = dataSource.tryUse { it.getImageSize(exif) }
+                ?.takeIf { it.width > 0 && it.height > 0 }
+                ?: return null
+            return ImageStreamSrc(dataSource, exif, size)
+        }
+    }
+}
+
+private suspend fun <R> ImageStream.tryUse(op: (InputStream) -> R): R? {
+    return withContext(Dispatchers.IO) {
+        openStream()?.use { stream -> runCatching { op(stream) } }
+    }?.onFailure {
+        it.printStackTrace()
+    }?.getOrNull()
 }
 
 private fun regionDecoder(stream: InputStream): BitmapRegionDecoder? {
@@ -85,8 +100,13 @@ private fun bitmapFactoryOptions(sampleSize: Int) = BitmapFactory.Options().appl
     inSampleSize = sampleSize
 }
 
-private fun InputStream.getImageSize(): IntSize {
+private fun InputStream.getImageSize(exif: ExifInfo): IntSize {
     val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
     BitmapFactory.decodeStream(this, null, options)
-    return IntSize(options.outWidth, options.outHeight)
+
+    return if (exif.isSwapWidthAndHeight()) {
+        IntSize(options.outHeight, options.outWidth)
+    } else {
+        IntSize(options.outWidth, options.outHeight)
+    }
 }

@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * Creates an [ImageBitmap] using the parameters in [CropState].
+ * Creates an [ImageBitmap] using the parameters in [createCropState].
  * If [maxSize] is not null, the result will be scaled down to match it.
  * Returns null if the image could not be created.
  */

@@ -7,7 +7,9 @@ import nolambda.android.playground.cropper.rememberImagePicker
 
 @Composable
 fun ViewModelDemo(viewModel: ImagesViewModel, modifier: Modifier = Modifier) {
-    val imagePicker = rememberImagePicker(onImage = { uri -> viewModel.setSelectedImage(uri) })
+    val imagePicker = rememberImagePicker { uri ->
+        viewModel.setSelectedImage(uri)
+    }
     DemoContent(
         cropState = viewModel.imageCropper.cropState,
         loadingStatus = viewModel.imageCropper.loadingStatus,

@@ -3,12 +3,10 @@ package nolambda.android.playground.cropper
 import android.content.Context
 import android.net.Uri
 import androidx.compose.ui.unit.IntSize
-import nolambda.android.playground.cropper.images.ImageSrc
 import nolambda.android.playground.cropper.images.toImageSrc
 import kotlinx.coroutines.*
 import java.io.File
 import java.util.UUID
-import kotlin.concurrent.thread
 
 /**
  * Initiates a new crop session, cancelling the current one, if any.
@@ -16,7 +14,7 @@ import kotlin.concurrent.thread
  * The resulting image will be scaled down to fit [maxResultSize] if provided.
  * [file] will be used as a source.
  */
-public suspend fun ImageCropper.crop(
+suspend fun ImageCropper.crop(
     file: File, maxResultSize: IntSize? = DefaultMaxCropSize,
 ): CropResult {
     return crop(maxResultSize) { file.toImageSrc() }
@@ -36,13 +34,16 @@ suspend fun ImageCropper.crop(
     maxResultSize: IntSize? = DefaultMaxCropSize,
     cacheBeforeUse: Boolean = true
 ): CropResult = cacheUri(enabled = cacheBeforeUse, uri, context) { cached ->
-    crop(maxResultSize) { cached?.toImageSrc(context) }
+    crop(maxResultSize) {
+        cached?.toImageSrc(context)
+    }
 }
 
-private const val CacheDir = "easycrop_cache"
+private const val CacheDir = "ImageCropperCache"
 
 private suspend fun <R> cacheUri(
-    enabled: Boolean, uri: Uri, context: Context,
+    enabled: Boolean,
+    uri: Uri, context: Context,
     block: suspend (Uri?) -> R
 ): R {
     if (!enabled) return block(uri)

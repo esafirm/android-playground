@@ -50,11 +50,7 @@ interface CropState {
     fun reset()
 }
 
-internal fun CropState(
-    src: ImageSrc,
-    onDone: () -> Unit = {},
-): CropState = object : CropState {
-
+internal fun createCropState(src: ImageSrc, onDone: () -> Unit): CropState = object : CropState {
     val defaultTransform: ImgTransform = ImgTransform.Identity
     val defaultAspectLock: Boolean = false
 
