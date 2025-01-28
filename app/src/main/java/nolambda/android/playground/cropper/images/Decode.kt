@@ -12,8 +12,8 @@ import nolambda.android.playground.cropper.utils.containsInclusive
 import nolambda.android.playground.cropper.utils.inverted
 import nolambda.android.playground.cropper.utils.roundOut
 
-public data class DecodeParams(val sampleSize: Int, val subset: IntRect)
-public data class DecodeResult(val params: DecodeParams, val bmp: ImageBitmap)
+data class DecodeParams(val sampleSize: Int, val subset: IntRect)
+data class DecodeResult(val params: DecodeParams, val bmp: ImageBitmap)
 
 internal fun calculateSampleSize(imgRegion: IntSize, view: IntSize): Int {
     val imgArea = imgRegion.let { it.width.toDouble() * it.height }

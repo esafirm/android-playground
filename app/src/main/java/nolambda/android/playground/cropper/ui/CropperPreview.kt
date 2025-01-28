@@ -63,6 +63,10 @@ fun CropperPreview(
         viewMatrix.fit(viewMatrix.matrix.map(state.region), outerRect)
     }
 
+    LaunchedEffect(state.transform) {
+        actionSession.next()
+    }
+
     val cropRect = remember(state.region, outerRect) {
         viewMatrix.matrix.map(state.region)
     }
