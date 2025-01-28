@@ -22,6 +22,17 @@ import nolambda.android.playground.cropper.utils.scaleToFit
 import nolambda.android.playground.cropper.utils.setSize
 import nolambda.android.playground.cropper.utils.toRect
 
+data class CropRegion(
+    val x: Float,
+    val y: Float,
+    val width: Float,
+    val height: Float,
+    val scale: Float,
+) {
+    val actualWidth: Float get() = width / scale
+    val actualHeight: Float get() = height / scale
+}
+
 /** State for the current image being cropped */
 @Stable
 interface CropState {
@@ -34,6 +45,7 @@ interface CropState {
     val accepted: Boolean
     fun done(accept: Boolean)
     fun reset()
+    var cropRegion: CropRegion?
 }
 
 internal fun CropState(
@@ -44,6 +56,8 @@ internal fun CropState(
     val defaultTransform: ImgTransform = ImgTransform.Identity
     val defaultShape: CropShape = RectCropShape
     val defaultAspectLock: Boolean = false
+
+    override var cropRegion: CropRegion? = null
 
     override val src: ImageSrc get() = src
     private var _transform: ImgTransform by mutableStateOf(defaultTransform)

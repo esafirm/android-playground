@@ -35,10 +35,12 @@ internal fun getDecodeParams(
     imgToView: Matrix
 ): DecodeParams? {
     if (view.width <= 0 || view.height <= 0) return null
+
     val imgRect = img.toIntRect()
     val viewToImg = imgToView.inverted()
     val subset = getImageSubset(view, viewToImg, imgRect, align = true)
     if (subset.isEmpty) return null
+
     val sampleSize = calculateSampleSize(
         imgRegion = getImageSubset(view, viewToImg, imgRect, align = false).size,
         view = view

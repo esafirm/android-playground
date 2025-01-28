@@ -25,8 +25,6 @@ internal fun Size.coerceAtMost(maxSize: Size): Size {
 
 internal fun Rect.atOrigin(): Rect = Rect(offset = Offset.Zero, size = size)
 
-internal val Rect.area get() = width * height
-
 internal fun Rect.lerp(target: Rect, p: Float): Rect {
     val tl0 = topLeft
     val br0 = bottomRight
@@ -62,22 +60,6 @@ internal fun Rect.constrainOffset(bounds: Rect): Rect {
     if (x < bounds.left) x += bounds.left - x
     if (y < bounds.top) y += bounds.top - y
     return Rect(Offset(x, y), size)
-}
-
-internal fun Rect.constraintOffset(
-    offset: Offset,
-    bounds: Rect,
-): Offset {
-    android.util.Log.d("Cropper", "----")
-    android.util.Log.d("Cropper", "--> OG offset: $offset")
-    android.util.Log.d("Cropper", "--> Image Rect: $bounds")
-    android.util.Log.d("Cropper", "--> Crop Rect: $this")
-
-    val newOff = Offset(
-        x = offset.x.coerceIn(bounds.left, left),
-        y = 0f
-    )
-    return newOff
 }
 
 internal fun IntRect.constrainOffset(bounds: IntRect): IntRect {

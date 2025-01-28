@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.toSize
 import kotlinx.coroutines.delay
+import nolambda.android.playground.cropper.CropRegion
 import nolambda.android.playground.cropper.CropState
 import nolambda.android.playground.cropper.DragHandle
 import nolambda.android.playground.cropper.LocalCropperStyle
@@ -32,6 +33,7 @@ import nolambda.android.playground.cropper.utils.ViewMatrix
 import nolambda.android.playground.cropper.utils.ViewMatrixImpl
 import nolambda.android.playground.cropper.utils.setAspect
 import nolambda.android.playground.cropper.utils.times
+import kotlin.math.abs
 import kotlin.random.Random
 
 @Composable
@@ -73,6 +75,31 @@ fun CropperPreview(
     val cropPath = remember(state.shape, cropRect) {
         state.shape.asPath(cropRect)
     }
+
+    // Calculate the crop area
+    val bounds = imgRect
+    val cropRegion = cropRect
+
+    val actualCropLeft =
+        if (bounds.left < 0) abs(bounds.left) + cropRegion.left else cropRegion.left - bounds.left
+    val actualCropTop =
+        if (bounds.top < 0) abs(bounds.top) + cropRegion.top else cropRegion.top - bounds.top
+
+    state.cropRegion = CropRegion(
+        x = actualCropLeft,
+        y = actualCropTop,
+        width = cropRegion.width,
+        height = cropRegion.height,
+        scale = viewMatrix.scale,
+    )
+
+    android.util.Log.d(
+        "Cropper", """
+        --> CropArea: ${state.cropRegion}
+        --> CropRect: $cropRect
+        --> ImgRect: $imgRect
+    """.trimIndent()
+    )
 
     AutoContains(
         mat = viewMatrix,
