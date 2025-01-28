@@ -64,6 +64,22 @@ internal fun Rect.constrainOffset(bounds: Rect): Rect {
     return Rect(Offset(x, y), size)
 }
 
+internal fun Rect.constraintOffset(
+    offset: Offset,
+    bounds: Rect,
+): Offset {
+    android.util.Log.d("Cropper", "----")
+    android.util.Log.d("Cropper", "--> OG offset: $offset")
+    android.util.Log.d("Cropper", "--> Image Rect: $bounds")
+    android.util.Log.d("Cropper", "--> Crop Rect: $this")
+
+    val newOff = Offset(
+        x = offset.x.coerceIn(bounds.left, left),
+        y = 0f
+    )
+    return newOff
+}
+
 internal fun IntRect.constrainOffset(bounds: IntRect): IntRect {
     var (x, y) = topLeft
     if (right > bounds.right) x += bounds.right - right

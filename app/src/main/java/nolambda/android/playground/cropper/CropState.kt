@@ -27,6 +27,7 @@ import nolambda.android.playground.cropper.utils.toRect
 interface CropState {
     val src: ImageSrc
     var transform: ImgTransform
+    val imgRect: Rect
     var region: Rect
     var aspectLock: Boolean
     var shape: CropShape
@@ -67,7 +68,7 @@ internal fun CropState(
             )
         }
 
-    val imgRect by derivedStateOf { getTransformedImageRect(transform, src.size) }
+    override val imgRect by derivedStateOf { getTransformedImageRect(transform, src.size) }
 
     override var shape: CropShape by mutableStateOf(defaultShape)
     override var aspectLock by mutableStateOf(defaultAspectLock)

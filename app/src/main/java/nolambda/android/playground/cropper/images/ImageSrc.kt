@@ -6,9 +6,9 @@ import androidx.compose.ui.unit.toIntRect
 import androidx.compose.runtime.Stable
 
 @Stable
-public interface ImageSrc {
-    public val size: IntSize
-    public suspend fun open(params: DecodeParams): DecodeResult?
+interface ImageSrc {
+    val size: IntSize
+    suspend fun open(params: DecodeParams): DecodeResult?
 }
 
 internal data class ImageBitmapSrc(private val data: ImageBitmap) : ImageSrc {

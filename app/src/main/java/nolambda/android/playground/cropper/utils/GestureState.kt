@@ -64,9 +64,9 @@ internal interface ZoomState {
 }
 
 internal inline fun ZoomState(
-    crossinline begin: (center: Offset) -> Unit = { },
-    crossinline done: () -> Unit = {},
-    crossinline next: (center: Offset, scale: Float) -> Unit = { _, _ -> },
+    crossinline begin: (center: Offset) -> Unit,
+    crossinline done: () -> Unit,
+    crossinline next: (center: Offset, scale: Float) -> Unit,
 ): ZoomState = object : ZoomState {
     override fun onBegin(cx: Float, cy: Float) = begin(Offset(cx, cy))
     override fun onNext(scale: Float, cx: Float, cy: Float) = next(Offset(cx, cy), scale)

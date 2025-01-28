@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
  * If [maxSize] is not null, the result will be scaled down to match it.
  * Returns null if the image could not be created.
  */
-public suspend fun CropState.createResult(
+suspend fun CropState.createResult(
     maxSize: IntSize?
 ): ImageBitmap? = withContext(Dispatchers.Default) {
     runCatching { doCreateResult(maxSize) }
@@ -35,8 +35,8 @@ private suspend fun CropState.doCreateResult(maxSize: IntSize?): ImageBitmap? {
         .roundUp()
     val result = ImageBitmap(finalSize.width, finalSize.height)
     val canvas = Canvas(result)
-    val viewMat = ViewMatrix()
-    viewMat.snapFit(region, finalSize.toSize().toRect())
+    val viewMat = ViewMatrixImpl()
+    viewMat.fit(region, finalSize.toSize().toRect())
     val imgMat = transform.asMatrix(src.size)
     val totalMat = imgMat * viewMat.matrix
 

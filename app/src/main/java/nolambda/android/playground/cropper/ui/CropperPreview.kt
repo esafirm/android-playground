@@ -1,11 +1,14 @@
 package nolambda.android.playground.cropper.ui
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,8 +31,10 @@ import nolambda.android.playground.cropper.asMatrix
 import nolambda.android.playground.cropper.cropperTouch
 import nolambda.android.playground.cropper.images.rememberLoadedImage
 import nolambda.android.playground.cropper.utils.ViewMatrix
+import nolambda.android.playground.cropper.utils.ViewMatrixImpl
 import nolambda.android.playground.cropper.utils.setAspect
 import nolambda.android.playground.cropper.utils.times
+import kotlin.random.Random
 
 @Composable
 fun CropperPreview(
@@ -37,52 +42,78 @@ fun CropperPreview(
     modifier: Modifier = Modifier
 ) {
     val style = LocalCropperStyle.current
+
+    var pendingDrag by remember { mutableStateOf<DragHandle?>(null) }
+    val actionSession = remember { ActionSession() }
+
     val imgTransform by animateImgTransform(target = state.transform)
     val imgMat = remember(imgTransform, state.src.size) { imgTransform.asMatrix(state.src.size) }
-    val viewMatrix = remember { ViewMatrix() }
+    val viewMatrix: ViewMatrix = remember { ViewMatrixImpl() }
     var view by remember { mutableStateOf(IntSize.Zero) }
-    var pendingDrag by remember { mutableStateOf<DragHandle?>(null) }
     val viewPadding = LocalDensity.current.run { style.touchRad.toPx() }
     val totalMat = remember(viewMatrix.matrix, imgMat) { imgMat * viewMatrix.matrix }
     val image = rememberLoadedImage(state.src, view, totalMat)
 
-    val cropRect = remember(state.region, viewMatrix.matrix) {
+    var isInitialized by remember { mutableStateOf(false) }
+    val cropRect = remember(state.region, isInitialized) {
         viewMatrix.matrix.map(state.region)
     }
     val cropPath = remember(state.shape, cropRect) {
         state.shape.asPath(cropRect)
     }
+    val imgRect = viewMatrix.matrix.map(state.imgRect)
+    val outerRect = view.toSize().toRect().deflate(viewPadding)
 
     // Set the cropper initial aspect ratio
     LaunchedEffect(Unit) {
-        android.util.Log.d("CropperPreview", "CropperPreview: ${state.region}")
         state.region = state.region.setAspect(style.defaultAspectRatio)
-
     }
 
-    BringToView(
-        autoZoomEnabled = style.autoZoom,
-        hasOverride = pendingDrag != null,
-        outer = view.toSize().toRect().deflate(viewPadding),
+    AutoContains(
         mat = viewMatrix,
-        local = state.region,
+        cropRect = cropRect,
+        imgRect = imgRect,
+        outerRect = outerRect,
+        inner = state.region,
+        actionId = actionSession.actionId,
     )
+
+    BringToView(
+        autoZoomEnabled = false,
+        hasOverride = pendingDrag != null,
+        outer = outerRect,
+        mat = viewMatrix,
+        inner = state.region,
+    ) {
+        isInitialized = true
+    }
+
     Canvas(
         modifier = modifier
             .onGloballyPositioned { view = it.size }
             .background(color = style.backgroundColor)
             .cropperTouch(
                 region = state.region,
-                onRegion = {
-                    /*state.region = it */
-                },
+                onRegion = { state.region = it },
                 touchRad = style.touchRad,
                 handles = style.handles,
                 viewMatrix = viewMatrix,
                 pending = pendingDrag,
-                onPending = { pendingDrag = it },
+                onPending = { nextPending ->
+                    pendingDrag = nextPending
+                    if (nextPending == null) {
+                        actionSession.next()
+                    }
+                },
+                onZoomEnd = {
+                    actionSession.next()
+                },
                 onTranslate = { delta ->
-                    viewMatrix.translate(delta)
+                    viewMatrix.translate(
+                        offset = delta,
+                        crop = cropRect,
+                        imgRect = imgRect
+                    )
                 }
             )
     ) {
@@ -101,6 +132,7 @@ fun CropperPreview(
             }
             drawCropRect(cropRect)
         }
+
     }
 }
 
@@ -111,25 +143,63 @@ fun CropperPreview(
 private fun BringToView(
     autoZoomEnabled: Boolean,
     hasOverride: Boolean,
-    outer: Rect,
     mat: ViewMatrix,
-    local: Rect
+    outer: Rect,
+    inner: Rect,
+    onInitialized: () -> Unit = {}
 ) {
     if (outer.isEmpty) return
     DisposableEffect(Unit) {
-        mat.snapFit(mat.matrix.map(local), outer)
+        mat.fit(mat.matrix.map(inner), outer)
+        onInitialized()
         onDispose { }
     }
     if (!autoZoomEnabled) return
     var overrideBlock by remember { mutableStateOf(false) }
-    LaunchedEffect(hasOverride, outer, local) {
+    LaunchedEffect(hasOverride, outer, inner) {
         if (hasOverride) overrideBlock = true
         else {
             if (overrideBlock) {
                 delay(500)
                 overrideBlock = false
             }
-            mat.fit(mat.matrix.map(local), outer)
+            Log.d("CropperPreview", "BringToView: inner rect: $inner")
+            mat.animateFit(mat.matrix.map(inner), outer)
         }
+    }
+}
+
+@Composable
+private fun AutoContains(
+    mat: ViewMatrix,
+    cropRect: Rect,
+    imgRect: Rect,
+    inner: Rect,
+    outerRect: Rect,
+    actionId: Int,
+) {
+    if (actionId == ActionSession.DEFAULT) return
+    LaunchedEffect(actionId, outerRect, cropRect) {
+        delay(200)
+        mat.animateContains(
+            inner = mat.matrix.map(inner),
+            outer = outerRect,
+            crop = cropRect,
+            imgRect = imgRect,
+        )
+    }
+}
+
+@Stable
+private class ActionSession {
+    private val actionIdState = mutableIntStateOf(DEFAULT)
+    val actionId get() = actionIdState.intValue
+
+    fun next() {
+        actionIdState.intValue = Random.nextInt()
+    }
+
+    companion object {
+        const val DEFAULT = 1
     }
 }
