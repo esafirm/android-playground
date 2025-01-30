@@ -18,6 +18,9 @@ import kotlin.math.roundToInt
 interface ViewMatrix {
     fun zoomStart(center: Offset)
     fun zoom(center: Offset, scale: Float)
+
+    fun rotate(center: Offset, rotation: Float)
+
     fun fit(inner: Rect, outer: Rect)
     fun translate(offset: Offset, crop: Rect, imgRect: Rect)
 
@@ -30,6 +33,7 @@ interface ViewMatrix {
 }
 
 internal class ViewMatrixImpl : ViewMatrix {
+
     var c0 = Offset.Zero
     var mat by mutableStateOf(Matrix(), neverEqualPolicy())
     val inv by derivedStateOf {
@@ -80,6 +84,14 @@ internal class ViewMatrixImpl : ViewMatrix {
         var x = offset.x * scale
         var y = offset.y * scale
         update { it.translate(x, y) }
+    }
+
+    override fun rotate(center: Offset, rotation: Float) {
+        update {
+            it.translate(center.x, center.y)
+            it.rotateZ(rotation)
+            it.translate(-center.x, -center.y)
+        }
     }
 
     override suspend fun animateFit(inner: Rect, outer: Rect) {

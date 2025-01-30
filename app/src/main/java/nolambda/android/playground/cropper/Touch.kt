@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.round
 import androidx.compose.ui.unit.toOffset
 import nolambda.android.playground.cropper.utils.DragState
+import nolambda.android.playground.cropper.utils.RotateState
 import nolambda.android.playground.cropper.utils.ViewMatrix
 import nolambda.android.playground.cropper.utils.ZoomState
 import nolambda.android.playground.cropper.utils.abs
@@ -74,6 +75,10 @@ internal fun Modifier.cropperTouch(
                 done = {
                     onPending(null)
                 }
+            ),
+            rotate = RotateState(
+                next = { rotation, center -> viewMatrix.rotate(center, rotation) },
+                done = onZoomEnd
             )
         )
     )
