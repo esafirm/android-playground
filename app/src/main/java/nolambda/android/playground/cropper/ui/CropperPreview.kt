@@ -150,17 +150,6 @@ private fun DrawScope.drawHelperBounds(
     crop: Rect,
     viewMatrix: ViewMatrix,
 ) {
-    drawBounds(
-        xAxisColor = Color.Yellow,
-        yAxisColor = Color.Yellow,
-        rect = imgRect
-    )
-    drawBounds(
-        xAxisColor = Color.Magenta,
-        yAxisColor = Color.Magenta,
-        rect = crop
-    )
-
 //    val rotation = Matrix().apply {
 //        rotateZ(viewMatrix.matrix.rotation())
 //        scale(0.5f, 0.5f)

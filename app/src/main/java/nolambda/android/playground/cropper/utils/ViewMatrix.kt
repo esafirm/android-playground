@@ -12,6 +12,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Matrix
 import kotlin.math.max
 import kotlin.math.min
+import android.graphics.Matrix as AndroidMatrix
 
 @Stable
 interface ViewMatrix {
@@ -64,12 +65,18 @@ internal class ViewMatrixImpl : ViewMatrix {
             scale(scale, scale)
             translate(-center.x, -center.y)
         }
-        update { it *= s }
+        updateNative { it *= s }
     }
 
-    inline fun update(op: (Matrix) -> Unit) {
+    inline fun updateNative(op: (Matrix) -> Unit) {
         mat = mat.copy().also(op)
         mat.mapPoints(currentImageCorners, initialImageCorners)
+    }
+
+    inline fun update(op: (AndroidMatrix) -> Unit) {
+        val androidMat = mat.toAndroidMatrix().also { op(it) }
+        androidMat.mapPoints(currentImageCorners, initialImageCorners)
+        mat = androidMat.toMatrix()
     }
 
     override val matrix: Matrix
@@ -86,7 +93,7 @@ internal class ViewMatrixImpl : ViewMatrix {
 
     override fun fit(inner: Rect, outer: Rect) {
         val dst = getDst(inner, outer) ?: return
-        update { it *= Matrix().apply { setRectToRect(inner, dst) } }
+        updateNative { it *= Matrix().apply { setRectToRect(inner, dst) } }
     }
 
     private fun getDst(inner: Rect, outer: Rect): Rect? {
@@ -95,11 +102,11 @@ internal class ViewMatrixImpl : ViewMatrix {
     }
 
     override fun translate(offset: Offset, crop: Rect, imgRect: Rect) {
-        update { it.translate(offset.x, offset.y) }
+        updateNative { it.translate(offset.x, offset.y) }
     }
 
     override fun rotate(center: Offset, rotation: Float) {
-        update { it.rotate(center, rotation) }
+        updateNative { it.rotate(center, rotation) }
     }
 
     override suspend fun animateFit(inner: Rect, outer: Rect) {
@@ -107,19 +114,9 @@ internal class ViewMatrixImpl : ViewMatrix {
         val mat = Matrix()
         val initial = this.mat.copy()
         animate(0f, 1f) { p, _ ->
-            update {
+            updateNative {
                 it.setFrom(initial)
                 it *= mat.apply { setRectToRect(inner, inner.lerp(dst, p)) }
-            }
-        }
-    }
-
-    private suspend fun animateTranslate(offset: Offset) {
-        val initial = mat.copy()
-        animate(0f, 1f) { p, _ ->
-            update {
-                it.setFrom(initial)
-                it.translate(offset.x * p, offset.y * p)
             }
         }
     }
@@ -127,21 +124,32 @@ internal class ViewMatrixImpl : ViewMatrix {
     /**
      * Not really sure why but the translation can be wrong if we do it in one pass.
      */
-    private suspend fun animateTranslateDoublePass(crop: Rect) {
-        fun calculateOffset(): Offset {
-            val imageIndents = calculateImageIndents(crop)
-            val dx = -(imageIndents[0] + imageIndents[2])
-            val dy = -(imageIndents[1] + imageIndents[3])
-            return Offset(dx, dy) / scale
+    private suspend fun calculateImageIndentsAndAnimate(crop: Rect) {
+        val imageIndents = calculateImageIndents(crop)
+        val dx = -(imageIndents[0] + imageIndents[2])
+        val dy = -(imageIndents[1] + imageIndents[3])
+
+        animateTranslate(dx, dy)
+    }
+
+    private suspend fun animateTranslate(dx: Float, dy: Float) {
+        var accOffsetX = 0f
+        var accOffsetY = 0f
+
+        animate(0f, 1f) { p, _ ->
+            val offsetX = (dx * p) - accOffsetX
+            val offsetY = (dy * p) - accOffsetY
+
+            accOffsetX += offsetX
+            accOffsetY += offsetY
+
+            update { it.postTranslate(offsetX, offsetY) }
         }
+    }
 
-        animateTranslate(calculateOffset())
-        if (isImageWrapCropBounds(currentImageCorners, crop)) return
-
-        log("double pass!")
-        animateTranslate(calculateOffset())
-
-        log("after double pass: ${isImageWrapCropBounds(currentImageCorners, crop)}")
+    // TODO: implement the animation
+    private suspend fun animateScale(scale: Float, center: Offset) {
+        update { it.postScale(scale, scale, center.x, center.y) }
     }
 
     /**
@@ -205,23 +213,26 @@ internal class ViewMatrixImpl : ViewMatrix {
         log("will wrap after translate: $willWrapAfterTranslate")
 
         if (willWrapAfterTranslate) {
-            animateTranslateDoublePass(crop)
+            calculateImageIndentsAndAnimate(crop)
         } else {
             tempMatrix.reset()
             tempMatrix.rotateZ(-currentRotation)
             val tempCropRect = tempMatrix.map(crop)
 
             val currentImageSides = currentImageCorners.toRectSides()
-            val dstScale = max(
+            var deltaScale = max(
                 tempCropRect.width / currentImageSides[0],
                 tempCropRect.height / currentImageSides[1]
             )
 
-            val translateOffset = Offset(dx, dy) / scale
-            animateTranslate(translateOffset)
-            update { it.scale(originalImg.center, dstScale + currentScale) }
+            // TODO: simplify this
+            deltaScale = deltaScale * currentScale - currentScale
+            deltaScale = currentScale + deltaScale
+            deltaScale = deltaScale / currentScale
 
-            log("deltaScale: $dstScale -- currentSscale: $currentScale, passed: ${dstScale / currentScale}")
+            val translateOffset = Offset(dx, dy)
+            animateTranslate(translateOffset.x, translateOffset.y)
+            animateScale(deltaScale, crop.center)
         }
     }
 
