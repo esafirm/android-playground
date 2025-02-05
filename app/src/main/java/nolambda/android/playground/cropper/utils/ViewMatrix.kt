@@ -10,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Matrix
+import kotlin.math.max
 import kotlin.math.min
 
 @Stable
@@ -113,7 +114,7 @@ internal class ViewMatrixImpl : ViewMatrix {
         }
     }
 
-    suspend fun animateTranslate(offset: Offset) {
+    private suspend fun animateTranslate(offset: Offset) {
         val initial = mat.copy()
         animate(0f, 1f) { p, _ ->
             update {
@@ -123,6 +124,62 @@ internal class ViewMatrixImpl : ViewMatrix {
         }
     }
 
+    /**
+     * Not really sure why but the translation can be wrong if we do it in one pass.
+     */
+    private suspend fun animateTranslateDoublePass(crop: Rect) {
+        fun calculateOffset(): Offset {
+            val imageIndents = calculateImageIndents(crop)
+            val dx = -(imageIndents[0] + imageIndents[2])
+            val dy = -(imageIndents[1] + imageIndents[3])
+            return Offset(dx, dy) / scale
+        }
+
+        animateTranslate(calculateOffset())
+        if (isImageWrapCropBounds(currentImageCorners, crop)) return
+
+        log("double pass!")
+        animateTranslate(calculateOffset())
+
+        log("after double pass: ${isImageWrapCropBounds(currentImageCorners, crop)}")
+    }
+
+    /**
+     * First, un-rotate image and crop rectangles (make image rectangle axis-aligned).
+     * Second, calculate deltas between those rectangles sides.
+     * Third, depending on delta (its sign) put them or zero inside an array.
+     * Fourth, using Matrix, rotate back those points (indents).
+     *
+     * @return - the float array of image indents (4 floats) - in this order [left, top, right, bottom]
+     */
+    private fun calculateImageIndents(crop: Rect): FloatArray {
+        val tempMatrix = Matrix()
+        tempMatrix.rotateZ(currentRotation)
+
+        val unrotatedImageCorners = currentImageCorners.copyOf()
+        tempMatrix.mapPoints(unrotatedImageCorners)
+
+        val unrotatedImageRect = unrotatedImageCorners.trapToRect()
+        val unrotatedCropRect = tempMatrix.map(crop)
+
+        val deltaLeft = unrotatedImageRect.left - unrotatedCropRect.left
+        val deltaTop = unrotatedImageRect.top - unrotatedCropRect.top
+        val deltaRight = unrotatedImageRect.right - unrotatedCropRect.right
+        val deltaBottom = unrotatedImageRect.bottom - unrotatedCropRect.bottom
+
+        val indents = FloatArray(4)
+        indents[0] = deltaLeft.coerceAtLeast(0f)
+        indents[1] = deltaTop.coerceAtLeast(0f)
+        indents[2] = deltaRight.coerceAtMost(0f)
+        indents[3] = deltaBottom.coerceAtMost(0f)
+
+        tempMatrix.reset()
+        tempMatrix.rotateZ(-currentRotation)
+        tempMatrix.mapPoints(indents)
+
+        return indents
+    }
+
     override suspend fun animateImageToWrapCropBounds(
         outer: Rect,
         crop: Rect,
@@ -130,7 +187,42 @@ internal class ViewMatrixImpl : ViewMatrix {
         originalImg: Rect,
     ) {
         val isWrapped = isImageWrapCropBounds(currentImageCorners, crop)
-        log("Is wrapped: $isWrapped")
+        if (isWrapped) {
+            log("=> is wrapped!")
+            return
+        }
+
+        var (dx, dy) = crop.center - imgRect.center
+        val currentScale = scale
+
+        val tempMatrix = Matrix()
+        tempMatrix.translate(dx, dy)
+
+        val tempCurrentImageCorners = currentImageCorners.copyOf()
+        tempMatrix.mapPoints(tempCurrentImageCorners)
+
+        val willWrapAfterTranslate = isImageWrapCropBounds(tempCurrentImageCorners, crop)
+        log("will wrap after translate: $willWrapAfterTranslate")
+
+        if (willWrapAfterTranslate) {
+            animateTranslateDoublePass(crop)
+        } else {
+            tempMatrix.reset()
+            tempMatrix.rotateZ(-currentRotation)
+            val tempCropRect = tempMatrix.map(crop)
+
+            val currentImageSides = currentImageCorners.toRectSides()
+            val dstScale = max(
+                tempCropRect.width / currentImageSides[0],
+                tempCropRect.height / currentImageSides[1]
+            )
+
+            val translateOffset = Offset(dx, dy) / scale
+            animateTranslate(translateOffset)
+            update { it.scale(originalImg.center, dstScale + currentScale) }
+
+            log("deltaScale: $dstScale -- currentSscale: $currentScale, passed: ${dstScale / currentScale}")
+        }
     }
 
     /**
@@ -157,8 +249,6 @@ internal class ViewMatrixImpl : ViewMatrix {
 
         return unrotatedImageRect.contains(unrotatedCropRect)
     }
-
-    private fun Rect.info(): String = "$this (${width}x${height}) - c: $center"
 
     private fun log(msg: String) {
         android.util.Log.d("ViewMatrixImpl", msg)

@@ -183,16 +183,14 @@ internal fun Rect.asCorners(): FloatArray {
 
 
 internal fun FloatArray.trapToRect(): Rect {
-    val array = this
-
     var left = Float.POSITIVE_INFINITY
     var top = Float.POSITIVE_INFINITY
     var right = Float.NEGATIVE_INFINITY
     var bottom = Float.NEGATIVE_INFINITY
 
-    for (i in 1 until array.size step 2) {
-        val x = (array[i - 1] * 10).roundToInt() / 10f
-        val y = (array[i] * 10).roundToInt() / 10f
+    for (i in 1 until size step 2) {
+        val x = (this[i - 1] * 10).roundToInt() / 10f
+        val y = (this[i] * 10).roundToInt() / 10f
         left = minOf(x, left)
         top = minOf(y, top)
         right = maxOf(x, right)
@@ -201,3 +199,24 @@ internal fun FloatArray.trapToRect(): Rect {
 
     return Rect(left, top, right, bottom)
 }
+
+/**
+ * Gets a float array of two lengths representing a rectangles width and height
+ * The order of the corners in the input float array is:
+ * 0------->1
+ * ^        |
+ * |        |
+ * |        v
+ * 3<-------2
+ *
+ * @param [FloatArray] the float array of corners (8 floats)
+ * @return the float array of width and height (2 floats)
+ */
+internal fun FloatArray.toRectSides(): FloatArray {
+    return floatArrayOf(
+        sqrt((this[0] - this[2]).pow(2) + (this[1] - this[3]).pow(2)),
+        sqrt((this[2] - this[4]).pow(2) + (this[3] - this[5]).pow(2))
+    )
+}
+
+private fun Float.pow(n: Int): Float = this.toDouble().pow(n).toFloat()
