@@ -16,7 +16,6 @@ import nolambda.android.playground.cropper.utils.ZoomState
 import nolambda.android.playground.cropper.utils.abs
 import nolambda.android.playground.cropper.utils.onGestures
 import nolambda.android.playground.cropper.utils.rememberGestureState
-import nolambda.android.playground.cropper.utils.resize
 
 private val MoveHandle = Offset(.5f, .5f)
 
@@ -27,14 +26,12 @@ internal class DragHandle(
 )
 
 internal fun Modifier.cropperTouch(
-    region: Rect,
-    center: Offset,
+    touchRegion: Rect,
     touchRad: Dp,
     handles: List<Offset>,
     viewMatrix: ViewMatrix,
     pending: DragHandle?,
 
-    onRegion: (Rect) -> Unit,
     onTranslate: (Offset) -> Unit,
     onPending: (DragHandle?) -> Unit,
     onZoomEnd: () -> Unit,
@@ -46,19 +43,19 @@ internal fun Modifier.cropperTouch(
         rememberGestureState(
             zoom = ZoomState(
                 begin = { center -> viewMatrix.zoomStart(center) },
-                next = { _, scale -> viewMatrix.zoom(center, scale) },
+                next = { center, scale -> viewMatrix.zoom(center, scale) },
                 done = onZoomEnd
             ),
             drag = DragState(
                 begin = { pos ->
                     val localPos = viewMatrix.invMatrix.map(pos)
                     val handle = handles.findHandle(
-                        region = region,
+                        region = touchRegion,
                         pos = localPos,
                         touchRadPx2 = touchRadPx2
                     )
                     if (handle != null) {
-                        onPending(DragHandle(handle, localPos, region))
+                        onPending(DragHandle(handle, localPos, touchRegion))
                     }
                 },
                 next = { _, pos, _ ->
@@ -66,8 +63,7 @@ internal fun Modifier.cropperTouch(
                         val localPos = viewMatrix.invMatrix.map(pos)
                         val delta = (localPos - pending.initialPos).round().toOffset()
                         if (pending.handle != MoveHandle) {
-                            val newRegion = pending.initialRegion.resize(pending.handle, delta)
-                            onRegion(newRegion)
+                            // Handling crop rect change
                         } else {
                             onTranslate(delta)
                         }

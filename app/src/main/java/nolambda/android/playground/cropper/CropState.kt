@@ -6,7 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.toRect
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.IntSize
@@ -15,15 +14,9 @@ import androidx.compose.ui.unit.toSize
 import nolambda.android.playground.cropper.images.ImageSrc
 import nolambda.android.playground.cropper.utils.ViewMatrix
 import nolambda.android.playground.cropper.utils.ViewMatrixImpl
-import nolambda.android.playground.cropper.utils.constrainOffset
-import nolambda.android.playground.cropper.utils.constrainResize
-import nolambda.android.playground.cropper.utils.eq
-import nolambda.android.playground.cropper.utils.keepAspect
 import nolambda.android.playground.cropper.utils.next90
 import nolambda.android.playground.cropper.utils.prev90
-import nolambda.android.playground.cropper.utils.scaleToFit
 import nolambda.android.playground.cropper.utils.setAspect
-import nolambda.android.playground.cropper.utils.setSize
 import nolambda.android.playground.cropper.utils.toRect
 
 sealed class CropSpec {
@@ -41,7 +34,6 @@ interface CropState {
     val src: ImageSrc
     var transform: ImgTransform
     val imgRect: Rect
-    var region: Rect
     var aspectLock: Boolean
     val accepted: Boolean
     var cropSpec: CropSpec
@@ -62,36 +54,15 @@ internal fun createCropState(src: ImageSrc, onDone: () -> Unit): CropState = obj
     override var transform: ImgTransform
         get() = _transform
         set(value) {
-            onTransformUpdated(transform, value)
             _transform = value
-        }
-
-    private val defaultRegion = src.size.toSize().toRect()
-
-    private var _region by mutableStateOf(defaultRegion)
-    override var region
-        get() = _region
-        set(value) {
-            _region = updateRegion(
-                old = _region,
-                new = value,
-                bounds = imgRect,
-                aspectLock = aspectLock
-            )
         }
 
     override val imgRect by derivedStateOf { getTransformedImageRect(transform, src.size) }
 
     override var aspectLock by mutableStateOf(defaultAspectLock)
 
-    private fun onTransformUpdated(old: ImgTransform, new: ImgTransform) {
-        val unTransform = old.asMatrix(src.size).apply { invert() }
-        _region = new.asMatrix(src.size).map(unTransform.map(region))
-    }
-
     override fun reset() {
         transform = defaultTransform
-        _region = defaultRegion
         aspectLock = defaultAspectLock
         cropSpec = CropSpec.Empty
     }
@@ -131,26 +102,6 @@ internal fun CropState.flipX() {
 
 internal fun CropState.flipY() {
     transform = transform.copy(scale = transform.scale.copy(y = -1 * transform.scale.y))
-}
-
-internal fun updateRegion(
-    old: Rect,
-    new: Rect,
-    bounds: Rect,
-    aspectLock: Boolean
-): Rect {
-    val offsetOnly = old.width.eq(new.width) && old.height.eq(new.height)
-    return if (offsetOnly) new.constrainOffset(bounds)
-    else {
-        val result = when {
-            aspectLock -> new.keepAspect(old).scaleToFit(bounds, old)
-            else -> new.constrainResize(bounds)
-        }
-        return when {
-            result.isEmpty -> result.setSize(old, Size(1f, 1f)).constrainOffset(bounds)
-            else -> result
-        }
-    }
 }
 
 internal fun CropState.generateCropRegion(): Rect {
