@@ -10,9 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Matrix
-import nolambda.android.playground.cropper.AspectRatio
 import kotlin.math.min
-import kotlin.math.roundToInt
 
 @Stable
 interface ViewMatrix {
@@ -25,7 +23,12 @@ interface ViewMatrix {
     fun translate(offset: Offset, crop: Rect, imgRect: Rect)
 
     suspend fun animateFit(inner: Rect, outer: Rect)
-    suspend fun animateContains(outer: Rect, crop: Rect, imgRect: Rect)
+    suspend fun animateImageToWrapCropBounds(
+        outer: Rect,
+        crop: Rect,
+        imgRect: Rect,
+        originalImg: Rect
+    )
 
     val matrix: Matrix
     val invMatrix: Matrix
@@ -34,31 +37,28 @@ interface ViewMatrix {
 
 internal class ViewMatrixImpl : ViewMatrix {
 
-    var c0 = Offset.Zero
-    var mat by mutableStateOf(Matrix(), neverEqualPolicy())
-    val inv by derivedStateOf {
+    private var mat by mutableStateOf(Matrix(), neverEqualPolicy())
+    private val inv by derivedStateOf {
         Matrix().apply {
             setFrom(mat)
             invert()
         }
     }
+
     override val scale by derivedStateOf {
         mat.values[Matrix.ScaleX]
     }
 
     override fun zoomStart(center: Offset) {
-        c0 = center
     }
 
     override fun zoom(center: Offset, scale: Float) {
         val s = Matrix().apply {
-            translate(center.x - c0.x, center.y - c0.y)
             translate(center.x, center.y)
             scale(scale, scale)
             translate(-center.x, -center.y)
         }
         update { it *= s }
-        c0 = center
     }
 
     inline fun update(op: (Matrix) -> Unit) {
@@ -69,6 +69,8 @@ internal class ViewMatrixImpl : ViewMatrix {
         get() = mat
     override val invMatrix: Matrix
         get() = inv
+
+    private val currentRotation get() = mat.rotation()
 
     override fun fit(inner: Rect, outer: Rect) {
         val dst = getDst(inner, outer) ?: return
@@ -81,17 +83,11 @@ internal class ViewMatrixImpl : ViewMatrix {
     }
 
     override fun translate(offset: Offset, crop: Rect, imgRect: Rect) {
-        var x = offset.x * scale
-        var y = offset.y * scale
-        update { it.translate(x, y) }
+        update { it.translate(offset.x, offset.y) }
     }
 
     override fun rotate(center: Offset, rotation: Float) {
-        update {
-            it.translate(center.x, center.y)
-            it.rotateZ(rotation)
-            it.translate(-center.x, -center.y)
-        }
+        update { it.rotate(center, rotation) }
     }
 
     override suspend fun animateFit(inner: Rect, outer: Rect) {
@@ -106,42 +102,52 @@ internal class ViewMatrixImpl : ViewMatrix {
         }
     }
 
-    override suspend fun animateContains(
+    suspend fun animateTranslate(offset: Offset) {
+        val initial = mat.copy()
+        animate(0f, 1f) { p, _ ->
+            update {
+                it.setFrom(initial)
+                it.translate(offset.x * p, offset.y * p)
+            }
+        }
+    }
+
+    override suspend fun animateImageToWrapCropBounds(
         outer: Rect,
         crop: Rect,
         imgRect: Rect,
+        originalImg: Rect,
     ) {
-        val needToScale = crop.width > imgRect.width || crop.height > imgRect.height
-        val aspectRatio = AspectRatio(crop.width.roundToInt(), crop.height.roundToInt())
-        if (needToScale) {
-            val cropDst = imgRect.setAspect(aspectRatio)
-            animateFit(cropDst, outer)
-            return
-        }
+        val isWrapped = isImageWrapCropBounds(originalImg, crop)
+        log("Is wrapped: $isWrapped")
+    }
 
-        val x = when {
-            crop.left < imgRect.left -> crop.left - imgRect.left
-            crop.right > imgRect.right -> crop.right - imgRect.right
-            else -> 0f
-        }
-        val y = when {
-            crop.top < imgRect.top -> crop.top - imgRect.top
-            crop.bottom > imgRect.bottom -> crop.bottom - imgRect.bottom
-            else -> 0f
-        }
-        if (x == 0f && y == 0f) return
+    /**
+     * This methods checks whether a rectangle that is represented as 4 corner points (8 floats)
+     * fills the crop bounds rectangle.
+     *
+     * @return - true if it wraps crop bounds, false - otherwise
+     */
+    private fun isImageWrapCropBounds(
+        img: Rect,
+        crop: Rect,
+    ): Boolean {
+        val tempMatrix = Matrix()
 
-        var accOffsetX = 0f
-        var accOffsetY = 0f
+        tempMatrix.setFrom(mat)
+        tempMatrix.rotate(img.center, currentRotation)
+        val unrotatedImage = tempMatrix.map(img)
 
-        animate(0f, 1f) { p, _ ->
-            val offsetX = (x / scale * p) - accOffsetX
-            val offsetY = (y / scale * p) - accOffsetY
+        tempMatrix.reset()
+        tempMatrix.rotate(crop.center, currentRotation)
+        val unrotatedCrop = tempMatrix.map(crop)
 
-            accOffsetX += offsetX
-            accOffsetY += offsetY
+        return unrotatedImage.contains(unrotatedCrop)
+    }
 
-            update { it.translate(offsetX, offsetY) }
-        }
+    private fun Rect.info(): String = "$this (${width}x${height}) - c: $center"
+
+    private fun log(msg: String) {
+        android.util.Log.d("ViewMatrixImpl", msg)
     }
 }

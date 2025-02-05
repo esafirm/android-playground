@@ -154,3 +154,19 @@ internal fun Rect.align(alignment: Int): Rect = Rect(
     left.alignDown(alignment), top.alignDown(alignment),
     right.alignUp(alignment), bottom.alignUp(alignment)
 )
+
+/**
+ * Returns true if the specified rectangle r is inside or equal to this
+ * rectangle. An empty rectangle never contains another rectangle.
+ *
+ * @param r The rectangle being tested for containment.
+ * @return true if the specified rectangle r is inside or equal to this
+ *              rectangle
+ */
+internal fun Rect.contains(r: Rect): Boolean {
+    // check for empty first
+    return this.left < this.right && this.top < this.bottom
+            // now check for containment
+            && left <= r.left && top <= r.top
+            && right >= r.right && bottom >= r.bottom
+}

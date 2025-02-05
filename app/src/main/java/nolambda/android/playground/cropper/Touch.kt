@@ -28,6 +28,7 @@ internal class DragHandle(
 
 internal fun Modifier.cropperTouch(
     region: Rect,
+    center: Offset,
     touchRad: Dp,
     handles: List<Offset>,
     viewMatrix: ViewMatrix,
@@ -45,7 +46,7 @@ internal fun Modifier.cropperTouch(
         rememberGestureState(
             zoom = ZoomState(
                 begin = { center -> viewMatrix.zoomStart(center) },
-                next = { center, scale -> viewMatrix.zoom(center, scale) },
+                next = { _, scale -> viewMatrix.zoom(center, scale) },
                 done = onZoomEnd
             ),
             drag = DragState(

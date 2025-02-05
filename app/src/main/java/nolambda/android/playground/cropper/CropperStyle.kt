@@ -108,9 +108,9 @@ fun CropperStyle(
         val strokeWidth = rectStrokeWidth.toPx()
         val finalRegion = region.inflate(strokeWidth / 2)
         if (finalRegion.isEmpty) return
-        if (guidelines != null && guidelines.count > 0) {
-            drawGuidelines(guidelines, finalRegion)
-        }
+//        if (guidelines != null && guidelines.count > 0) {
+//            drawGuidelines(guidelines, finalRegion)
+//        }
         drawRect(
             color = rectColor,
             style = Stroke(strokeWidth),
