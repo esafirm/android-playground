@@ -170,3 +170,34 @@ internal fun Rect.contains(r: Rect): Boolean {
             && left <= r.left && top <= r.top
             && right >= r.right && bottom >= r.bottom
 }
+
+
+internal fun Rect.asCorners(): FloatArray {
+    return floatArrayOf(
+        left, top,
+        right, top,
+        right, bottom,
+        left, bottom
+    )
+}
+
+
+internal fun FloatArray.trapToRect(): Rect {
+    val array = this
+
+    var left = Float.POSITIVE_INFINITY
+    var top = Float.POSITIVE_INFINITY
+    var right = Float.NEGATIVE_INFINITY
+    var bottom = Float.NEGATIVE_INFINITY
+
+    for (i in 1 until array.size step 2) {
+        val x = (array[i - 1] * 10).roundToInt() / 10f
+        val y = (array[i] * 10).roundToInt() / 10f
+        left = minOf(x, left)
+        top = minOf(y, top)
+        right = maxOf(x, right)
+        bottom = maxOf(y, bottom)
+    }
+
+    return Rect(left, top, right, bottom)
+}

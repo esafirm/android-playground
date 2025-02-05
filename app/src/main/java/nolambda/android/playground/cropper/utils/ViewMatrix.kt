@@ -22,6 +22,8 @@ interface ViewMatrix {
     fun fit(inner: Rect, outer: Rect)
     fun translate(offset: Offset, crop: Rect, imgRect: Rect)
 
+    fun setInitialMatrix(initialImg: Rect)
+
     suspend fun animateFit(inner: Rect, outer: Rect)
     suspend fun animateImageToWrapCropBounds(
         outer: Rect,
@@ -36,6 +38,9 @@ interface ViewMatrix {
 }
 
 internal class ViewMatrixImpl : ViewMatrix {
+
+    private lateinit var initialImageCorners: FloatArray
+    private val currentImageCorners: FloatArray = FloatArray(8)
 
     private var mat by mutableStateOf(Matrix(), neverEqualPolicy())
     private val inv by derivedStateOf {
@@ -63,6 +68,7 @@ internal class ViewMatrixImpl : ViewMatrix {
 
     inline fun update(op: (Matrix) -> Unit) {
         mat = mat.copy().also(op)
+        mat.mapPoints(currentImageCorners, initialImageCorners)
     }
 
     override val matrix: Matrix
@@ -71,6 +77,11 @@ internal class ViewMatrixImpl : ViewMatrix {
         get() = inv
 
     private val currentRotation get() = mat.rotation()
+
+    override fun setInitialMatrix(initialImg: Rect) {
+        initialImageCorners = initialImg.asCorners()
+        initialImageCorners.copyInto(currentImageCorners)
+    }
 
     override fun fit(inner: Rect, outer: Rect) {
         val dst = getDst(inner, outer) ?: return
@@ -118,7 +129,7 @@ internal class ViewMatrixImpl : ViewMatrix {
         imgRect: Rect,
         originalImg: Rect,
     ) {
-        val isWrapped = isImageWrapCropBounds(originalImg, crop)
+        val isWrapped = isImageWrapCropBounds(currentImageCorners, crop)
         log("Is wrapped: $isWrapped")
     }
 
@@ -129,20 +140,22 @@ internal class ViewMatrixImpl : ViewMatrix {
      * @return - true if it wraps crop bounds, false - otherwise
      */
     private fun isImageWrapCropBounds(
-        img: Rect,
-        crop: Rect,
+        imageCorners: FloatArray,
+        crop: Rect
     ): Boolean {
-        val tempMatrix = Matrix()
+        val matrix = Matrix()
+        matrix.rotateZ(currentRotation)
 
-        tempMatrix.setFrom(mat)
-        tempMatrix.rotate(img.center, currentRotation)
-        val unrotatedImage = tempMatrix.map(img)
+        // Un-rotate image
+        val unrotatedImageCorners = imageCorners.copyOf()
+        matrix.mapPoints(unrotatedImageCorners)
 
-        tempMatrix.reset()
-        tempMatrix.rotate(crop.center, currentRotation)
-        val unrotatedCrop = tempMatrix.map(crop)
+        val unrotatedImageRect = unrotatedImageCorners.trapToRect()
 
-        return unrotatedImage.contains(unrotatedCrop)
+        // Un-rotate crop
+        val unrotatedCropRect = matrix.map(crop)
+
+        return unrotatedImageRect.contains(unrotatedCropRect)
     }
 
     private fun Rect.info(): String = "$this (${width}x${height}) - c: $center"

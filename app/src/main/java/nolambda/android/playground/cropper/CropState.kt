@@ -186,15 +186,16 @@ internal fun CropState.shapePathOrError(rect: Rect? = null): Path {
     }
 }
 
-internal fun CropState.initializeCropSpec(
+internal fun CropState.initialize(
     outer: Rect,
     aspectRatio: AspectRatio,
 ) {
     val image = src.size.toSize().toRect()
     val region = image.setAspect(aspectRatio)
 
+    viewMatrix.setInitialMatrix(image)
     viewMatrix.fit(viewMatrix.matrix.map(region), outer)
-    val cropRect = viewMatrix.matrix.map(region)
 
+    val cropRect = viewMatrix.matrix.map(region)
     cropSpec = CropSpec.Ready(rect = cropRect)
 }

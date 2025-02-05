@@ -14,6 +14,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Matrix
 import nolambda.android.playground.cropper.utils.contains
 import nolambda.android.playground.cropper.utils.mapPoints
+import nolambda.android.playground.cropper.utils.trapToRect
 import nolambda.android.playground.ui.theme.AndroidPlaygroundTheme
 import kotlin.math.roundToInt
 
@@ -119,8 +120,8 @@ class MainActivity : ComponentActivity() {
         val unrotatedCropCorner = getCornersFromRect(cropRect)
         matrix.mapPoints(unrotatedCropCorner)
 
-        val unrotatedImageRect = trapToRect(unrotatedImageCorners)
-        val unrotatedCropRect = trapToRect(unrotatedCropCorner)
+        val unrotatedImageRect = unrotatedImageCorners.trapToRect()
+        val unrotatedCropRect = unrotatedCropCorner.trapToRect()
 
         log("image: ${unrotatedImageRect.info()}")
         log("crop: ${unrotatedCropRect.info()}")
@@ -176,23 +177,5 @@ class MainActivity : ComponentActivity() {
         }
         r.sort()
         return r
-    }
-
-    private fun trapToRect(array: FloatArray): Rect {
-        var left = Float.POSITIVE_INFINITY
-        var top = Float.POSITIVE_INFINITY
-        var right = Float.NEGATIVE_INFINITY
-        var bottom = Float.NEGATIVE_INFINITY
-
-        for (i in 1 until array.size step 2) {
-            val x = (array[i - 1] * 10).roundToInt() / 10f
-            val y = (array[i] * 10).roundToInt() / 10f
-            left = minOf(x, left)
-            top = minOf(y, top)
-            right = maxOf(x, right)
-            bottom = maxOf(y, bottom)
-        }
-
-        return Rect(left, top, right, bottom)
     }
 }

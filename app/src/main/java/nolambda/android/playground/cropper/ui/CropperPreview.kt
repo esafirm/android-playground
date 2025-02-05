@@ -32,7 +32,7 @@ import nolambda.android.playground.cropper.animateImgTransform
 import nolambda.android.playground.cropper.asMatrix
 import nolambda.android.playground.cropper.cropperTouch
 import nolambda.android.playground.cropper.images.rememberLoadedImage
-import nolambda.android.playground.cropper.initializeCropSpec
+import nolambda.android.playground.cropper.initialize
 import nolambda.android.playground.cropper.shapePathOrError
 import nolambda.android.playground.cropper.utils.ViewMatrix
 import nolambda.android.playground.cropper.utils.rotation
@@ -68,7 +68,7 @@ fun CropperPreview(
 
     LaunchedEffect(outerRect) {
         if (outerRect.isEmpty) return@LaunchedEffect
-        state.initializeCropSpec(outer = outerRect, aspectRatio = style.defaultAspectRatio)
+        state.initialize(outer = outerRect, aspectRatio = style.defaultAspectRatio)
     }
 
     LaunchedEffect(state.transform) {
@@ -150,27 +150,6 @@ private fun DrawScope.drawHelperBounds(
     crop: Rect,
     viewMatrix: ViewMatrix,
 ) {
-    val rotation = Matrix().apply {
-        rotateZ(viewMatrix.matrix.rotation())
-    }
-    val rotatedCrop = rotation.map(crop)
-    drawBounds(
-        xAxisColor = Color.Red,
-        yAxisColor = Color.Blue,
-        rect = rotatedCrop
-    )
-
-    val matrixWithoutRotation = Matrix().apply {
-        setFrom(viewMatrix.matrix)
-        rotateZ(viewMatrix.matrix.rotation())
-    }
-    val unrotatedImg = matrixWithoutRotation.map(state.imgRect)
-    drawBounds(
-        xAxisColor = Color.Yellow,
-        yAxisColor = Color.Green,
-        rect = unrotatedImg,
-    )
-
 //    val rotation = Matrix().apply {
 //        rotateZ(viewMatrix.matrix.rotation())
 //        scale(0.5f, 0.5f)
