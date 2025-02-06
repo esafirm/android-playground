@@ -2,7 +2,7 @@ package nolambda.android.playground.cropper.utils
 
 import androidx.compose.ui.graphics.Path
 
-fun polygonPath(
+internal fun polygonPath(
     tx: Float = 0f, ty: Float = 0f,
     sx: Float = 1f, sy: Float = 1f,
     points: FloatArray

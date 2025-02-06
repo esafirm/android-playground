@@ -25,16 +25,6 @@ internal fun Matrix.setScaleTranslate(sx: Float, sy: Float, tx: Float, ty: Float
     values[Matrix.TranslateY] = ty
 }
 
-internal fun AndroidMatrix.setScaleTranslate(sx: Float, sy: Float, tx: Float, ty: Float) {
-    reset()
-    val values = values()
-    values[AndroidMatrix.MSCALE_X] = sx
-    values[AndroidMatrix.MTRANS_X] = tx
-    values[AndroidMatrix.MSCALE_Y] = sy
-    values[AndroidMatrix.MTRANS_Y] = ty
-    setValues(values)
-}
-
 /**
  * Sets this matrix to map the source rectangle to the destination rectangle.
  *
@@ -42,20 +32,6 @@ internal fun AndroidMatrix.setScaleTranslate(sx: Float, sy: Float, tx: Float, ty
  * @param dst The destination rectangle.
  */
 internal fun Matrix.setRectToRect(src: Rect, dst: Rect) {
-    val sx: Float = dst.width / src.width
-    val tx = dst.left - src.left * sx
-    val sy: Float = dst.height / src.height
-    val ty = dst.top - src.top * sy
-    setScaleTranslate(sx, sy, tx, ty)
-}
-
-/**
- * Sets this AndroidMatrix to map the source rectangle to the destination rectangle.
- *
- * @param src The source rectangle.
- * @param dst The destination rectangle.
- */
-internal fun AndroidMatrix.setRectToRect(src: Rect, dst: Rect) {
     val sx: Float = dst.width / src.width
     val tx = dst.left - src.left * sx
     val sy: Float = dst.height / src.height
@@ -141,10 +117,4 @@ internal fun AndroidMatrix.copy(): AndroidMatrix {
     return AndroidMatrix().apply {
         setValues(values)
     }
-}
-
-internal fun AndroidMatrix.map(offset: Offset): Offset {
-    val points = floatArrayOf(offset.x, offset.y)
-    mapPoints(points)
-    return Offset(points[0], points[1])
 }

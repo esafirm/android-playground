@@ -24,14 +24,11 @@ import kotlinx.coroutines.delay
 import nolambda.android.playground.cropper.CropSpec
 import nolambda.android.playground.cropper.CropState
 import nolambda.android.playground.cropper.LocalCropperStyle
-import nolambda.android.playground.cropper.animateImgTransform
-import nolambda.android.playground.cropper.asMatrix
 import nolambda.android.playground.cropper.cropperTouch
 import nolambda.android.playground.cropper.images.rememberLoadedImage
 import nolambda.android.playground.cropper.initialize
 import nolambda.android.playground.cropper.shapePathOrError
 import nolambda.android.playground.cropper.utils.ViewMatrix
-import nolambda.android.playground.cropper.utils.times
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -48,13 +45,10 @@ fun CropperPreview(
     val actionSession = remember { ActionSession() }
 
     val viewMatrix = state.viewMatrix
-    val imgTransform by animateImgTransform(target = state.transform)
-    val imgMat = remember(imgTransform, state.src.size) { imgTransform.asMatrix(state.src.size) }
-    val totalMat = remember(viewMatrix.matrix, imgMat) { imgMat * viewMatrix.matrix }
     var viewSize by remember { mutableStateOf(IntSize.Zero) }
-    val image = rememberLoadedImage(state.src, viewSize, totalMat)
+    val image = rememberLoadedImage(state.src, viewSize, state.viewMatrix.matrix)
 
-    val imgRect = viewMatrix.matrix.map(state.imgRect)
+    val imgRect = remember(viewMatrix.matrix) { viewMatrix.matrix.map(state.imgRect) }
     val outerRect = remember(viewSize, viewPadding) {
         viewSize.toSize().toRect().deflate(viewPadding)
     }
@@ -64,10 +58,6 @@ fun CropperPreview(
         if (outerRect.isEmpty) return@LaunchedEffect
         if (cropSpec !is CropSpec.Empty) return@LaunchedEffect
         state.initialize(outer = outerRect, aspectRatio = style.defaultAspectRatio)
-    }
-
-    LaunchedEffect(state.transform) {
-        actionSession.next()
     }
 
     AutoContains(
