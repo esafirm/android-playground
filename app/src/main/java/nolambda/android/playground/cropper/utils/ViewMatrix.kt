@@ -22,7 +22,7 @@ interface ViewMatrix {
     fun rotate(center: Offset, rotation: Float)
 
     fun fit(inner: Rect, outer: Rect)
-    fun translate(offset: Offset, crop: Rect, imgRect: Rect)
+    fun translate(offset: Offset)
 
     fun setInitialMatrix(initialImg: Rect)
 
@@ -101,8 +101,9 @@ internal class ViewMatrixImpl : ViewMatrix {
         return Rect(Offset.Zero, inner.size * scale).centerIn(outer)
     }
 
-    override fun translate(offset: Offset, crop: Rect, imgRect: Rect) {
-        updateNative { it.translate(offset.x, offset.y) }
+    override fun translate(offset: Offset) {
+        if (offset == Offset.Zero) return
+        update { it.postTranslate(offset.x, offset.y) }
     }
 
     override fun rotate(center: Offset, rotation: Float) {

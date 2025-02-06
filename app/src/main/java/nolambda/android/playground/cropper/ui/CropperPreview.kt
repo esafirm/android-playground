@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.toSize
 import kotlinx.coroutines.delay
 import nolambda.android.playground.cropper.CropSpec
 import nolambda.android.playground.cropper.CropState
-import nolambda.android.playground.cropper.DragHandle
 import nolambda.android.playground.cropper.LocalCropperStyle
 import nolambda.android.playground.cropper.animateImgTransform
 import nolambda.android.playground.cropper.asMatrix
@@ -46,7 +45,6 @@ fun CropperPreview(
     val style = LocalCropperStyle.current
     val viewPadding = LocalDensity.current.run { style.touchRad.toPx() }
 
-    var pendingDrag by remember { mutableStateOf<DragHandle?>(null) }
     val actionSession = remember { ActionSession() }
 
     val viewMatrix = state.viewMatrix
@@ -86,28 +84,9 @@ fun CropperPreview(
             .onGloballyPositioned { viewSize = it.size }
             .background(color = style.backgroundColor)
             .cropperTouch(
-                touchRegion = state.imgRect,
-                touchRad = style.touchRad,
-                handles = style.handles,
                 viewMatrix = viewMatrix,
-                pending = pendingDrag,
-
-                onZoomEnd = { actionSession.next() },
-                onPending = { nextPending ->
-                    pendingDrag = nextPending
-                    if (nextPending == null) {
-                        actionSession.next()
-                    }
-                },
-                onTranslate = { delta ->
-                    cropSpec.whenReady {
-                        viewMatrix.translate(
-                            offset = delta,
-                            crop = (cropSpec as CropSpec.Ready).rect,
-                            imgRect = imgRect
-                        )
-                    }
-                })
+                onActionEnd = actionSession::next
+            )
     ) {
         withTransform({ transform(viewMatrix.matrix) }) {
             image?.let { (params, bitmap) ->
@@ -156,10 +135,6 @@ private inline fun CropSpec.whenReady(body: (CropSpec.Ready) -> Unit) {
     if (this is CropSpec.Ready) {
         body(this)
     }
-}
-
-private fun CropSpec.rectOrZero(): Rect {
-    return (this as? CropSpec.Ready)?.rect ?: Rect.Zero
 }
 
 @Stable
