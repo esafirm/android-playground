@@ -42,17 +42,18 @@ fun CropperPreview(
     val style = LocalCropperStyle.current
     val viewPadding = LocalDensity.current.run { style.touchRad.toPx() }
 
-    val actionSession = remember { ActionSession() }
-
     val viewMatrix = state.viewMatrix
+    val cropSpec = state.cropSpec
+
+    val actionSession = remember { ActionSession() }
     var viewSize by remember { mutableStateOf(IntSize.Zero) }
-    val image = rememberLoadedImage(state.src, viewSize, state.viewMatrix.matrix)
+
+    val image = rememberLoadedImage(state.src, viewSize)
 
     val imgRect = remember(viewMatrix.matrix) { viewMatrix.matrix.map(state.imgRect) }
     val outerRect = remember(viewSize, viewPadding) {
         viewSize.toSize().toRect().deflate(viewPadding)
     }
-    val cropSpec = state.cropSpec
 
     LaunchedEffect(outerRect, cropSpec) {
         if (outerRect.isEmpty) return@LaunchedEffect
@@ -79,11 +80,10 @@ fun CropperPreview(
             )
     ) {
         withTransform({ transform(viewMatrix.matrix) }) {
-            image?.let { (params, bitmap) ->
+            image?.let {
                 drawImage(
-                    image = bitmap,
-                    dstOffset = params.subset.topLeft,
-                    dstSize = params.subset.size
+                    image = it.bmp,
+                    dstSize = state.src.size,
                 )
             }
         }

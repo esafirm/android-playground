@@ -1,9 +1,15 @@
 package nolambda.android.playground.cropper.images
 
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.toIntRect
-import androidx.compose.runtime.Stable
+
+data class DecodeParams(val requestedSize: IntSize)
+data class DecodeResult(
+    val params: DecodeParams,
+    val sampleSize: Int,
+    val bmp: ImageBitmap
+)
 
 @Stable
 interface ImageSrc {
@@ -13,6 +19,6 @@ interface ImageSrc {
 
 internal data class ImageBitmapSrc(private val data: ImageBitmap) : ImageSrc {
     override val size: IntSize = IntSize(data.width, data.height)
-    private val resultParams = DecodeParams(1, size.toIntRect())
-    override suspend fun open(params: DecodeParams) = DecodeResult(resultParams, data)
+    private val resultParams = DecodeParams(size)
+    override suspend fun open(params: DecodeParams) = DecodeResult(resultParams, 1, data)
 }

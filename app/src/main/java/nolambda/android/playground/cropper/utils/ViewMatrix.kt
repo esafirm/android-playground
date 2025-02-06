@@ -16,13 +16,11 @@ import android.graphics.Matrix as AndroidMatrix
 
 @Stable
 interface ViewMatrix {
-    fun zoomStart(center: Offset)
     fun zoom(center: Offset, scale: Float)
-
     fun rotate(center: Offset, rotation: Float)
+    fun translate(offset: Offset)
 
     fun fit(inner: Rect, outer: Rect)
-    fun translate(offset: Offset)
 
     fun setInitialMatrix(initialImg: Rect)
 
@@ -37,6 +35,9 @@ interface ViewMatrix {
     val matrix: Matrix
     val invMatrix: Matrix
     val scale: Float
+    val currentRotation: Float
+
+    val currentImageRect: Rect
 }
 
 internal class ViewMatrixImpl : ViewMatrix {
@@ -56,8 +57,9 @@ internal class ViewMatrixImpl : ViewMatrix {
         mat.values[Matrix.ScaleX]
     }
 
-    override fun zoomStart(center: Offset) {
-    }
+    override val currentRotation get() = mat.rotation()
+
+    override val currentImageRect: Rect get() = currentImageCorners.trapToRect()
 
     override fun zoom(center: Offset, scale: Float) {
         val s = Matrix().apply {
@@ -83,8 +85,6 @@ internal class ViewMatrixImpl : ViewMatrix {
         get() = mat
     override val invMatrix: Matrix
         get() = inv
-
-    private val currentRotation get() = mat.rotation()
 
     override fun setInitialMatrix(initialImg: Rect) {
         initialImageCorners = initialImg.asCorners()
