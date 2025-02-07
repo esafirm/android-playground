@@ -16,7 +16,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Shape
@@ -25,8 +24,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import nolambda.android.playground.cropper.CropState
 import nolambda.android.playground.cropper.CropperStyle
-import nolambda.android.playground.cropper.DefaultCropperStyle
-import nolambda.android.playground.cropper.LocalCropperStyle
 
 private val CropperDialogProperties = DialogProperties(
     usePlatformDefaultWidth = false,
@@ -37,30 +34,28 @@ private val CropperDialogProperties = DialogProperties(
 @Composable
 fun ImageCropperDialog(
     state: CropState,
-    style: CropperStyle = DefaultCropperStyle,
+    style: CropperStyle = CropperStyle(),
     dialogProperties: DialogProperties = CropperDialogProperties,
     dialogPadding: PaddingValues = PaddingValues(16.dp),
     dialogShape: Shape = RoundedCornerShape(8.dp),
     topBar: @Composable (CropState) -> Unit = { DefaultTopBar(it) },
 ) {
-    CompositionLocalProvider(LocalCropperStyle provides style) {
-        Dialog(
-            onDismissRequest = { state.done(accept = false) },
-            properties = dialogProperties,
+    Dialog(
+        onDismissRequest = { state.done(accept = false) },
+        properties = dialogProperties,
+    ) {
+        Surface(
+            modifier = Modifier.padding(dialogPadding),
+            shape = dialogShape,
         ) {
-            Surface(
-                modifier = Modifier.padding(dialogPadding),
-                shape = dialogShape,
-            ) {
-                Column {
-                    topBar(state)
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clipToBounds()
-                    ) {
-                        CropperPreview(state = state, modifier = Modifier.fillMaxSize())
-                    }
+            Column {
+                topBar(state)
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clipToBounds()
+                ) {
+                    CropperPreview(state = state, style = style, modifier = Modifier.fillMaxSize())
                 }
             }
         }

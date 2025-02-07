@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.toSize
 import kotlinx.coroutines.delay
 import nolambda.android.playground.cropper.CropSpec
 import nolambda.android.playground.cropper.CropState
-import nolambda.android.playground.cropper.LocalCropperStyle
+import nolambda.android.playground.cropper.CropperStyle
 import nolambda.android.playground.cropper.cropperTouch
 import nolambda.android.playground.cropper.images.rememberLoadedImage
 import nolambda.android.playground.cropper.initialize
@@ -37,9 +37,9 @@ private val AutoContainsDelay = 200.milliseconds
 @Composable
 fun CropperPreview(
     state: CropState,
+    style: CropperStyle,
     modifier: Modifier = Modifier
 ) {
-    val style = LocalCropperStyle.current
     val viewPadding = LocalDensity.current.run { style.touchRad.toPx() }
 
     val viewMatrix = state.viewMatrix

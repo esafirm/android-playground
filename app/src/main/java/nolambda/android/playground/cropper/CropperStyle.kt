@@ -1,7 +1,6 @@
 package nolambda.android.playground.cropper
 
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ClipOp
@@ -25,7 +24,7 @@ data class CropperStyleGuidelines(
 /**
  * Style provider for the image cropper.
  */
-@Stable
+@Immutable
 interface CropperStyle {
     /** Backdrop for the image */
     val backgroundColor: Color
@@ -52,10 +51,6 @@ interface CropperStyle {
     /** The default aspect ratio that will be applied to the cropper */
     val defaultAspectRatio: AspectRatio
 }
-
-val DefaultCropperStyle: CropperStyle by lazy { CropperStyle() }
-
-val LocalCropperStyle = staticCompositionLocalOf { DefaultCropperStyle }
 
 sealed interface HandlesConfig {
     object Main : HandlesConfig
