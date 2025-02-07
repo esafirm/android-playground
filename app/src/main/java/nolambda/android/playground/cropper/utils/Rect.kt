@@ -3,17 +3,8 @@ package nolambda.android.playground.cropper.utils
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.unit.IntRect
 import nolambda.android.playground.cropper.AspectRatio
 import kotlin.math.*
-
-internal fun Rect.lerp(target: Rect, p: Float): Rect {
-    val tl0 = topLeft
-    val br0 = bottomRight
-    val dtl = target.topLeft - tl0
-    val dbr = target.bottomRight - br0
-    return Rect(tl0 + dtl * p, br0 + dbr * p)
-}
 
 internal fun Rect.centerIn(outer: Rect): Rect =
     translate(outer.center.x - center.x, outer.center.y - center.y)
@@ -25,13 +16,8 @@ internal fun Rect.fitIn(outer: Rect): Rect {
 
 internal fun Rect.scale(sx: Float, sy: Float) = setSizeTL(width = width * sx, height = height * sy)
 
-internal fun Rect.setSizeTL(width: Float, height: Float) =
+private fun Rect.setSizeTL(width: Float, height: Float) =
     Rect(offset = topLeft, size = Size(width, height))
-
-internal fun Rect.roundOut(): IntRect = IntRect(
-    left = floor(left).toInt(), top = floor(top).toInt(),
-    right = ceil(right).toInt(), bottom = ceil(bottom).toInt()
-)
 
 internal fun Rect.setAspect(aspect: AspectRatio): Rect = setAspect(aspect.x.toFloat() / aspect.y)
 
@@ -41,55 +27,6 @@ private fun Rect.setAspect(aspect: Float): Rect {
         .fitIn(this)
         .centerIn(this)
 }
-
-internal fun Size.keepAspect(old: Size): Size {
-    val a = width * height
-    return Size(
-        width = sqrt((a * old.width) / old.height),
-        height = sqrt((a * old.height) / old.width)
-    )
-}
-
-internal fun Rect.keepAspect(old: Rect): Rect {
-    return setSize(old, size.keepAspect(old.size))
-}
-
-internal fun Rect.setSize(old: Rect, size: Size): Rect {
-    var (l, t, r, b) = this
-    if ((old.left - l).absoluteValue < (old.right - r).absoluteValue) {
-        r = l + size.width
-    } else {
-        l = r - size.width
-    }
-    if ((old.top - t).absoluteValue < (old.bottom - b).absoluteValue) {
-        b = t + size.height
-    } else {
-        t = b - size.height
-    }
-    return Rect(l, t, r, b)
-}
-
-internal fun Rect.scaleToFit(bounds: Rect, old: Rect): Rect {
-    val (l, t, r, b) = this
-    val scale = minOf(
-        (bounds.right - l) / (r - l),
-        (bounds.bottom - t) / (b - t),
-        (r - bounds.left) / (r - l),
-        (bottom - bounds.top) / (b - t),
-    )
-    if (scale >= 1f) return this
-    return setSize(old, size * scale)
-}
-
-internal fun IntRect.containsInclusive(other: IntRect): Boolean {
-    return other.left >= left && other.top >= top &&
-            other.right <= right && other.bottom <= bottom
-}
-
-internal fun Rect.align(alignment: Int): Rect = Rect(
-    left.alignDown(alignment), top.alignDown(alignment),
-    right.alignUp(alignment), bottom.alignUp(alignment)
-)
 
 /**
  * Returns true if the specified rectangle r is inside or equal to this

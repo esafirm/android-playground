@@ -24,7 +24,6 @@ interface ViewMatrix {
 
     fun setInitialMatrix(initialImg: Rect)
 
-    suspend fun animateFit(inner: Rect, outer: Rect)
     suspend fun animateImageToWrapCropBounds(
         outer: Rect,
         crop: Rect,
@@ -53,10 +52,7 @@ internal class ViewMatrixImpl : ViewMatrix {
         }
     }
 
-    override val scale by derivedStateOf {
-        mat.values[Matrix.ScaleX]
-    }
-
+    override val scale get() = mat.values[Matrix.ScaleX]
     override val currentRotation get() = mat.rotation()
 
     override val currentImageRect: Rect get() = currentImageCorners.trapToRect()
@@ -108,18 +104,6 @@ internal class ViewMatrixImpl : ViewMatrix {
 
     override fun rotate(center: Offset, rotation: Float) {
         updateNative { it.rotate(center, rotation) }
-    }
-
-    override suspend fun animateFit(inner: Rect, outer: Rect) {
-        val dst = getDst(inner, outer) ?: return
-        val mat = Matrix()
-        val initial = this.mat.copy()
-        animate(0f, 1f) { p, _ ->
-            updateNative {
-                it.setFrom(initial)
-                it *= mat.apply { setRectToRect(inner, inner.lerp(dst, p)) }
-            }
-        }
     }
 
     /**

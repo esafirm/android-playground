@@ -8,9 +8,11 @@ import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.IntSize
 import androidx.core.graphics.scale
+import androidx.core.graphics.values
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import nolambda.android.playground.cropper.images.DecodeParams
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 /**
@@ -30,24 +32,28 @@ private suspend fun CropState.doImageCrop(maxSize: IntSize?): ImageBitmap? {
     val inParams = DecodeParams(requestedSize = src.size)
     val decoded = src.open(inParams) ?: return null
 
-    val currentScale = viewMatrix.scale
+    var currentScale = viewMatrix.scale
     val currentRotation = viewMatrix.currentRotation
-
     val cropRect = cropRectOrError()
-    val imageRect = viewMatrix.currentImageRect
 
-    val rotatedBitmap = decoded.bmp.asAndroidBitmap().rotateIfNeeded(currentRotation)
-    val croppedBitmap = rotatedBitmap.crop(
-        cropRect = cropRect,
-        imageRect = imageRect,
-        currentScale = currentScale
+    val scaleResult = decoded.bmp.asAndroidBitmap().scaleBitmap(
+        crop = cropRect,
+        currentScale = currentScale,
+        maxSize = maxSize
     )
 
-    return if (maxSize != null) {
-        croppedBitmap.scaleBitmap(maxSize).asImageBitmap()
-    } else {
-        croppedBitmap.asImageBitmap()
-    }
+    // Update scale
+    currentScale = scaleResult.newScale
+
+    log("scaled bitmap size: ${scaleResult.bitmap.width}x${scaleResult.bitmap.height}")
+    val rotatedBitmap = scaleResult.bitmap.rotateIfNeeded(currentRotation)
+    log("rotated bitmap size: ${rotatedBitmap.width}x${rotatedBitmap.height}")
+
+    return rotatedBitmap.crop(
+        cropRect = cropRect,
+        imageRect = viewMatrix.currentImageRect,
+        currentScale = currentScale
+    ).asImageBitmap()
 }
 
 private fun Bitmap.crop(cropRect: Rect, imageRect: Rect, currentScale: Float): Bitmap {
@@ -72,23 +78,52 @@ private fun Bitmap.crop(cropRect: Rect, imageRect: Rect, currentScale: Float): B
     return croppedBitmap
 }
 
-private fun Bitmap.scaleBitmap(maxSize: IntSize): Bitmap {
-    val scale = width.coerceAtLeast(height).toFloat() / maxSize.width.coerceAtLeast(maxSize.height)
-    val newWidth = (width / scale).roundToInt()
-    val newHeight = (height / scale).roundToInt()
+private data class ScaleResult(
+    val bitmap: Bitmap,
+    val newScale: Float
+)
+
+private fun Bitmap.scaleBitmap(
+    crop: Rect,
+    currentScale: Float,
+    maxSize: IntSize?,
+): ScaleResult {
+    if (maxSize == null) return ScaleResult(this, currentScale)
+
+    val cropWidth = crop.width / currentScale
+    val cropHeight = crop.height / currentScale
+
+    if (cropWidth <= maxSize.width && cropHeight <= maxSize.height) {
+        return ScaleResult(this, currentScale)
+    }
+
+    val scaleX = maxSize.width / cropWidth
+    val scaleY = maxSize.height / cropHeight
+    val resizeScale = min(scaleX, scaleY)
+
+    val newWidth = (width / resizeScale).roundToInt()
+    val newHeight = (height / resizeScale).roundToInt()
 
     val scaledBitmap = scale(newWidth, newHeight)
     if (this != scaledBitmap) {
         this.recycle()
     }
-    return scaledBitmap
+    return ScaleResult(
+        newScale = currentScale / resizeScale,
+        bitmap = scaledBitmap
+    )
 }
 
 private fun Bitmap.rotateIfNeeded(rotation: Float): Bitmap {
     if (rotation == 0f) return this
 
     val tempMatrix = Matrix()
-    tempMatrix.setRotate(rotation, width / 2f, height / 2f)
+    tempMatrix.setRotate(-rotation, width / 2f, height / 2f)
+
+    // Still not sure why, but a pure rotation matrix affect the scale of the matrix
+    // That's why in here we restore the scale to 1
+    val currentMatrixScale = tempMatrix.values()[Matrix.MSCALE_X]
+    tempMatrix.postScale(1f / currentMatrixScale, 1f / currentMatrixScale)
 
     val rotatedBitmap = Bitmap.createBitmap(this, 0, 0, width, height, tempMatrix, true)
     if (this != rotatedBitmap) {
@@ -104,4 +139,8 @@ private fun CropState.cropRectOrError(): Rect {
     } else {
         error("CropSpec is not available. $this")
     }
+}
+
+private fun log(message: String) {
+    android.util.Log.d("ViewMatrix", message)
 }

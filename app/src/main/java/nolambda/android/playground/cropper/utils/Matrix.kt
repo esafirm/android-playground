@@ -41,8 +41,6 @@ internal fun Matrix.setRectToRect(src: Rect, dst: Rect) {
 
 internal fun Matrix.copy(): Matrix = Matrix(values.clone())
 
-internal fun Matrix.inverted() = copy().apply { invert() }
-
 internal fun Matrix.rotation(): Float {
     val skewX = values[Matrix.SkewX]
     val scaleX = values[Matrix.ScaleX]
@@ -72,11 +70,16 @@ fun Matrix.toAndroidMatrix(): AndroidMatrix {
     this.values.copyInto(composeValues)
 
     // Extract the relevant values from the 4x4 matrix
-    val androidValues = floatArrayOf(
-        composeValues[0], composeValues[4], composeValues[12],
-        composeValues[1], composeValues[5], composeValues[13],
-        composeValues[3], composeValues[7], composeValues[15]
-    )
+    val androidValues = FloatArray(9)
+    androidValues[AndroidMatrix.MTRANS_X] = composeValues[Matrix.TranslateX]
+    androidValues[AndroidMatrix.MTRANS_Y] = composeValues[Matrix.TranslateY]
+    androidValues[AndroidMatrix.MSCALE_X] = composeValues[Matrix.ScaleX]
+    androidValues[AndroidMatrix.MSCALE_Y] = composeValues[Matrix.ScaleY]
+    androidValues[AndroidMatrix.MSKEW_X] = composeValues[Matrix.SkewX]
+    androidValues[AndroidMatrix.MSKEW_Y] = composeValues[Matrix.SkewY]
+    androidValues[AndroidMatrix.MPERSP_0] = 0f
+    androidValues[AndroidMatrix.MPERSP_1] = 0f
+    androidValues[AndroidMatrix.MPERSP_2] = 1f
 
     return AndroidMatrix().apply {
         setValues(androidValues)
@@ -97,24 +100,10 @@ internal fun AndroidMatrix.toMatrix(): Matrix {
     }
 }
 
-internal fun AndroidMatrix.rotation(): Float {
-    val values = this.values()
-    val skewX = values[AndroidMatrix.MSKEW_X]
-    val scaleX = values[AndroidMatrix.MSCALE_X]
-    return Math.toDegrees(atan2(skewX.toDouble(), scaleX.toDouble())).toFloat()
-}
-
 internal fun Matrix.mapPoints(points: FloatArray) {
     toAndroidMatrix().mapPoints(points)
 }
 
 internal fun Matrix.mapPoints(dst: FloatArray, src: FloatArray) {
     toAndroidMatrix().mapPoints(dst, src)
-}
-
-internal fun AndroidMatrix.copy(): AndroidMatrix {
-    val values = this.values()
-    return AndroidMatrix().apply {
-        setValues(values)
-    }
 }
