@@ -5,7 +5,6 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Path
-import nolambda.android.playground.cropper.utils.polygonPath
 
 /**
  * A Shape used to clip the resulting image.
@@ -66,3 +65,17 @@ val DefaultCropShapes = listOf(
     StarCropShape,
     TriangleCropShape
 )
+
+
+private fun polygonPath(
+    tx: Float = 0f, ty: Float = 0f,
+    sx: Float = 1f, sy: Float = 1f,
+    points: FloatArray
+): Path = Path().apply {
+    if (points.size < 2) return@apply
+    moveTo(points[0] * sx + tx, points[1] * sy + ty)
+    for (i in 1 until points.size / 2) {
+        lineTo(points[(i * 2) + 0] * sx + tx, points[(i * 2) + 1] * sy + ty)
+    }
+    close()
+}
