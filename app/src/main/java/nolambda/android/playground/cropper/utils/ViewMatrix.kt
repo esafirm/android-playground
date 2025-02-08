@@ -24,6 +24,7 @@ interface ViewMatrix {
 
     fun setInitialMatrix(initialImg: Rect)
 
+    suspend fun animateZoom(scale: Float, center: Offset)
     suspend fun animateImageToWrapCropBounds(
         outer: Rect,
         crop: Rect,
@@ -58,6 +59,8 @@ internal class ViewMatrixImpl : ViewMatrix {
     override val currentImageRect: Rect get() = currentImageCorners.trapToRect()
 
     override fun zoom(center: Offset, scale: Float) {
+        if (scale == 0f) return
+
         val s = Matrix().apply {
             translate(center.x, center.y)
             scale(scale, scale)
@@ -132,9 +135,16 @@ internal class ViewMatrixImpl : ViewMatrix {
         }
     }
 
-    // TODO: implement the animation
-    private suspend fun animateScale(scale: Float, center: Offset) {
-        update { it.postScale(scale, scale, center.x, center.y) }
+    override suspend fun animateZoom(scale: Float, center: Offset) {
+        val initialScale = this.scale
+
+        animate(0f, 1f) { p, _ ->
+            val deltaScale = (scale * initialScale - initialScale) * p
+            val actualTargetScale = initialScale + deltaScale
+            val relativeScale = actualTargetScale / this.scale
+
+            update { it.postScale(relativeScale, relativeScale, center.x, center.y) }
+        }
     }
 
     /**
@@ -217,7 +227,7 @@ internal class ViewMatrixImpl : ViewMatrix {
 
             val translateOffset = Offset(dx, dy)
             animateTranslate(translateOffset.x, translateOffset.y)
-            animateScale(deltaScale, crop.center)
+            animateZoom(deltaScale, crop.center)
         }
     }
 
